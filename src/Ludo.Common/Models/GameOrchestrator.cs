@@ -24,7 +24,7 @@ public class GameOrchestrator
     throw new NotImplementedException();
   }
 
-  public void IsValidMove(Piece piece)
+  public bool IsValidMove(Piece piece)
   {
     throw new NotImplementedException();
   }
