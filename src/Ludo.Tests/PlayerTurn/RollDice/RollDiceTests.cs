@@ -18,6 +18,10 @@ public class RollDiceTests
     [Fact]
     public void RollDie_NotOnMyTurn_NotRollDie()
     {
+        // Arrange 
         
+        // Act
+        
+        // Assert
     }
 }
