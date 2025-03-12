@@ -1,9 +1,10 @@
 using System;
 using Ludo.Common.Models.Player;
+using Ludo.Common.Interfaces.Tiles;
 
 namespace Ludo.Common.Models.Tiles;
 
-public class GoalTile: TileBase
+public class GoalTile: TileBase, IGoalTile
 {
   public required DriveWayTile PreviusTile { get; init; }
 
