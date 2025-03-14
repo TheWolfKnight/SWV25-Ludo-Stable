@@ -25,7 +25,6 @@ namespace Ludo.Tests.PlayerTurn.MovePiece
             };
 
             A.CallTo(() => orchestrator.Die.Roll()).Returns(1);
-            A.CallTo(() => orchestrator.Board.Tiles[0].MovePiece(A<Piece>._, A<int>._)).Returns(true);
 
             //Act
             int i = orchestrator.Die.Roll();
@@ -58,7 +57,7 @@ namespace Ludo.Tests.PlayerTurn.MovePiece
 
             //Act
             int i = orchestrator.Die.Roll();
-
+            throw new NotImplementedException();
 
             //Assert
             home.Pieces.Should().HaveCount(4);
@@ -90,6 +89,7 @@ namespace Ludo.Tests.PlayerTurn.MovePiece
 
 
             //Assert
+            throw new NotImplementedException();
             home.Pieces.Should().BeEmpty();
         }
 
@@ -144,6 +144,7 @@ namespace Ludo.Tests.PlayerTurn.MovePiece
 
             //Act
             int i = orchestrator.Die.Roll();
+            throw new NotImplementedException();
 
             //Assert
             home.Pieces.Should().BeEmpty();

@@ -13,6 +13,7 @@ public class RollDiceTests
         // Act
         
         // Assert
+        throw new NotImplementedException();
     }
 
     [Fact]
@@ -23,5 +24,6 @@ public class RollDiceTests
         // Act
         
         // Assert
+        throw new NotImplementedException();
     }
 }
