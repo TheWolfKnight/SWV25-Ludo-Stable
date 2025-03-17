@@ -30,7 +30,8 @@ public class SkipTurnTests
         {
             Board = A.Fake<Board>(),
             Die = A.Fake<DieBase>(),
-            Players = []
+            Players = [],
+            CurrentPlayer = 0
         };
         A.CallTo(() => orchestrator.Die.Roll()).Returns(6);
         

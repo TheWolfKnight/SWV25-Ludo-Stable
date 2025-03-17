@@ -21,6 +21,7 @@ namespace Ludo.Tests.PlayerTurn.MovePiece
             {
                 Board = new Board { Tiles = [A.Fake<TileBase>()]},
                 Die = A.Fake<DieBase>(),
+                CurrentPlayer = 0,
                 Players = []
             };
 
@@ -42,6 +43,7 @@ namespace Ludo.Tests.PlayerTurn.MovePiece
             {
                 Board = new Board { Tiles = [A.Fake<TileBase>()] },
                 Die = A.Fake<DieBase>(),
+                CurrentPlayer = 0,
                 Players = []
             };
 
@@ -71,7 +73,8 @@ namespace Ludo.Tests.PlayerTurn.MovePiece
             {
                 Board = new Board { Tiles = [A.Fake<TileBase>()] },
                 Die = A.Fake<DieBase>(),
-                Players = []
+                Players = [],
+                CurrentPlayer = 0
             };
 
             Home home = new Home
@@ -82,7 +85,6 @@ namespace Ludo.Tests.PlayerTurn.MovePiece
             };
 
             A.CallTo(() => orchestrator.Die.Roll()).Returns(3);
-
 
             //Act
             int i = orchestrator.Die.Roll();
@@ -101,6 +103,7 @@ namespace Ludo.Tests.PlayerTurn.MovePiece
             {
                 Board = new Board { Tiles = [A.Fake<TileBase>()] },
                 Die = A.Fake<DieBase>(),
+                CurrentPlayer = 0,
                 Players = []
             };
 
@@ -130,6 +133,7 @@ namespace Ludo.Tests.PlayerTurn.MovePiece
             {
                 Board = new Board { Tiles = [A.Fake<TileBase>()] },
                 Die = A.Fake<DieBase>(),
+                CurrentPlayer = 0,
                 Players = []
             };
 
