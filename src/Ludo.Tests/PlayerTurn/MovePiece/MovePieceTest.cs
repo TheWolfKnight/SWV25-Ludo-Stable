@@ -25,8 +25,6 @@ namespace Ludo.Tests.PlayerTurn.MovePiece
                 Players = []
             };
 
-            A.CallTo(() => orchestrator.Die.Roll()).Returns(1);
-
             //Act
             int i = orchestrator.Die.Roll();
             bool moved = orchestrator.Board.Tiles[0].MovePiece(A.Fake<Piece>(), i);

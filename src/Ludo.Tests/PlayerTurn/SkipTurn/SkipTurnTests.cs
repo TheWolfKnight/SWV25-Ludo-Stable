@@ -1,5 +1,6 @@
 using FakeItEasy;
 using FluentAssertions;
+using FluentAssertions.Execution;
 using Ludo.Common.Models;
 using Ludo.Common.Models.Player;
 
@@ -11,14 +12,39 @@ public class SkipTurnTests
     public void SkipTurn_NoValidMove_SkipTurn()
     {
         // Arrange
-        GameOrchestrator orchestrator = A.Fake<GameOrchestrator>();
+        Player currentPlayer = new Player()
+        {
+            PlayerNr = 0,
+            InPlay = true,
+            Home = A.Fake<Home>(),
+            Pieces = []
+        };
+        
+        Player exepectedPlayer = new Player()
+        {
+            PlayerNr = 1,
+            InPlay = true,
+            Home = A.Fake<Home>(),
+            Pieces = []
+        };
+        
+        GameOrchestrator orchestrator = new GameOrchestrator()
+        {
+            Players = [currentPlayer, exepectedPlayer],
+            CurrentPlayer = 0,
+            Board = A.Fake<Board>(),
+            Die = A.Fake<DieBase>()
+        };
+        
         Piece piece = A.Fake<Piece>();
         
         // Act
         bool validMove = orchestrator.IsValidMove(piece);
+        orchestrator.NextPlayer();
         
         // Assert
         validMove.Should().BeFalse();
+        orchestrator.CurrentPlayer.Should().Be(exepectedPlayer.PlayerNr);
     }
 
     [Fact]
@@ -38,10 +64,13 @@ public class SkipTurnTests
         // Act
         int rollResult = orchestrator.Die.Roll();
         bool validMove = orchestrator.IsValidMove(piece);
+        orchestrator.NextPlayer();
         
         // Assert
+        using AssertionScope scope = new();
         rollResult.Should().Be(6);
         validMove.Should().BeFalse();
+        orchestrator.CurrentPlayer.Should().Be(0);
     }
 }
    
