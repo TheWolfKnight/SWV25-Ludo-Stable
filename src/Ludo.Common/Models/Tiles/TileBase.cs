@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using Ludo.Common.Models.Player;
 
 namespace Ludo.Common.Models.Tiles;
@@ -10,6 +8,6 @@ public abstract class TileBase
   public required (int X, int Y) Location { get; set; }
   public required List<Piece> Pieces { get; set; }
 
-  public abstract bool MovePiece(Piece piece, int amount);
+  public abstract void MovePiece(Piece piece, int amount);
   public abstract bool PeekMove(Piece piece, int amount); 
 }

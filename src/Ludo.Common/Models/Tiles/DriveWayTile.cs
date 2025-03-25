@@ -1,4 +1,3 @@
-using System;
 using Ludo.Common.Interfaces.Tiles;
 using Ludo.Common.Models.Player;
 
@@ -9,7 +8,7 @@ public class DriveWayTile: TileBase, IGoalTile
   public required IGoalTile NextTile { get; init; }
   public required DriveWayTile PreviusTile { get; init; }
 
-  public override bool MovePiece(Piece piece, int amount)
+  public override void MovePiece(Piece piece, int amount)
   {
     throw new NotImplementedException();
   }

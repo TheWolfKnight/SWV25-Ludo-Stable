@@ -30,7 +30,9 @@ public class MovementTests
     startTile.MovePiece(piece, die.Roll());
 
     // Assert
+    using AssertionScope scope = new();
     GetTileAt(startTile, 5)?.Pieces.Should().BeEmpty();
+    piece.CurrentTile.Should().NotBe(GetTileAt(startTile, 5));
   }
 
   [Fact]
@@ -52,7 +54,9 @@ public class MovementTests
     startTile.MovePiece(piece, die.Roll());
 
     // Assert
+    using AssertionScope scepe = new();
     GetTileAt(startTile, 3)?.Pieces.Should().HaveCount(1);
+    piece.CurrentTile.Should().NotBe(GetTileAt(startTile, 3));
   }
 
   [Fact]
@@ -74,7 +78,7 @@ public class MovementTests
       PlayerNr = 2,
       InPlay = true,
       Pieces = [],
-      Home = null!
+      Home = null! // TODO: Make home for blue, to complete test
     };
     Piece blue = new Piece {
       Owner = bluePlayer,
@@ -120,7 +124,7 @@ public class MovementTests
       PlayerNr = 2,
       InPlay = true,
       Pieces = [],
-      Home = null!
+      Home = null! // TODO: give home to complete test
     };
     Piece blue = new Piece {
       Owner = bluePlayer,
@@ -208,12 +212,7 @@ public class MovementTests
   public void Movement_GivenARollOf3_WithNoLegalMoves_DoNotExecuteMove()
   {
     // Arrange
-    Player player = new() {
-      PlayerNr = 1,
-      InPlay = true,
-      Pieces = [],
-      Home = null!
-    };
+    Player player = A.Fake<Player>();
     Piece piece1 = new() {
       CurrentTile = null!,
       Owner = player,
@@ -246,15 +245,9 @@ public class MovementTests
   public void Movement_GivenARollOf3_WithLegalMoves_ExecuteMovement()
   {
     // Arrange
-    Player player = new() {
-      PlayerNr = 1,
-      InPlay = true,
-      Pieces = [],
-      Home = null!
-    };
     Piece piece1 = new() {
       CurrentTile = null!,
-      Owner = player,
+      Owner = null!,
       PieceState = PieceState.OnBoard
     };
 
