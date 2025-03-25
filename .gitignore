@@ -6,3 +6,4 @@
 **/*.log
 /.vs/Ludo
 /.vs
+*.user
