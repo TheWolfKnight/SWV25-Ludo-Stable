@@ -42,31 +42,41 @@ public class RollDiceTests
         rolled.Should().BeGreaterThan(0);
     }
 
-    [Fact]
-    public void RollDie_NotOnMyTurn_NotRollDie()
+    [Theory]
+    [MemberData(nameof(GetGameOrchestratorWithPlayers))]
+    public void RollDie_NotOnMyTurn_NotRollDie(GameOrchestrator orchestrator, Player player)
     {
-        // Arrange
-        Player player = new Player()
-        {
-            PlayerNr = 0,
-            InPlay = true,
-            Home = A.Fake<Home>(),
-            Pieces = []
-        };
-        
-        GameOrchestrator orchestrator = new GameOrchestrator()
-        {
-            Players = [player, A.Fake<Player>()],
-            CurrentPlayer = 0,
-            Board = A.Fake<Board>(),
-            Die = A.Fake<DieBase>()
-        };
-        
         // Act
         orchestrator.NextPlayer();
         bool playerTurn = orchestrator.CurrentPlayer == player.PlayerNr;
         
         // Assert
         playerTurn.Should().BeFalse();
+    }
+
+    public static IEnumerable<object[]> GetGameOrchestratorWithPlayers()
+    {
+        Player player = new()
+        {
+            PlayerNr = 1,
+            InPlay = true,
+            Home = A.Fake<Home>(),
+            Pieces = []
+        };
+
+        return new[] 
+        {
+            new object[]
+            {
+                new GameOrchestrator()
+                {
+                    Players = [player, A.Fake<Player>()],
+                    CurrentPlayer = 0,
+                    Board = A.Fake<Board>(),
+                    Die = A.Fake<DieBase>()
+                },
+                player
+            }
+        };
     }
 }

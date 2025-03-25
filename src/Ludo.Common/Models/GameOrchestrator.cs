@@ -25,7 +25,7 @@ public class GameOrchestrator
     throw new NotImplementedException();
   }
 
-  public void NextPlayer()
+  public virtual void NextPlayer()
   {
     throw new NotImplementedException();
   }
