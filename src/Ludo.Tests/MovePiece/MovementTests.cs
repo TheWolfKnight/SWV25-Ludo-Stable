@@ -1,4 +1,3 @@
-using System;
 using FakeItEasy;
 using FluentAssertions;
 using FluentAssertions.Execution;
@@ -11,8 +10,10 @@ namespace Ludo.Tests.MovePiece;
 
 public class MovementTests
 {
-  [Fact]
-  public void Movement_GivenRoll3_DoNotMove5()
+  [Theory]
+  [InlineData(3, 5, 5)]
+  [InlineData(2, 1, 3)]
+  public void Movement_GivenRollX_DoNotMoveY(int roll, int check, int tileDepth)
   {
     // Arrange
     Piece piece = A.Fake<Piece>();
@@ -21,22 +22,23 @@ public class MovementTests
     StandardTile startTile = new StandardTile {
       Location = (1, 1),
       Pieces = [piece],
-      NextTile = GenerateFakeTiles(4)
+      NextTile = GenerateFakeTiles(tileDepth)
     };
 
-    A.CallTo(() => die.Roll()).Returns(3);
+    A.CallTo(() => die.Roll()).Returns(roll);
 
     // Act
     startTile.MovePiece(piece, die.Roll());
 
     // Assert
     using AssertionScope scope = new();
-    GetTileAt(startTile, 5)?.Pieces.Should().BeEmpty();
-    piece.CurrentTile.Should().NotBe(GetTileAt(startTile, 5));
+    GetTileAt(startTile, check)?.Pieces.Should().BeEmpty();
+    piece.CurrentTile.Should().NotBe(GetTileAt(startTile, check));
   }
 
-  [Fact]
-  public void Movement_GivenRoll3_Move3()
+  [Theory]
+  [InlineData(3, 5)]
+  public void Movement_GivenRoll3_Move3(int roll, int tileDepth)
   {
     // Arrange
     Piece piece = A.Fake<Piece>();
@@ -45,18 +47,18 @@ public class MovementTests
     StandardTile startTile = new StandardTile {
       Location = (1, 1),
       Pieces = [piece],
-      NextTile = GenerateFakeTiles(4)
+      NextTile = GenerateFakeTiles(tileDepth)
     };
 
-    A.CallTo(() => die.Roll()).Returns(3);
+    A.CallTo(() => die.Roll()).Returns(roll);
 
     // Act
     startTile.MovePiece(piece, die.Roll());
 
     // Assert
     using AssertionScope scepe = new();
-    GetTileAt(startTile, 3)?.Pieces.Should().HaveCount(1);
-    piece.CurrentTile.Should().NotBe(GetTileAt(startTile, 3));
+    GetTileAt(startTile, roll)?.Pieces.Should().HaveCount(1);
+    piece.CurrentTile.Should().Be(GetTileAt(startTile, roll));
   }
 
   [Fact]
@@ -235,10 +237,11 @@ public class MovementTests
     };
 
     // Act
-    bool pieceMoved = tile.MovePiece(piece1, 3);
+    tile.MovePiece(piece1, 3);
 
     // Assert
-    pieceMoved.Should().BeFalse();
+    piece1.CurrentTile.Should().Be(tile);
+    tile.NextTile.Pieces.Should().NotContain(piece1);
   }
 
   [Fact]
@@ -262,12 +265,12 @@ public class MovementTests
     };
 
     // Act
-    bool pieceMoved = tile.MovePiece(piece1, 3);
+    tile.MovePiece(piece1, 3);
 
     // Assert
-    pieceMoved.Should().BeTrue();
+    piece1.CurrentTile.Should().Be(tile.NextTile);
+    tile.NextTile.Pieces.Should().Contain(piece1);
   }
-
 
   #region Helpers
   private TileBase GenerateFakeTiles(int depth = 1)
