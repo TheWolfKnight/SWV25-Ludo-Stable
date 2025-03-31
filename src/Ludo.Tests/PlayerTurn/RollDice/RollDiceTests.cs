@@ -12,7 +12,7 @@ public class RollDiceTests
     /// Missing methods/states?
     /// </summary>
     [Fact]
-    public void RollDie_OnMyTurn_RollDie()
+    public void RollDie_OnPlayerTurn_RollDie()
     {
         // Arrange
         Player player = new Player()
@@ -32,14 +32,13 @@ public class RollDiceTests
         };
 
         // Act
-        orchestrator.NextPlayer();
         bool playerTurn = orchestrator.CurrentPlayer == player.PlayerNr;
-        int? rolled = orchestrator.Die.Roll();
+        int rolledNo = orchestrator.Die.Roll();
 
         // Assert
         using AssertionScope scope = new();
         playerTurn.Should().BeTrue();
-        rolled.Should().BeGreaterThan(0);
+        rolledNo.Should().BeGreaterThanOrEqualTo(1).And.BeLessThanOrEqualTo(6);
     }
 
     [Theory]
