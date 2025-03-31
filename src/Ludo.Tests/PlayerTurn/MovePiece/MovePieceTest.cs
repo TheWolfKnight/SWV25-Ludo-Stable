@@ -14,26 +14,33 @@ namespace Ludo.Tests.PlayerTurn.MovePiece
     public void Move_rollsX_moveX()
     {
       //Arrange
-      GameOrchestrator orchestrator = new()
+      Piece piece = A.Fake<Piece>();
+      DieBase die = A.Fake<DieBase>();
+      StandardTile moveToTile = A.Fake<StandardTile>();
+      
+      StandardTile startTile = new()
       {
-        Board = new Board { Tiles = [A.Fake<TileBase>()] },
-        Die = A.Fake<DieBase>(),
-        CurrentPlayer = 0,
-        Players = []
+        Location = (0,0),
+        PlayerNr = 0,
+        Pieces = [piece],
+        NextTile = moveToTile
       };
 
       //Act
-      int i = orchestrator.Die.Roll();
-      bool moved = orchestrator.Board.Tiles[0].MovePiece(A.Fake<Piece>(), i);
+      int rolled = die.Roll();
+      startTile.MovePiece(piece, rolled);
 
       //Assert
-      moved.Should().BeTrue();
+      startTile.Pieces.Should().BeEmpty();
     }
 
     [Fact]
     public void Move_NotRoll6AndPieceAtHome_CannotMoveOut()
     {
       //Arrange
+      Player player = A.Fake<Player>();
+      DieBase die = A.Fake<DieBase>();
+      
       HomeTile homeTile = new()
       {
         Location = (0, 0),
@@ -42,9 +49,6 @@ namespace Ludo.Tests.PlayerTurn.MovePiece
         NextTile = A.Fake<TileBase>()
       };
       
-      Player player = A.Fake<Player>();
-      DieBase die = A.Fake<DieBase>();
-
       Piece piece = new()
       {
         Owner = player,
@@ -78,16 +82,17 @@ namespace Ludo.Tests.PlayerTurn.MovePiece
     public void Move_NotRoll6AndNotAPieceAtHome_CannotMoveOut()
     {
       //Arrange
+      TileBase nextTile = A.Fake<TileBase>();
+      Player player = A.Fake<Player>();
+      DieBase die = A.Fake<DieBase>();
+      
       HomeTile homeTile = new()
       {
         Location = (0, 0),
         Pieces = [],
         PlayerNr = 0,
-        NextTile = A.Fake<TileBase>()
+        NextTile = nextTile
       };
-      
-      Player player = A.Fake<Player>();
-      DieBase die = A.Fake<DieBase>();
       
       Home home = new()
       {
@@ -103,17 +108,20 @@ namespace Ludo.Tests.PlayerTurn.MovePiece
       // This one is a bit odd, since I'm required to use a 
       // piece when moving out (since ofc), but for testing
       // I'm using a Fake Piece
-      bool moved = homeTile.MovePiece(A.Fake<Piece>(), i);
+      homeTile.MovePiece(A.Fake<Piece>(), i);
       
       //Assert
       home.Pieces.Should().BeEmpty();
-      moved.Should().BeFalse();
+      nextTile.Pieces.Should().BeEmpty();
     }
 
     [Fact]
     public void Move_Roll6andHasPieceAtHome_MoveOut()
     {
       //Arrange
+      Player player = A.Fake<Player>();
+      DieBase die = A.Fake<DieBase>();
+      
       HomeTile homeTile = new()
       {
         Location = (0, 0),
@@ -121,9 +129,6 @@ namespace Ludo.Tests.PlayerTurn.MovePiece
         Pieces = [],
         PlayerNr = 0
       };
-      
-      Player player = A.Fake<Player>();
-      DieBase die = A.Fake<DieBase>();
 
       Piece piece = new()
       {
@@ -158,17 +163,17 @@ namespace Ludo.Tests.PlayerTurn.MovePiece
     public void Move_Roll6andNoneAtHome_DontMoveOut()
     {
       //Arrange
-      //Arrange
+      TileBase nextTile = A.Fake<TileBase>();
+      Player player = A.Fake<Player>();
+      DieBase die = A.Fake<DieBase>();
+      
       HomeTile homeTile = new()
       {
         Location = (0, 0),
         Pieces = [],
         PlayerNr = 0,
-        NextTile = A.Fake<TileBase>()
+        NextTile = nextTile
       };
-      
-      Player player = A.Fake<Player>();
-      DieBase die = A.Fake<DieBase>();
       
       Home home = new()
       {
@@ -184,13 +189,11 @@ namespace Ludo.Tests.PlayerTurn.MovePiece
       // Like the Unit test further up, this is an odd one
       // since we're checking if it failed when moving a piece
       // out, but no pieces exist
-      bool moved = homeTile.MovePiece(A.Fake<Piece>(), i);
-
-      //Act
+      homeTile.MovePiece(A.Fake<Piece>(), i);
 
       //Assert
       home.Pieces.Should().BeEmpty();
-      moved.Should().BeFalse();
+      nextTile.Pieces.Should().BeEmpty();
     }
   }
 }
