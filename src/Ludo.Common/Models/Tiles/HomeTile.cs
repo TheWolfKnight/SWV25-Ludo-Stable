@@ -7,7 +7,7 @@ public class HomeTile: TileBase
 {
   public required TileBase NextTile { get; set; }
 
-  public override bool MovePiece(Piece piece, int amount)
+  public override void MovePiece(Piece piece, int amount)
   {
     throw new NotImplementedException();
   }
