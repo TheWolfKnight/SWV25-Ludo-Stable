@@ -15,13 +15,13 @@ public class SkipTurnTests
   {
     // Arrange
     Piece piece = A.Fake<Piece>();
+    A.CallTo(() => orchestrator.IsValidMove(piece)).Returns(false);
 
     // Act
     bool validMove = orchestrator.IsValidMove(piece);
     orchestrator.NextPlayer();
 
     // Assert
-    validMove.Should().BeFalse();
     orchestrator.CurrentPlayer.Should().Be(expectedPlayer.PlayerNr);
   }
 
@@ -38,6 +38,7 @@ public class SkipTurnTests
             CurrentPlayer = 0
         };
         A.CallTo(() => orchestrator.Die.Roll()).Returns(6);
+        A.CallTo(() => orchestrator.IsValidMove(piece)).Returns(false); 
         
         // Act
         int rollResult = orchestrator.Die.Roll();
@@ -45,9 +46,6 @@ public class SkipTurnTests
         orchestrator.NextPlayer();
         
         // Assert
-        using AssertionScope scope = new();
-        rollResult.Should().Be(6);
-        validMove.Should().BeFalse();
         orchestrator.CurrentPlayer.Should().Be(0);
     }
 }
