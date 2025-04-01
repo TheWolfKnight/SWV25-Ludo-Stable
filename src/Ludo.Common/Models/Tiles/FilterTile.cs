@@ -16,4 +16,9 @@ public class FilterTile: TileBase
   {
     throw new NotImplementedException();
   }
+
+  internal override bool InternalMakeMove(Piece piece, int amount)
+  {
+    
+  }
 }
