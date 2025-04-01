@@ -1,6 +1,7 @@
 ﻿using FakeItEasy;
 using FluentAssertions;
 using Ludo.Common.Models;
+using Ludo.Common.Models.Dice;
 using Ludo.Common.Models.Player;
 using Ludo.Common.Models.Tiles;
 

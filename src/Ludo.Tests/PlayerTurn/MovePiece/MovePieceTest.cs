@@ -1,6 +1,9 @@
 ﻿using FakeItEasy;
 using FluentAssertions;
+using FluentAssertions.Execution;
+using Ludo.Common.Enums;
 using Ludo.Common.Models;
+using Ludo.Common.Models.Dice;
 using Ludo.Common.Models.Player;
 using Ludo.Common.Models.Tiles;
 
@@ -12,141 +15,186 @@ namespace Ludo.Tests.PlayerTurn.MovePiece
     public void Move_rollsX_moveX()
     {
       //Arrange
-      Common.Models.GameOrchestrator orchestrator = new Common.Models.GameOrchestrator
+      Piece piece = A.Fake<Piece>();
+      DieBase die = A.Fake<DieBase>();
+      StandardTile moveToTile = A.Fake<StandardTile>();
+      
+      StandardTile startTile = new()
       {
-        Board = new Board { Tiles = [A.Fake<TileBase>()] },
-        Die = A.Fake<DieBase>(),
-        CurrentPlayer = 0,
-        Players = []
+        Location = (0,0),
+        PlayerNr = 0,
+        Pieces = [piece],
+        NextTile = moveToTile
       };
 
       //Act
-      int i = orchestrator.Die.Roll();
-      bool moved = orchestrator.Board.Tiles[0].MovePiece(A.Fake<Piece>(), i);
+      int rolled = die.Roll();
+      startTile.MovePiece(piece, rolled);
 
       //Assert
-      moved.Should().BeTrue();
+      startTile.Pieces.Should().BeEmpty();
     }
 
     [Fact]
     public void Move_NotRoll6AndPieceAtHome_CannotMoveOut()
     {
       //Arrange
-      GameOrchestrator orchestrator = new GameOrchestrator
+      Player player = A.Fake<Player>();
+      DieBase die = A.Fake<DieBase>();
+      
+      HomeTile homeTile = new()
       {
-        Board = new Board { Tiles = [A.Fake<TileBase>()] },
-        Die = A.Fake<DieBase>(),
-        CurrentPlayer = 0,
-        Players = []
+        Location = (0, 0),
+        Pieces = [],
+        PlayerNr = 0,
+        NextTile = A.Fake<TileBase>()
+      };
+      
+      Piece piece = new()
+      {
+        Owner = player,
+        PieceState = PieceState.Home,
+        CurrentTile = homeTile
+      };
+      
+      homeTile.Pieces.Add(piece);
+      
+      Home home = new()
+      {
+        Owner = player,
+        Pieces = [piece, A.Fake<Piece>()],
+        HomeTiles = [homeTile]
       };
 
-      Home home = new Home
-      {
-        Owner = A.Fake<Player>(),
-        Pieces = A.CollectionOfFake<Piece>(4).ToList(),
-        HomeTiles = []
-      };
-
-      A.CallTo(() => orchestrator.Die.Roll()).Returns(3);
-
-
+      A.CallTo(() => die.Roll()).Returns(3);
+      int rolled = die.Roll();
+      
       //Act
-      int i = orchestrator.Die.Roll();
-      throw new NotImplementedException();
-
+      home.HomeTiles[0].MovePiece(piece, rolled);
+      
       //Assert
-      home.Pieces.Should().HaveCount(4);
+      using AssertionScope assertions = new();
+      piece.PieceState.Should().Be(PieceState.Home);
+      home.Pieces.Should().Contain(piece).And.HaveCount(2);
+      homeTile.Pieces.Should().Contain(piece);
     }
 
     [Fact]
-    public void Move_NotRoll6AndNotAPieceAtHome_cannotMoveout()
+    public void Move_NotRoll6AndNotAPieceAtHome_CannotMoveOut()
     {
       //Arrange
-      GameOrchestrator orchestrator = new GameOrchestrator
+      TileBase nextTile = A.Fake<TileBase>();
+      Player player = A.Fake<Player>();
+      DieBase die = A.Fake<DieBase>();
+      
+      HomeTile homeTile = new()
       {
-        Board = new Board { Tiles = [A.Fake<TileBase>()] },
-        Die = A.Fake<DieBase>(),
-        Players = [],
-        CurrentPlayer = 0
-      };
-
-      Home home = new Home
-      {
-        Owner = A.Fake<Player>(),
+        Location = (0, 0),
         Pieces = [],
-        HomeTiles = []
+        PlayerNr = 0,
+        NextTile = nextTile
+      };
+      
+      Home home = new()
+      {
+        Owner = player,
+        Pieces = [],
+        HomeTiles = [homeTile]
       };
 
-      A.CallTo(() => orchestrator.Die.Roll()).Returns(3);
+      A.CallTo(() => die.Roll()).Returns(3);
+      int i = die.Roll();
 
       //Act
-      int i = orchestrator.Die.Roll();
-
-
+      // This one is a bit odd, since I'm required to use a 
+      // piece when moving out (since ofc), but for testing
+      // I'm using a Fake Piece
+      homeTile.MovePiece(A.Fake<Piece>(), i);
+      
       //Assert
-      throw new NotImplementedException();
       home.Pieces.Should().BeEmpty();
+      nextTile.Pieces.Should().BeEmpty();
     }
 
     [Fact]
     public void Move_Roll6andHasPieceAtHome_MoveOut()
     {
       //Arrange
-      GameOrchestrator orchestrator = new GameOrchestrator
+      Player player = A.Fake<Player>();
+      DieBase die = A.Fake<DieBase>();
+      
+      HomeTile homeTile = new()
       {
-        Board = new Board { Tiles = [A.Fake<TileBase>()] },
-        Die = A.Fake<DieBase>(),
-        CurrentPlayer = 0,
-        Players = []
+        Location = (0, 0),
+        NextTile = A.Fake<TileBase>(),
+        Pieces = [],
+        PlayerNr = 0
       };
 
-      Home home = new Home
+      Piece piece = new()
       {
-        Owner = A.Fake<Player>(),
-        Pieces = A.CollectionOfFake<Piece>(4).ToList(),
-        HomeTiles = []
+        Owner = player,
+        CurrentTile = homeTile,
+        PieceState = PieceState.Home
+      };
+      
+      homeTile.Pieces.Add(piece);
+      
+      Home home = new()
+      {
+        Owner = player,
+        Pieces = [piece],
+        HomeTiles = [homeTile]
       };
 
-      A.CallTo(() => orchestrator.Die.Roll()).Returns(6);
+      A.CallTo(() => die.Roll()).Returns(6);
+      int i = die.Roll();
 
       //Act
-      int i = orchestrator.Die.Roll();
-      bool moved = orchestrator.Board.Tiles[0].MovePiece(home.Pieces[0], i); //Burde være void?
+      homeTile.MovePiece(piece, i);
 
       //Assert
-      home.Pieces.Should().HaveCount(3);
-
+      using AssertionScope scope = new();
+      home.Pieces.Should().HaveCount(1);
+      homeTile.Pieces.Should().BeEmpty();
+      piece.PieceState.Should().Be(PieceState.OnBoard);
     }
 
     [Fact]
     public void Move_Roll6andNoneAtHome_DontMoveOut()
     {
       //Arrange
-      GameOrchestrator orchestrator = new GameOrchestrator
+      TileBase nextTile = A.Fake<TileBase>();
+      Player player = A.Fake<Player>();
+      DieBase die = A.Fake<DieBase>();
+      
+      HomeTile homeTile = new()
       {
-        Board = new Board { Tiles = [A.Fake<TileBase>()] },
-        Die = A.Fake<DieBase>(),
-        CurrentPlayer = 0,
-        Players = []
-      };
-
-      Home home = new Home
-      {
-        Owner = A.Fake<Player>(),
+        Location = (0, 0),
         Pieces = [],
-        HomeTiles = []
+        PlayerNr = 0,
+        NextTile = nextTile
+      };
+      
+      Home home = new()
+      {
+        Owner = player,
+        Pieces = [],
+        HomeTiles = [homeTile]
       };
 
-      A.CallTo(() => orchestrator.Die.Roll()).Returns(6);
+      A.CallTo(() => die.Roll()).Returns(6);
+      int i = die.Roll();
 
       //Act
-      int i = orchestrator.Die.Roll();
-      throw new NotImplementedException();
+      // Like the Unit test further up, this is an odd one
+      // since we're checking if it failed when moving a piece
+      // out, but no pieces exist
+      homeTile.MovePiece(A.Fake<Piece>(), i);
 
       //Assert
       home.Pieces.Should().BeEmpty();
-
-
+      nextTile.Pieces.Should().BeEmpty();
     }
   }
 }
