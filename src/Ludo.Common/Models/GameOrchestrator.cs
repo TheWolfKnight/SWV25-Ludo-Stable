@@ -28,7 +28,7 @@ public class GameOrchestrator
 
   public void NextPlayer()
   {
-    throw new NotImplementedException();
+    CurrentPlayer = (byte)((CurrentPlayer + 1) % Players.Length);
   }
 
   public bool IsValidMove(Piece piece)

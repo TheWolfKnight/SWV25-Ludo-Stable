@@ -22,9 +22,6 @@ public class RollDiceTests
         rolled.Should().BeGreaterThanOrEqualTo(1).And.BeLessThanOrEqualTo(6);
     }
     
-    /// <summary>
-    /// Missing methods/states?
-    /// </summary>
     [Fact]
     public void RollDie_OnPlayerTurn_RollDie()
     {
@@ -40,9 +37,9 @@ public class RollDiceTests
         GameOrchestrator orchestrator = new()
         {
             Players = [A.Fake<Player>(), player],
-            CurrentPlayer = 0,
+            CurrentPlayer = 1,
             Board = A.Fake<Board>(),
-            Die = A.Fake<DieBase>()
+            Die = new DieD6()
         };
 
         // Act
@@ -66,7 +63,8 @@ public class RollDiceTests
         // Assert
         playerTurn.Should().BeFalse();
     }
-
+    
+    #region Helpers
     public static IEnumerable<object[]> GetGameOrchestratorWithPlayers()
     {
         Player player = new()
@@ -84,7 +82,7 @@ public class RollDiceTests
                 new GameOrchestrator()
                 {
                     Players = [player, A.Fake<Player>()],
-                    CurrentPlayer = 0,
+                    CurrentPlayer = 1,
                     Board = A.Fake<Board>(),
                     Die = A.Fake<DieBase>()
                 },
@@ -92,4 +90,5 @@ public class RollDiceTests
             }
         };
     }
+    #endregion
 }
