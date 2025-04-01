@@ -1,4 +1,5 @@
 using System;
+using Ludo.Common.Models.Dice;
 using Ludo.Common.Models.Player;
 
 namespace Ludo.Common.Models;
