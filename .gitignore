@@ -4,3 +4,6 @@
 
 **/*.tmp
 **/*.log
+/.vs/Ludo
+/.vs
+*.user
