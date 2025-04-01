@@ -46,7 +46,7 @@ namespace Ludo.Tests.PlayerTurn.MovePiece
         Location = (0, 0),
         Pieces = [],
         PlayerNr = 0,
-        NextTile = A.Fake<TileBase>()
+        NextTile = A.Fake<StandardTile>()
       };
 
       Piece piece = new()
@@ -82,7 +82,7 @@ namespace Ludo.Tests.PlayerTurn.MovePiece
     public void Move_NotRoll6AndNotAPieceAtHome_CannotMoveOut()
     {
       //Arrange
-      TileBase nextTile = A.Fake<TileBase>();
+      TileBase nextTile = A.Fake<StandardTile>();
       Player player = A.Fake<Player>();
       DieBase die = A.Fake<DieBase>();
       
@@ -109,7 +109,7 @@ namespace Ludo.Tests.PlayerTurn.MovePiece
       // piece when moving out (since ofc), but for testing
       // I'm using a Fake Piece
       homeTile.MovePiece(A.Fake<Piece>(), i);
-      
+
       //Assert
       home.Pieces.Should().BeEmpty();
       nextTile.Pieces.Should().BeEmpty();
@@ -125,7 +125,7 @@ namespace Ludo.Tests.PlayerTurn.MovePiece
       HomeTile homeTile = new()
       {
         Location = (0, 0),
-        NextTile = A.Fake<TileBase>(),
+        NextTile = A.Fake<StandardTile>(),
         Pieces = [],
         PlayerNr = 0
       };
@@ -163,7 +163,7 @@ namespace Ludo.Tests.PlayerTurn.MovePiece
     public void Move_Roll6andNoneAtHome_DontMoveOut()
     {
       //Arrange
-      TileBase nextTile = A.Fake<TileBase>();
+      TileBase nextTile = A.Fake<StandardTile>();
       Player player = A.Fake<Player>();
       DieBase die = A.Fake<DieBase>();
       

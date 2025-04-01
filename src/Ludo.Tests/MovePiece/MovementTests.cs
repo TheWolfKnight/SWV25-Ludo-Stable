@@ -71,7 +71,7 @@ public class MovementTests
       PlayerNr = 1,
       InPlay = true,
       Pieces = [],
-      Home = null! // TODO: Make home for blue, to complete test
+      Home = null!
     };
     Piece red = new Piece {
       Owner = redPlayer,

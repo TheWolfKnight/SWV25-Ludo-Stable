@@ -21,6 +21,18 @@ public class FilterTile: TileBase
 
   internal override (bool MoveAccepted, TileBase TargetTile) InternalMakeMove(Piece piece, int amount)
   {
-    throw new NotImplementedException();
+    if (amount is 0)
+      return (true, this);
+
+    bool containsOwnPiece = base.Pieces.Any(inner => inner.Owner.PlayerNr == piece.Owner.PlayerNr);
+    if (containsOwnPiece)
+      return (false, this);
+
+    bool isFilterdPlayer = base.PlayerNr == piece.Owner.PlayerNr;
+    Func<Piece, int, (bool MoveAccepted, TileBase TargetTile)> method = isFilterdPlayer
+      ? FilterdTile.InternalMakeMove
+      : NextTile.InternalMakeMove;
+
+    return method(piece, amount - 1);
   }
 }

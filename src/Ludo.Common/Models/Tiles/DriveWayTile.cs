@@ -18,11 +18,6 @@ public class DriveWayTile: TileBase, IGoalTile
     throw new NotImplementedException();
   }
 
-  public bool DriveWayMove(Piece piece, int amount, bool forward)
-  {
-    throw new NotImplementedException();
-  }
-
   internal override (bool MoveAccepted, TileBase TargetTile) InternalMakeMove(Piece piece, int amount)
   {
     throw new NotImplementedException();
