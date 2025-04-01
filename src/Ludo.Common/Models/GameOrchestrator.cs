@@ -5,6 +5,7 @@ namespace Ludo.Common.Models;
 
 public class GameOrchestrator
 {
+  public required byte CurrentPlayer { get; set; }
   public required DieBase Die { get; init; }
   public required Board Board { get; init; }
   public required Player.Player[] Players { get; set; }
@@ -24,7 +25,12 @@ public class GameOrchestrator
     throw new NotImplementedException();
   }
 
-  public void IsValidMove(Piece piece)
+  public void NextPlayer()
+  {
+    throw new NotImplementedException();
+  }
+
+  public bool IsValidMove(Piece piece)
   {
     throw new NotImplementedException();
   }
