@@ -37,9 +37,11 @@ public class SkipTurnTests
             Players = [],
             CurrentPlayer = 0
         };
+        A.CallTo(() => orchestrator.Die.Roll()).Returns(6);
         A.CallTo(() => orchestrator.IsValidMove(piece)).Returns(false); 
         
         // Act
+        int die = orchestrator.Die.Roll();
         bool validMove = orchestrator.IsValidMove(piece);
         orchestrator.NextPlayer();
         
