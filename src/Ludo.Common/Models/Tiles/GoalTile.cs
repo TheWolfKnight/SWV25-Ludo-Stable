@@ -16,5 +16,10 @@ public class GoalTile: TileBase, IGoalTile
   {
     throw new NotImplementedException();
   }
+
+  internal override (bool MoveAccepted, TileBase TargetTile) InternalMakeMove(Piece piece, int amount)
+  {
+    throw new NotImplementedException();
+  }
 }
 

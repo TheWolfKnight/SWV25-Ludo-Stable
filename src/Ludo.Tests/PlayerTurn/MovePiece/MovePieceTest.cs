@@ -17,7 +17,7 @@ namespace Ludo.Tests.PlayerTurn.MovePiece
       Piece piece = A.Fake<Piece>();
       DieBase die = A.Fake<DieBase>();
       StandardTile moveToTile = A.Fake<StandardTile>();
-      
+
       StandardTile startTile = new()
       {
         Location = (0,0),
@@ -40,7 +40,7 @@ namespace Ludo.Tests.PlayerTurn.MovePiece
       //Arrange
       Player player = A.Fake<Player>();
       DieBase die = A.Fake<DieBase>();
-      
+
       HomeTile homeTile = new()
       {
         Location = (0, 0),
@@ -48,16 +48,16 @@ namespace Ludo.Tests.PlayerTurn.MovePiece
         PlayerNr = 0,
         NextTile = A.Fake<TileBase>()
       };
-      
+
       Piece piece = new()
       {
         Owner = player,
         PieceState = PieceState.Home,
         CurrentTile = homeTile
       };
-      
+
       homeTile.Pieces.Add(piece);
-      
+
       Home home = new()
       {
         Owner = player,
@@ -67,10 +67,10 @@ namespace Ludo.Tests.PlayerTurn.MovePiece
 
       A.CallTo(() => die.Roll()).Returns(3);
       int rolled = die.Roll();
-      
+
       //Act
       home.HomeTiles[0].MovePiece(piece, rolled);
-      
+
       //Assert
       using AssertionScope assertions = new();
       piece.PieceState.Should().Be(PieceState.Home);

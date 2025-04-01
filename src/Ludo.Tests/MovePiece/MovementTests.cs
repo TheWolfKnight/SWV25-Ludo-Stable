@@ -25,6 +25,7 @@ public class MovementTests
       NextTile = GenerateFakeTiles(tileDepth)
     };
 
+    piece.CurrentTile = startTile;
     A.CallTo(() => die.Roll()).Returns(roll);
 
     // Act
@@ -50,6 +51,7 @@ public class MovementTests
       NextTile = GenerateFakeTiles(tileDepth)
     };
 
+    piece.CurrentTile = startTile;
     A.CallTo(() => die.Roll()).Returns(roll);
 
     // Act
@@ -69,7 +71,7 @@ public class MovementTests
       PlayerNr = 1,
       InPlay = true,
       Pieces = [],
-      Home = null!
+      Home = null! // TODO: Make home for blue, to complete test
     };
     Piece red = new Piece {
       Owner = redPlayer,
@@ -98,6 +100,8 @@ public class MovementTests
       }
     };
 
+    red.CurrentTile = blueStart.NextTile;
+    blue.CurrentTile = blueStart;
     // Act
     blueStart.MovePiece(blue, 1);
 
@@ -144,6 +148,9 @@ public class MovementTests
       }
     };
 
+    red.CurrentTile = redStart;
+    blue.CurrentTile = redStart.NextTile;
+
     // Act
     redStart.MovePiece(red, 1);
 
@@ -172,6 +179,8 @@ public class MovementTests
       Pieces = []
     };
 
+    piece.CurrentTile = tile;
+
     // Act
     tile.MovePiece(piece, 1);
 
@@ -199,6 +208,8 @@ public class MovementTests
       Pieces = [],
       PreviusTile = tile
     };
+
+    piece.CurrentTile = tile;
 
     // Act
     tile.MovePiece(piece, 2);
@@ -236,6 +247,9 @@ public class MovementTests
       }
     };
 
+    piece1.CurrentTile = tile;
+    piece2.CurrentTile = tile.NextTile;
+
     // Act
     tile.MovePiece(piece1, 3);
 
@@ -263,6 +277,8 @@ public class MovementTests
         Pieces = []
       }
     };
+
+    piece1.CurrentTile = tile;
 
     // Act
     tile.MovePiece(piece1, 3);

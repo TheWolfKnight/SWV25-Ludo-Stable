@@ -9,16 +9,18 @@ public class FilterTile: TileBase
 
   public override void MovePiece(Piece piece, int amount)
   {
-    throw new NotImplementedException();
+    (bool moveAccepted, TileBase targetTile) = InternalMakeMove(piece, amount);
+    if (!moveAccepted)
+      return;
   }
 
   public override bool PeekMove(Piece piece, int amount)
   {
-    throw new NotImplementedException();
+    return InternalMakeMove(piece, amount).MoveAccepted;
   }
 
-  internal override bool InternalMakeMove(Piece piece, int amount)
+  internal override (bool MoveAccepted, TileBase TargetTile) InternalMakeMove(Piece piece, int amount)
   {
-    
+    throw new NotImplementedException();
   }
 }
