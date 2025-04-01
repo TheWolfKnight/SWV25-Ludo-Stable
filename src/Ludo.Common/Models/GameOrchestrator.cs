@@ -35,4 +35,9 @@ public class GameOrchestrator
   {
     throw new NotImplementedException();
   }
+
+    public void DetermineStartingPlayer()
+    {
+        CurrentPlayer = 1;
+    }
 }

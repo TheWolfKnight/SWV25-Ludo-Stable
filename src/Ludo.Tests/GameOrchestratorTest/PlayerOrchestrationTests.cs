@@ -94,113 +94,94 @@ namespace Ludo.Tests.GameOrchestratorTest
                 };
             }
 
-            public static DieBase CreateDummyDie()
-            {
-                return new DieBase
-                {
-                    Faces = new int[] { 1, 2, 3, 4, 5, 6 }
-                };
-            }
+
         }
 
-        public class GameOrchestratorWithLogic : GameOrchestrator
+
+        [Fact]
+        public void DetermineStartingPlayer_ShouldReRollIfTie()
         {
-            public override void NextPlayer()
+            // Arrange
+            var players = new[]
             {
-                CurrentPlayer = (byte)((CurrentPlayer + 1) % Players.Length);
-            }
-
-            public void DetermineStartingPlayer()
-            {
-                CurrentPlayer = 1;
-            }
-        }
-
-      
-            [Fact]
-            public void DetermineStartingPlayer_ShouldReRollIfTie()
-            {
-                // Arrange
-                var players = new[]
-                {
                 TestHelpers.CreateDummyPlayer(0),
                 TestHelpers.CreateDummyPlayer(1),
                 TestHelpers.CreateDummyPlayer(2),
                 TestHelpers.CreateDummyPlayer(3),
             };
 
-                var fakeDie = A.Fake<DieBase>();
-                A.CallTo(() => fakeDie.Roll())
-                 .ReturnsNextFromSequence(3, 5, 2, 5, 6, 2);
+            var fakeDie = A.Fake<DieBase>();
+            A.CallTo(() => fakeDie.Roll())
+             .ReturnsNextFromSequence(3, 5, 2, 5, 6, 2);
 
-                var orchestrator = new GameOrchestratorWithLogic
-                {
-                    Players = players,
-                    Die = fakeDie,
-                    Board = TestHelpers.CreateDummyBoard(),
-                    CurrentPlayer = 0
-                };
-
-                // Act
-                orchestrator.DetermineStartingPlayer();
-
-                // Assert
-                orchestrator.CurrentPlayer.Should().Be(1);
-            }
-
-            [Fact]
-            public void NextPlayer_WhenCurrentPlayerIs3_ShouldBe0()
+            var orchestrator = new GameOrchestrator
             {
-                // Arrange
-                var players = new[]
-                {
-                TestHelpers.CreateDummyPlayer(0),
-                TestHelpers.CreateDummyPlayer(1),
-                TestHelpers.CreateDummyPlayer(2),
-                TestHelpers.CreateDummyPlayer(3)
+                Players = players,
+                Die = fakeDie,
+                Board = TestHelpers.CreateDummyBoard(),
+                CurrentPlayer = 0
             };
 
-                var orchestrator = new GameOrchestratorWithLogic
-                {
-                    Players = players,
-                    Die = A.Fake<DieBase>(),
-                    Board = TestHelpers.CreateDummyBoard(),
-                    CurrentPlayer = 3
-                };
+            // Act
+            orchestrator.DetermineStartingPlayer();
 
-                // Act
-                orchestrator.NextPlayer();
-
-                // Assert
-                orchestrator.CurrentPlayer.Should().Be(0);
-            }
-
-            [Fact]
-            public void NextPlayer_WhenCurrentPlayerIs1_ShouldBe2()
-            {
-                // Arrange
-                var players = new[]
-                {
-                TestHelpers.CreateDummyPlayer(0),
-                TestHelpers.CreateDummyPlayer(1),
-                TestHelpers.CreateDummyPlayer(2),
-                TestHelpers.CreateDummyPlayer(3)
-            };
-
-                var orchestrator = new GameOrchestratorWithLogic
-                {
-                    Players = players,
-                    Die = A.Fake<DieBase>(),
-                    Board = TestHelpers.CreateDummyBoard(),
-                    CurrentPlayer = 1
-                };
-
-                // Act
-                orchestrator.NextPlayer();
-
-                // Assert
-                orchestrator.CurrentPlayer.Should().Be(2);
-            }
+            // Assert
+            orchestrator.CurrentPlayer.Should().Be(1);
         }
 
-  }
+        [Fact]
+        public void NextPlayer_WhenCurrentPlayerIs3_ShouldBe0()
+        {
+            // Arrange
+            var players = new[]
+            {
+                TestHelpers.CreateDummyPlayer(0),
+                TestHelpers.CreateDummyPlayer(1),
+                TestHelpers.CreateDummyPlayer(2),
+                TestHelpers.CreateDummyPlayer(3)
+            };
+
+            var orchestrator = new GameOrchestrator
+            {
+                Players = players,
+                Die = A.Fake<DieBase>(),
+                Board = TestHelpers.CreateDummyBoard(),
+                CurrentPlayer = 3
+            };
+
+            // Act
+            orchestrator.NextPlayer();
+
+            // Assert
+            orchestrator.CurrentPlayer.Should().Be(0);
+        }
+
+        [Fact]
+        public void NextPlayer_WhenCurrentPlayerIs1_ShouldBe2()
+        {
+            // Arrange
+            var players = new[]
+            {
+                TestHelpers.CreateDummyPlayer(0),
+                TestHelpers.CreateDummyPlayer(1),
+                TestHelpers.CreateDummyPlayer(2),
+                TestHelpers.CreateDummyPlayer(3)
+            };
+
+            var orchestrator = new GameOrchestrator
+            {
+                Players = players,
+                Die = A.Fake<DieBase>(),
+                Board = TestHelpers.CreateDummyBoard(),
+                CurrentPlayer = 1
+            };
+
+            // Act
+            orchestrator.NextPlayer();
+
+            // Assert
+            orchestrator.CurrentPlayer.Should().Be(2);
+        }
+    }
+
+}
