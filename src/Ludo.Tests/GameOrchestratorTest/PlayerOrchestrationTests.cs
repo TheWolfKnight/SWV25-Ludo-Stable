@@ -51,7 +51,7 @@ namespace Ludo.Tests.GameOrchestratorTest
       gameOrchestrator.NextPlayer();
 
       // Assert
-      expectedNextPlayer.Should().Be(gameOrchestrator.CurrentPlayer);
+      gameOrchestrator.CurrentPlayer.Should().Be(expectedNextPlayer);
     }
   }
 }
