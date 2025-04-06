@@ -1,3 +1,4 @@
+using Ludo.Common.Enums;
 using Ludo.Common.Models.Player;
 
 namespace Ludo.Common.Models.Tiles;
@@ -12,6 +13,22 @@ public class FilterTile: TileBase
     (bool moveAccepted, TileBase targetTile) = InternalMakeMove(piece, amount);
     if (!moveAccepted)
       return;
+
+    base.Pieces.Remove(piece);
+
+    int opponentCount = targetTile.Pieces.Count(inner => inner.Owner.PlayerNr != piece.Owner.PlayerNr);
+    if (opponentCount > 1)
+    {
+      piece.MoveToHome();
+      return;
+    }
+    else if (opponentCount == 1)
+    {
+      Piece opp = targetTile.Pieces.First();
+      opp.MoveToHome();
+    }
+
+    targetTile.TakePiece(piece);
   }
 
   public override bool PeekMove(Piece piece, int amount)
@@ -34,5 +51,12 @@ public class FilterTile: TileBase
       : NextTile.InternalMakeMove;
 
     return method(piece, amount - 1);
+  }
+
+  internal override void TakePiece(Piece piece)
+  {
+    piece.PieceState = PieceState.OnBoard;
+    piece.CurrentTile = this;
+    base.Pieces.Add(piece);
   }
 }

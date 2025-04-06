@@ -12,4 +12,5 @@ public abstract class TileBase
   public abstract bool PeekMove(Piece piece, int amount); 
 
   internal abstract (bool MoveAccepted, TileBase TargetTile) InternalMakeMove(Piece piece, int amount);
+  internal abstract void TakePiece(Piece piece);
 }
