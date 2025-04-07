@@ -19,13 +19,20 @@ public class HomeTileTests
     //Arrange
     Piece piece = new Piece
     {
-      Owner = null!,
+      Owner = new Player
+      {
+        PlayerNr = 1,
+        InPlay = true,
+        Pieces = [],
+        Home = null!,
+      },
       CurrentTile = null!,
       PieceState = PieceState.Home
     };
 
     HomeTile tile = new HomeTile
     {
+      PlayerNr = 1,
       Location = (1, 1),
       Pieces = [piece],
       NextTile = new StandardTile
@@ -47,18 +54,26 @@ public class HomeTileTests
     tile.NextTile.Pieces.Should().BeEmpty();
   }
 
+  [Fact]
   public void HomeTile_PieceShouldMoveOut_When6Rolled()
   {
     //Arrange
     Piece piece = new Piece
     {
-      Owner = null!,
+      Owner = new Player
+      {
+        PlayerNr = 1,
+        InPlay = true,
+        Pieces = [],
+        Home = null!,
+      },
       CurrentTile = null!,
       PieceState = PieceState.Home
     };
 
     HomeTile tile = new HomeTile
     {
+      PlayerNr = 1,
       Location = (1, 1),
       Pieces = [piece],
       NextTile = new StandardTile

@@ -91,6 +91,7 @@ public class FilterTileTests
       },
       FilterdTile = new DriveWayTile
       {
+        PlayerNr = playerAllegiance,
         Location = (1, 1),
         Pieces = [],
         NextTile = null!,

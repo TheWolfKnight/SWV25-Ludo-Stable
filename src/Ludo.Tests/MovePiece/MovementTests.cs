@@ -19,7 +19,8 @@ public class MovementTests
     Piece piece = A.Fake<Piece>();
     DieBase die = A.Fake<DieBase>();
 
-    StandardTile startTile = new StandardTile {
+    StandardTile startTile = new StandardTile
+    {
       Location = (1, 1),
       Pieces = [piece],
       NextTile = GenerateFakeTiles(tileDepth)
@@ -45,7 +46,8 @@ public class MovementTests
     Piece piece = A.Fake<Piece>();
     DieBase die = A.Fake<DieBase>();
 
-    StandardTile startTile = new StandardTile {
+    StandardTile startTile = new StandardTile
+    {
       Location = (1, 1),
       Pieces = [piece],
       NextTile = GenerateFakeTiles(tileDepth)
@@ -67,33 +69,39 @@ public class MovementTests
   public void Movement_GivenBlueLandsOn2Red_SendBlueHome()
   {
     // Arrange
-    Player redPlayer = new() {
+    Player redPlayer = new()
+    {
       PlayerNr = 1,
       InPlay = true,
       Pieces = [],
       Home = null!
     };
-    Piece red = new Piece {
+    Piece red = new Piece
+    {
       Owner = redPlayer,
       CurrentTile = null!,
       PieceState = PieceState.OnBoard,
     };
-    Player bluePlayer = new() {
+    Player bluePlayer = new()
+    {
       PlayerNr = 2,
       InPlay = true,
       Pieces = [],
       Home = null! // TODO: Make home for blue, to complete test
     };
-    Piece blue = new Piece {
+    Piece blue = new Piece
+    {
       Owner = bluePlayer,
       CurrentTile = null!,
       PieceState = PieceState.OnBoard
     };
 
-    StandardTile blueStart = new() {
+    StandardTile blueStart = new()
+    {
       Location = (1,1),
       Pieces = [blue],
-      NextTile = new StandardTile {
+      NextTile = new StandardTile
+      {
         Location = (1,1),
         Pieces = [red, red],
         NextTile = null!
@@ -115,33 +123,39 @@ public class MovementTests
   public void Movement_GivenRedLandsOnBlue_SendBlueHome()
   {
     // Arrange
-    Player redPlayer = new() {
+    Player redPlayer = new()
+    {
       PlayerNr = 1,
       InPlay = true,
       Pieces = [],
       Home = null!
     };
-    Piece red = new Piece {
+    Piece red = new Piece
+    {
       Owner = redPlayer,
       CurrentTile = null!,
       PieceState = PieceState.OnBoard,
     };
-    Player bluePlayer = new() {
+    Player bluePlayer = new()
+    {
       PlayerNr = 2,
       InPlay = true,
       Pieces = [],
       Home = null! // TODO: give home to complete test
     };
-    Piece blue = new Piece {
+    Piece blue = new Piece
+    {
       Owner = bluePlayer,
       CurrentTile = null!,
       PieceState = PieceState.OnBoard
     };
 
-    StandardTile redStart = new() {
+    StandardTile redStart = new()
+    {
       Location = (1,1),
       Pieces = [red],
-      NextTile = new StandardTile {
+      NextTile = new StandardTile
+      {
         Location = (1,1),
         Pieces = [blue],
         NextTile = null!
@@ -166,14 +180,18 @@ public class MovementTests
     // Arrange
     Piece piece = A.Fake<Piece>();
     GoalTile goal = null!;
-    DriveWayTile tile = new DriveWayTile {
+    DriveWayTile tile = new DriveWayTile
+    {
+      PlayerNr = 1,
       Location = (1,1),
       NextTile = goal,
       PreviusTile = null!,
       Pieces = [piece]
     };
 
-    goal = new() {
+    goal = new()
+    {
+      PlayerNr = 1,
       Location = (1,1),
       PreviusTile = tile,
       Pieces = []
@@ -195,15 +213,20 @@ public class MovementTests
   {
     // Arrange
     Piece piece = A.Fake<Piece>();
+
     GoalTile goal = null!;
-    DriveWayTile tile = new DriveWayTile {
+    DriveWayTile tile = new DriveWayTile
+    {
+      PlayerNr = 1,
       Location = (1,1),
       NextTile = goal,
       PreviusTile = null!,
       Pieces = [piece]
     };
 
-    goal = new() {
+    goal = new()
+    {
+      PlayerNr = 1,
       Location = (1,1),
       Pieces = [],
       PreviusTile = tile
@@ -226,21 +249,25 @@ public class MovementTests
   {
     // Arrange
     Player player = A.Fake<Player>();
-    Piece piece1 = new() {
+    Piece piece1 = new()
+    {
       CurrentTile = null!,
       Owner = player,
       PieceState = PieceState.OnBoard
     };
-    Piece piece2 = new() {
+    Piece piece2 = new()
+    {
       CurrentTile = null!,
       Owner = player,
       PieceState = PieceState.OnBoard
     };
 
-    StandardTile tile = new StandardTile {
+    StandardTile tile = new StandardTile
+    {
       Location = (1,1),
       Pieces = [piece1],
-      NextTile = new StandardTile {
+      NextTile = new StandardTile
+      {
         Location = (1,1),
         NextTile = GenerateFakeTiles(2),
         Pieces = [piece2]
@@ -268,10 +295,12 @@ public class MovementTests
       PieceState = PieceState.OnBoard
     };
 
-    StandardTile tile = new StandardTile {
+    StandardTile tile = new StandardTile
+    {
       Location = (1,1),
       Pieces = [piece1],
-      NextTile = new StandardTile {
+      NextTile = new StandardTile
+      {
         Location = (1,1),
         NextTile = GenerateFakeTiles(2),
         Pieces = []
@@ -291,7 +320,8 @@ public class MovementTests
   #region Helpers
   private TileBase GenerateFakeTiles(int depth = 1)
   {
-    StandardTile tail = new StandardTile {
+    StandardTile tail = new StandardTile
+    {
       Location = (1,1),
       Pieces = [],
       NextTile = null!,
@@ -300,7 +330,8 @@ public class MovementTests
 
     for (int i = 1; i < depth; ++i)
     {
-      StandardTile head = new StandardTile {
+      StandardTile head = new StandardTile
+      {
         Location = (1,1),
         Pieces = [],
         NextTile = current

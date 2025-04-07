@@ -5,6 +5,7 @@ namespace Ludo.Common.Models.Tiles;
 
 public class HomeTile: TileBase
 {
+  public override required byte? PlayerNr { get; init; }
   public required TileBase NextTile { get; set; }
 
   public void SendPieceHome(Piece piece)

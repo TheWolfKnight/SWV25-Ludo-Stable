@@ -14,12 +14,18 @@ public class DriveWayTileTests
     //Arrange
     Piece piece = new Piece
     {
-      Owner = null!,
+      Owner = new Player
+    {
+      PlayerNr = 1,
+      InPlay = true,
+      Pieces = new Piece[1],
+      Home = null!,
+    },
       CurrentTile = null!,
       PieceState = PieceState.OnBoard,
     };
 
-    DriveWayTile tile = GenerateDriveWay(2);
+    DriveWayTile tile = GenerateDriveWay(3, 1);
     tile.Pieces.Add(piece);
     piece.CurrentTile = tile;
 
@@ -39,12 +45,18 @@ public class DriveWayTileTests
     //Arrange
     Piece piece = new Piece
     {
-      Owner = null!,
+      Owner = new Player
+    {
+      PlayerNr = 1,
+      InPlay = true,
+      Pieces = new Piece[1],
+      Home = null!,
+    },
       CurrentTile = null!,
       PieceState = PieceState.OnBoard,
     };
 
-    DriveWayTile tile = GenerateDriveWay(3);
+    DriveWayTile tile = GenerateDriveWay(3, 1);
     tile.Pieces.Add(piece);
     piece.CurrentTile = tile;
 
@@ -58,10 +70,11 @@ public class DriveWayTileTests
   }
 
 #region Helpers
-  private DriveWayTile GenerateDriveWay(int depth)
+  private DriveWayTile GenerateDriveWay(int depth, byte playerAlligiance)
   {
     DriveWayTile tail = new DriveWayTile
     {
+      PlayerNr = playerAlligiance,
       Location = (1, 1),
       Pieces = [],
       NextTile = null!,
@@ -74,6 +87,7 @@ public class DriveWayTileTests
     {
       DriveWayTile head = new DriveWayTile
       {
+        PlayerNr = playerAlligiance,
         Location = (1, 1),
         Pieces = [],
         NextTile = null!,

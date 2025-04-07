@@ -6,35 +6,32 @@ namespace Ludo.Common.Models.Tiles;
 
 public class DriveWayTile: TileBase, IGoalTile
 {
+  public required override byte? PlayerNr { get; init; }
+
   public required IGoalTile NextTile { get; set; }
   public required DriveWayTile? PreviusTile { get; set; }
 
   public override void MovePiece(Piece piece, int amount)
   {
+    if (piece.Owner.PlayerNr != this.PlayerNr)
+    {
+      piece.MoveToHome();
+      return;
+    }
+
     (bool moveAccepted, TileBase targetTile) = InternalMakeMove(piece, amount);
 
     if (!moveAccepted)
       return;
 
     base.Pieces.Remove(piece);
-
-    int opponentCount = targetTile.Pieces.Count(inner => inner.Owner.PlayerNr != piece.Owner.PlayerNr);
-    if (opponentCount > 1)
-    {
-      piece.MoveToHome();
-      return;
-    }
-    else if (opponentCount == 1)
-    {
-      Piece opp = targetTile.Pieces.First();
-      opp.MoveToHome();
-    }
-
     targetTile.TakePiece(piece);
   }
 
   public override bool PeekMove(Piece piece, int amount)
   {
+    if (piece.Owner.PlayerNr != this.PlayerNr)
+      return false;
     return InternalMakeMove(piece, amount).MoveAccepted;
   }
 

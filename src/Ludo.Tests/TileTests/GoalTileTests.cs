@@ -15,13 +15,20 @@ public class GoalTileTests
     //Arrange
     Piece piece = new Piece
     {
-      Owner = null!,
+      Owner = new Player
+      {
+        PlayerNr = 1,
+        InPlay = true,
+        Pieces = [],
+        Home = null!,
+      },
       CurrentTile = null!,
       PieceState = PieceState.OnBoard,
     };
 
     DriveWayTile tile = new DriveWayTile
     {
+      PlayerNr = 1,
       Location = (1, 1),
       Pieces = [piece],
       NextTile = null!,
@@ -31,6 +38,7 @@ public class GoalTileTests
 
     GoalTile goal = new GoalTile
     {
+      PlayerNr = 1,
       Location = (1, 1),
       Pieces = [],
       PreviusTile = tile,
@@ -54,13 +62,20 @@ public class GoalTileTests
     //Arrange
     Piece piece = new Piece
     {
-      Owner = null!,
+      Owner = new Player
+      {
+        PlayerNr = 1,
+        InPlay = true,
+        Pieces = [],
+        Home = null!,
+      },
       CurrentTile = null!,
       PieceState = PieceState.OnBoard,
     };
 
     DriveWayTile tile = new DriveWayTile
     {
+      PlayerNr = 1,
       Location = (1, 1),
       Pieces = [piece],
       NextTile = null!,
@@ -70,6 +85,7 @@ public class GoalTileTests
 
     GoalTile goal = new GoalTile
     {
+      PlayerNr = 1,
       Location = (1, 1),
       Pieces = [],
       PreviusTile = tile,
