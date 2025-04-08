@@ -4,7 +4,7 @@ using Ludo.Common.Models.Player;
 
 namespace Ludo.Common.Models.Tiles;
 
-public class DriveWayTile: TileBase, IGoalTile
+public class DriveWayTile : TileBase, IGoalTile
 {
   public required override byte? PlayerNr { get; init; }
 
@@ -45,7 +45,7 @@ public class DriveWayTile: TileBase, IGoalTile
     if (amount is 0)
       return (true, this);
 
-    bool containsOwnPiece = base.Pieces.Any(inner => inner.Owner.PlayerNr == piece.Owner.PlayerNr);
+    bool containsOwnPiece = base.Pieces.Any(inner => inner.Owner.PlayerNr == piece.Owner.PlayerNr && inner != piece);
     if (containsOwnPiece)
       return (false, this);
 

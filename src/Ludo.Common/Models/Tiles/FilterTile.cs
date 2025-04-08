@@ -3,7 +3,7 @@ using Ludo.Common.Models.Player;
 
 namespace Ludo.Common.Models.Tiles;
 
-public class FilterTile: TileBase
+public class FilterTile : TileBase
 {
   public required TileBase NextTile { get; set; }
   public required DriveWayTile FilterdTile { get; set; }
@@ -41,7 +41,7 @@ public class FilterTile: TileBase
     if (amount is 0)
       return (true, this);
 
-    bool containsOwnPiece = base.Pieces.Any(inner => inner.Owner.PlayerNr == piece.Owner.PlayerNr);
+    bool containsOwnPiece = base.Pieces.Any(inner => inner.Owner.PlayerNr == piece.Owner.PlayerNr && inner != piece);
     if (containsOwnPiece)
       return (false, this);
 

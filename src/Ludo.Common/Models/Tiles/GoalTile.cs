@@ -4,7 +4,7 @@ using Ludo.Common.Enums;
 
 namespace Ludo.Common.Models.Tiles;
 
-public class GoalTile: TileBase, IGoalTile
+public class GoalTile : TileBase, IGoalTile
 {
   public override required byte? PlayerNr { get; init; }
   public required DriveWayTile PreviusTile { get; set; }
@@ -42,7 +42,7 @@ public class GoalTile: TileBase, IGoalTile
     //      Should the pieces in the goal be counted as on the board for rule 1
     //      "you cannot jump over own pieces"
     // For now, I will assume it does
-    bool containsOwnPieces = base.Pieces.Any(inner => inner.Owner.PlayerNr == piece.Owner.PlayerNr);
+    bool containsOwnPieces = base.Pieces.Any(inner => inner.Owner.PlayerNr == piece.Owner.PlayerNr && inner != piece);
     if (containsOwnPieces)
       return (false, this);
 

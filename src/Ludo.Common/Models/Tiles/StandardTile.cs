@@ -15,7 +15,7 @@ public class StandardTile : TileBase
 
     base.Pieces.Remove(piece);
 
-    int cntOpponentPieces = base.Pieces.Count(inner => inner.Owner.PlayerNr != piece.Owner.PlayerNr);
+    int cntOpponentPieces = base.Pieces.Count(inner => inner.Owner.PlayerNr != piece.Owner.PlayerNr && inner != piece);
     if (cntOpponentPieces > 1)
     {
       piece.MoveToHome();

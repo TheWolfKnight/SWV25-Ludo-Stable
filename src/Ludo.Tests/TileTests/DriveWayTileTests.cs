@@ -15,12 +15,12 @@ public class DriveWayTileTests
     Piece piece = new Piece
     {
       Owner = new Player
-    {
-      PlayerNr = 1,
-      InPlay = true,
-      Pieces = new Piece[1],
-      Home = null!,
-    },
+      {
+        PlayerNr = 1,
+        InPlay = true,
+        Pieces = new Piece[1],
+        Home = null!,
+      },
       CurrentTile = null!,
       PieceState = PieceState.OnBoard,
     };
@@ -33,9 +33,10 @@ public class DriveWayTileTests
     tile.MovePiece(piece, 2);
 
     //Assert
+    DriveWayTile target = GetTileAt(tile, 3);
     using AssertionScope scope = new();
-    piece.CurrentTile.Should().Be(GetTileAt(tile, 3));
-    GetTileAt(tile, 3).Pieces.Should().Contain(piece);
+    piece.CurrentTile.Should().Be(target);
+    target.Pieces.Should().Contain(piece);
     tile.Pieces.Should().BeEmpty();
   }
 
@@ -46,17 +47,24 @@ public class DriveWayTileTests
     Piece piece = new Piece
     {
       Owner = new Player
-    {
-      PlayerNr = 1,
-      InPlay = true,
-      Pieces = new Piece[1],
-      Home = null!,
-    },
+      {
+        PlayerNr = 1,
+        InPlay = true,
+        Pieces = new Piece[1],
+        Home = null!,
+      },
       CurrentTile = null!,
       PieceState = PieceState.OnBoard,
     };
 
-    DriveWayTile tile = GenerateDriveWay(3, 1);
+    DriveWayTile tile = GenerateDriveWay(2, 1);
+    tile.NextTile = new GoalTile
+    {
+      Location = (1, 1),
+      Pieces = [],
+      PlayerNr = 1,
+      PreviusTile = tile
+    };
     tile.Pieces.Add(piece);
     piece.CurrentTile = tile;
 
@@ -69,10 +77,10 @@ public class DriveWayTileTests
     tile.Pieces.Should().Contain(piece);
   }
 
-#region Helpers
+  #region Helpers
   private DriveWayTile GenerateDriveWay(int depth, byte playerAlligiance)
   {
-    DriveWayTile tail = new DriveWayTile
+    DriveWayTile head = new DriveWayTile
     {
       PlayerNr = playerAlligiance,
       Location = (1, 1),
@@ -81,11 +89,11 @@ public class DriveWayTileTests
       PreviusTile = null!,
     };
 
-    DriveWayTile currentTile = tail;
+    DriveWayTile currentTile = head;
 
-    for (int i = 0; i < depth; ++i)
+    for (int i = 0; i < depth - 1; ++i)
     {
-      DriveWayTile head = new DriveWayTile
+      DriveWayTile tail = new DriveWayTile
       {
         PlayerNr = playerAlligiance,
         Location = (1, 1),
@@ -94,23 +102,23 @@ public class DriveWayTileTests
         PreviusTile = null!,
       };
 
-      tail.PreviusTile = head;
-      head.NextTile = tail;
+      currentTile.NextTile = tail;
+      tail.PreviusTile = currentTile;
 
-      currentTile = head;
+      currentTile = tail;
     }
 
-    return currentTile;
+    return head;
   }
 
   private DriveWayTile GetTileAt(DriveWayTile tile, int depth)
   {
     DriveWayTile currentTile = tile;
-    for (int i = 0; i < depth; i++)
-      currentTile = (DriveWayTile)tile.NextTile;
+    for (int i = 0; i < depth - 1; i++)
+      currentTile = (DriveWayTile)currentTile.NextTile;
 
     return currentTile;
   }
-#endregion // Helpers
+  #endregion // Helpers
 }
 

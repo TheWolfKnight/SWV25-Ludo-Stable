@@ -42,6 +42,7 @@ public class HomeTileTests
         NextTile = null!,
       }
     };
+    piece.CurrentTile = tile;
 
     //Act
     tile.MovePiece(piece, roll);
