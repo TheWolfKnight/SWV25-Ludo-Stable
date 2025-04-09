@@ -57,7 +57,7 @@ public class GoalTileTests
   }
 
   [Fact]
-  public void GoalTile_PieceRolls2InFrontOfGoal_MovesBack1SquareFromGoal()
+  public void GoalTile_PieceRolls2InFrontOfGoal_MovesBack1TileFromGoal()
   {
     //Arrange
     Piece piece = new Piece

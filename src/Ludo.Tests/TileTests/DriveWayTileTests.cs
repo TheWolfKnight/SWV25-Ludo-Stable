@@ -41,7 +41,7 @@ public class DriveWayTileTests
   }
 
   [Fact]
-  public void DriveWayTile_Moves4Tiles_DriveWayContains3Tiles_PieceMovesBackwards()
+  public void DriveWayTile_Moves5Tiles_DriveWayContains3Tiles_PieceMovesBackwards()
   {
     //Arrange
     Piece piece = new Piece
