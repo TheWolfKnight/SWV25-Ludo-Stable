@@ -36,8 +36,16 @@ public class GameOrchestrator
     throw new NotImplementedException();
   }
 
-    public void DetermineStartingPlayer()
-    {
-        CurrentPlayer = 1;
-    }
+  public int[] DetermineStartingPlayer(int[] rolls)
+  {
+    int highestRoll = rolls.Max();
+
+    List<int> highestRollers = [];
+
+    for (int i = 0; i < rolls.Length; i++)
+      if (rolls[i] == highestRoll)
+        highestRollers.Add(i);
+
+    return highestRollers.ToArray();
+  }
 }

@@ -2,11 +2,13 @@ namespace Ludo.Common.Models.Dice;
 
 public class DieD6 : DieBase
 {
+  private readonly Random _random = new();
+  
   public override int[] Faces { get; set; } = [1, 2, 3, 4, 5, 6];
   
   public override int Roll()
   {
-    CurrentInt = Faces[Random.Next(1, Faces.Length)];
+    CurrentInt = Faces[_random.Next(1, Faces.Length)];
     
     return CurrentInt;
   }
