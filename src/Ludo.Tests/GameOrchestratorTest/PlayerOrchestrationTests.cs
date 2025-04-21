@@ -18,6 +18,14 @@ namespace Ludo.Tests.GameOrchestratorTest
         new object[] { new byte[] { 0, 1, 2, 3 }, 3, 0 }
       };
 
+    public static IEnumerable<object[]> PlayerCycleData => new List<object[]>
+    {
+      new object[] { TestHelpers.CreateDummyPlayer(0) },
+      new object[] { TestHelpers.CreateDummyPlayer(1) },
+      new object[] { TestHelpers.CreateDummyPlayer(2) },
+      new object[] { TestHelpers.CreateDummyPlayer(3) }
+    };
+
     [Theory]
     [MemberData(nameof(PlayerData))]
     public void NextPlayer_ShouldCycleThroughPlayers(byte[] playerNumbers, byte currentPlayer, byte expectedNextPlayer)
@@ -69,18 +77,11 @@ namespace Ludo.Tests.GameOrchestratorTest
       returnedRollers.Should().HaveCount(2);
     }
 
-    [Fact]
-    public void NextPlayer_WhenCurrentPlayerIs3_ShouldBe0()
+    [Theory]
+    [MemberData(nameof(PlayerCycleData))]
+    public void NextPlayer_WhenCurrentPlayerIs3_ShouldBe0(Player[] players)
     {
       // Arrange
-      var players = new[]
-      {
-        TestHelpers.CreateDummyPlayer(0),
-        TestHelpers.CreateDummyPlayer(1),
-        TestHelpers.CreateDummyPlayer(2),
-        TestHelpers.CreateDummyPlayer(3)
-      };
-
       GameOrchestrator orchestrator = new()
       {
         Players = players,
@@ -96,18 +97,11 @@ namespace Ludo.Tests.GameOrchestratorTest
       orchestrator.CurrentPlayer.Should().Be(0);
     }
 
-    [Fact]
-    public void NextPlayer_WhenCurrentPlayerIs1_ShouldBe2()
+    [Theory]
+    [MemberData(nameof(PlayerCycleData))]
+    public void NextPlayer_WhenCurrentPlayerIs1_ShouldBe2(Player[] players)
     {
       // Arrange
-      var players = new[]
-      {
-        TestHelpers.CreateDummyPlayer(0),
-        TestHelpers.CreateDummyPlayer(1),
-        TestHelpers.CreateDummyPlayer(2),
-        TestHelpers.CreateDummyPlayer(3)
-      };
-
       GameOrchestrator orchestrator = new()
       {
         Players = players,
