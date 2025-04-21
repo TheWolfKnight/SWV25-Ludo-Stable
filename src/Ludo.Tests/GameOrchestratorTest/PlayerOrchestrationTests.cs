@@ -40,7 +40,7 @@ namespace Ludo.Tests.GameOrchestratorTest
         };
       }
 
-      var gameOrchestrator = new GameOrchestrator
+      GameOrchestrator gameOrchestrator = new()
       {
         CurrentPlayer = currentPlayer,
         Players = players,
@@ -52,7 +52,7 @@ namespace Ludo.Tests.GameOrchestratorTest
       gameOrchestrator.NextPlayer();
 
       // Assert
-      expectedNextPlayer.Should().Be(gameOrchestrator.CurrentPlayer);
+      gameOrchestrator.CurrentPlayer.Should().Be(expectedNextPlayer);
     }
 
     [Fact]
@@ -60,10 +60,10 @@ namespace Ludo.Tests.GameOrchestratorTest
     {
       int[] playerRolls = [3, 5, 2, 5];
 
-      var orchestrator = A.Fake<GameOrchestrator>();
+      GameOrchestrator orchestrator = A.Fake<GameOrchestrator>();
 
       // Act
-      int[] returnedRollers = orchestrator.DetermineStartingPlayer(playerRolls);
+      byte[] returnedRollers = orchestrator.DetermineStartingPlayer(playerRolls);
 
       // Assert
       returnedRollers.Should().HaveCount(2);
@@ -81,7 +81,7 @@ namespace Ludo.Tests.GameOrchestratorTest
         TestHelpers.CreateDummyPlayer(3)
       };
 
-      var orchestrator = new GameOrchestrator
+      GameOrchestrator orchestrator = new()
       {
         Players = players,
         Die = A.Fake<DieBase>(),
@@ -108,11 +108,11 @@ namespace Ludo.Tests.GameOrchestratorTest
         TestHelpers.CreateDummyPlayer(3)
       };
 
-      var orchestrator = new GameOrchestrator
+      GameOrchestrator orchestrator = new()
       {
         Players = players,
-        Die = A.Fake<DieBase>(),
-        Board = TestHelpers.CreateDummyBoard(),
+        Die = A.Fake<DieD6>(),
+        Board = A.Fake<Board>(),
         CurrentPlayer = 1
       };
 
@@ -122,8 +122,9 @@ namespace Ludo.Tests.GameOrchestratorTest
       // Assert
       orchestrator.CurrentPlayer.Should().Be(2);
     }
-    
+
     #region Helpers
+
     private static class TestHelpers
     {
       public static Player CreateDummyPlayer(byte playerNr)
@@ -132,24 +133,8 @@ namespace Ludo.Tests.GameOrchestratorTest
         {
           PlayerNr = playerNr,
           InPlay = true,
-          Pieces = new Piece[4],
-          Home = new Home
-          {
-            HomeTiles = new HomeTile[4],
-            Owner = new Player
-            {
-              PlayerNr = 99,
-              InPlay = true,
-              Pieces = new Piece[4],
-              Home = new Home
-              {
-                HomeTiles = new HomeTile[4],
-                Owner = default!,
-                Pieces = new System.Collections.Generic.List<Piece>()
-              }
-            },
-            Pieces = new System.Collections.Generic.List<Piece>()
-          }
+          Pieces = A.CollectionOfFake<Piece>(4).ToArray(),
+          Home = A.Fake<Home>()
         };
       }
 
@@ -157,10 +142,11 @@ namespace Ludo.Tests.GameOrchestratorTest
       {
         return new Board
         {
-          Tiles = Array.Empty<TileBase>()
+          Tiles = []
         };
       }
-    }  
+    }
+
     #endregion
   }
 }
