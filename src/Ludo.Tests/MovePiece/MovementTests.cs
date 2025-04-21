@@ -5,6 +5,7 @@ using Ludo.Common.Models.Tiles;
 using Ludo.Common.Models;
 using Ludo.Common.Models.Player;
 using Ludo.Common.Enums;
+using Ludo.Common.Models.Dice;
 
 namespace Ludo.Tests.MovePiece;
 

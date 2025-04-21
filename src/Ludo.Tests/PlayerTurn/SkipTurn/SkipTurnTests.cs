@@ -3,6 +3,7 @@ using FakeItEasy;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Ludo.Common.Models;
+using Ludo.Common.Models.Dice;
 using Ludo.Common.Models.Player;
 
 namespace Ludo.Tests.PlayerTurn.SkipTurn;
