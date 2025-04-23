@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Ludo.Application\Ludo.Application.csproj" />
     <ProjectReference Include="..\Ludo.Common\Ludo.Common.csproj" />
   </ItemGroup>
 
