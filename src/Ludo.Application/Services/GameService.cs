@@ -1,9 +1,8 @@
-using Ludo.Application.Interfaces;
 using Ludo.Common.Models;
 
 namespace Ludo.Application.Services;
 
-public class GameService : IGameService
+public class GameService
 {
     public GameOrchestrator GenerateGame(int amountOfPlayers)
     {
