@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Ludo.Api.Dtos;
+namespace Ludo.Common.Dtos;
 
 public record PlayerDto
 {
