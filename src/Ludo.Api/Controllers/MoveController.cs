@@ -8,7 +8,6 @@ namespace Ludo.Api.Controllers;
 public class MoveController
 {
   [HttpPost("/v1/Move")]
-  [Route("/v1/NextPlayer")]
   public Task<ActionResult<GameDto>> MovePiece(int pieceToMove, int amountToMove)
   {
     throw new NotImplementedException();
