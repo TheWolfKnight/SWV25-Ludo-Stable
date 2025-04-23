@@ -11,7 +11,7 @@ public class SkipTurnTests
 {
   [Theory]
   [ClassData(typeof(SkipTurnTestData))]
-  public void SkipTurn_NoValidMove_SkipTurn(GameOrchestrator orchestrator, Player currentPlayer, Player expectedPlayer)
+  public void SkipTurn_NoValidMove_SkipTurn(GameOrchestrator orchestrator, Player _currentPlayer, Player expectedPlayer)
   {
     // Arrange
     Piece piece = A.Fake<Piece>();

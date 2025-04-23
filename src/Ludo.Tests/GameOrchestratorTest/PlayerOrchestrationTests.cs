@@ -34,7 +34,6 @@ namespace Ludo.Tests.GameOrchestratorTest
           {
             HomeTiles = new HomeTile[4], // Assuming each home has 4 tiles
             Owner = players[i], // Set Owner in the object initializer
-            Pieces = new List<Piece>()
           }
         };
       }
