@@ -1,6 +1,8 @@
+using System.Collections.Generic;
+
 namespace Ludo.Api.Dtos;
 
-public class PlayerDto
+public record PlayerDto
 {
   public required byte PlayerNo { get; init; }
 

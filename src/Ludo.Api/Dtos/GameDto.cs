@@ -1,6 +1,6 @@
 namespace Ludo.Api.Dtos;
 
-public class GameDto
+public record GameDto
 {
   public required int Version { get; init; }
   public required int X { get; init; }
