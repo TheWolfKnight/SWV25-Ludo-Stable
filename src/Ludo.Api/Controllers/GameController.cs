@@ -10,7 +10,7 @@ namespace Ludo.Api.Controllers;
 public class GameController
 {
   [HttpGet("/v1/game")]
-  public Task<ActionResult<GameDto>> GetNewGameAsync(int playerCount)
+  public Task<ActionResult<GameDto>> GetNewGameAsync([FromQuery] int playerCount)
   {
     throw new NotImplementedException();
   }
