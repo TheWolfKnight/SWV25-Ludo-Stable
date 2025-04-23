@@ -8,7 +8,7 @@ namespace Ludo.Api.Controllers;
 public class PlayerController : ControllerBase
 {
   [HttpGet("/v1/NextPlayer")]
-  public async Task<ActionResult<byte>> GetNextPlayerAsync()
+  public Task<ActionResult<byte>> GetNextPlayerAsync()
   {
     throw new NotImplementedException();
   }

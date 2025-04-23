@@ -7,7 +7,7 @@ namespace Ludo.Api.Controllers;
 public class DiceController : ControllerBase
 {
   [HttpGet("/v1/RollDie")]
-  public Task<ActionResult<int>> RollDie()
+  public Task<ActionResult<int>> RollDieAsync()
   {
     throw new NotImplementedException();
   }

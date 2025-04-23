@@ -8,13 +8,13 @@ namespace Ludo.Api.Controllers;
 public class GameController
 {
   [HttpGet("/v1/Game")]
-  public Task<ActionResult<GameDto>> GetGameControl()
+  public Task<ActionResult<GameDto>> GetGameControlAsync()
   {
     throw new NotImplementedException();
   }
 
   [HttpPost("/v1/Game")]
-  public Task<ActionResult<GameDto>> PostGameControl(GameDto game)
+  public Task<ActionResult<GameDto>> PostGameControlAsync(GameDto game)
   {
     throw new NotImplementedException();
   }

@@ -8,20 +8,19 @@ namespace Ludo.Api.Controllers;
 public class MoveController
 {
   [HttpPost("/v1/Move")]
-  [Route("/v1/NextPlayer")]
-  public Task<ActionResult<GameDto>> MovePiece(int pieceToMove, int amountToMove)
+  public Task<ActionResult<GameDto>> MovePieceAsync(int pieceToMove, int amountToMove)
   {
     throw new NotImplementedException();
   }
 
   [HttpGet("/v1/Peek")]
-  public Task<ActionResult<bool>> PeekMove(int pieceToMove, int amountToPeek)
+  public Task<ActionResult<bool>> PeekMoveAsync(int pieceToMove, int amountToPeek)
   {
     throw new NotImplementedException();
   }
 
   [HttpGet("/v1/Valid")]
-  public Task<ActionResult<bool>> CheckValid(int pieceToMove, int amountToCheck)
+  public Task<ActionResult<bool>> CheckValidAsync(int pieceToMove, int amountToCheck)
   {
     throw new NotImplementedException();
   }
