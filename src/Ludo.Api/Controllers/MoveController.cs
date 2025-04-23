@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
-using Ludo.Api.Dtos;
-using Ludo.Api.Dtos.Requests;
+using Ludo.Common.Dtos;
+using Ludo.Common.Dtos.Requests;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ludo.Api.Controllers;

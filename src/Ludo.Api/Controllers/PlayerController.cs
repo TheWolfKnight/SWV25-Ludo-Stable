@@ -1,6 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using Ludo.Api.Dtos;
+using Ludo.Common.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ludo.Api.Controllers;
@@ -9,7 +9,7 @@ namespace Ludo.Api.Controllers;
 [ApiController]
 public class PlayerController : ControllerBase
 {
-  [HttpPut("/v1/next-player")]
+  [HttpPut("/v1/next")]
   public Task<ActionResult<byte>> GetNextPlayerAsync([FromBody] GameDto request)
   {
     throw new NotImplementedException();
