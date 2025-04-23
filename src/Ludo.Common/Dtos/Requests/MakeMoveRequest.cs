@@ -1,7 +1,7 @@
 
-namespace Ludo.Api.Dtos.Requests;
+namespace Ludo.Common.Dtos.Requests;
 
-public record CheckValidMoveRequestDto
+public record MakeMoveRequestDto
 {
   public required GameDto Game { get; init; }
 

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Ludo.Common.Enums;
 
-namespace Ludo.Api.Dtos;
+namespace Ludo.Common.Dtos;
 
 public record TileDto
 {

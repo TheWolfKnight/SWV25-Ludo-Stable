@@ -1,6 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using Ludo.Api.Dtos;
+using Ludo.Common.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ludo.Api.Controllers;
@@ -9,7 +9,7 @@ namespace Ludo.Api.Controllers;
 [ApiController]
 public class GameController
 {
-  [HttpGet("/v1/game")]
+  [HttpGet("/v1/new")]
   public Task<ActionResult<GameDto>> GetNewGameAsync([FromQuery] int playerCount)
   {
     throw new NotImplementedException();
