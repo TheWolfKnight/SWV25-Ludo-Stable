@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ludo.Common", "src\Ludo.Com
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ludo.Api", "src\Ludo.Api\Ludo.Api.csproj", "{A2C9B5A0-578E-464E-9AE6-F6BBEAB4CD1F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ludo.Application", "src\Ludo.Application\Ludo.Application.csproj", "{A4CAB8CB-4AD3-4CCC-B92D-AC76D4B2B51B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{A2C9B5A0-578E-464E-9AE6-F6BBEAB4CD1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A2C9B5A0-578E-464E-9AE6-F6BBEAB4CD1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A2C9B5A0-578E-464E-9AE6-F6BBEAB4CD1F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4CAB8CB-4AD3-4CCC-B92D-AC76D4B2B51B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4CAB8CB-4AD3-4CCC-B92D-AC76D4B2B51B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4CAB8CB-4AD3-4CCC-B92D-AC76D4B2B51B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4CAB8CB-4AD3-4CCC-B92D-AC76D4B2B51B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
