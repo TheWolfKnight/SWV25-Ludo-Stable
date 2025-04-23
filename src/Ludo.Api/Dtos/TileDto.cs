@@ -1,8 +1,9 @@
+using System.Collections.Generic;
 using Ludo.Common.Enums;
 
 namespace Ludo.Api.Dtos;
 
-public class TileDto
+public record TileDto
 {
   public required TileTypes Type { get; init; }
 

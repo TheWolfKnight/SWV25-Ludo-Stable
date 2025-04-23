@@ -1,3 +1,5 @@
+using System;
+using System.Threading.Tasks;
 using Ludo.Api.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,14 +9,8 @@ namespace Ludo.Api.Controllers;
 [ApiController]
 public class GameController
 {
-  [HttpGet("/v1/Game")]
-  public Task<ActionResult<GameDto>> GetGameControlAsync()
-  {
-    throw new NotImplementedException();
-  }
-
-  [HttpPost("/v1/Game")]
-  public Task<ActionResult<GameDto>> PostGameControlAsync(GameDto game)
+  [HttpGet("/v1/game")]
+  public Task<ActionResult<GameDto>> GetNewGameAsync(int playerCount)
   {
     throw new NotImplementedException();
   }

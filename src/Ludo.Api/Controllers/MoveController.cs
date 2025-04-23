@@ -1,4 +1,7 @@
+using System;
+using System.Threading.Tasks;
 using Ludo.Api.Dtos;
+using Ludo.Api.Dtos.Requests;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ludo.Api.Controllers;
@@ -7,20 +10,14 @@ namespace Ludo.Api.Controllers;
 [ApiController]
 public class MoveController
 {
-  [HttpPost("/v1/Move")]
-  public Task<ActionResult<GameDto>> MovePieceAsync(int pieceToMove, int amountToMove)
+  [HttpPost("/v1/move")]
+  public Task<ActionResult<GameDto>> MovePieceAsync([FromBody] MakeMoveRequestDto request)
   {
     throw new NotImplementedException();
   }
 
-  [HttpGet("/v1/Peek")]
-  public Task<ActionResult<bool>> PeekMoveAsync(int pieceToMove, int amountToPeek)
-  {
-    throw new NotImplementedException();
-  }
-
-  [HttpGet("/v1/Valid")]
-  public Task<ActionResult<bool>> CheckValidAsync(int pieceToMove, int amountToCheck)
+  [HttpPut("/v1/valid")]
+  public Task<ActionResult<bool>> CheckValidAsync([FromBody] CheckValidMoveRequestDto request)
   {
     throw new NotImplementedException();
   }
