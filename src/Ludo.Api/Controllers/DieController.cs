@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Ludo.Common.Dtos;
+using Ludo.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ludo.Api.Controllers;
@@ -9,15 +10,26 @@ namespace Ludo.Api.Controllers;
 [ApiController]
 public class DieController : ControllerBase
 {
-  [HttpGet("/v1/roll")]
-  public Task<ActionResult<DieDto>> RollDieAsync([FromQuery] DieDto die)
+  private readonly DieService _dieService;
+
+  public DieController(DieService dieService)
   {
-    throw new NotImplementedException();
+    _dieService = dieService;
+  }
+
+  [HttpPost("/v1/roll")]
+  public async Task<ActionResult<DieDto>> RollDieAsync([FromQuery] DieDto dto)
+  {
+    int roll = await Task.Run(() => _dieService.RollDie(dto));
+
+    return Ok(roll);
   }
 
   [HttpGet("/v1/peek")]
-  public Task<ActionResult<DieDto>> PeekDieAsync([FromQuery] DieDto die)
+  public async Task<ActionResult<DieDto>> PeekDieAsync([FromQuery] DieDto dto)
   {
-    throw new NotImplementedException();
+    int roll = await Task.Run(() => _dieService.PeekDieRoll(dto));
+
+    return Ok(roll);
   }
 }

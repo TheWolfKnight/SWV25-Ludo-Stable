@@ -1,3 +1,5 @@
+using Ludo.Application.Factories;
+using Ludo.Common.Models.Dice;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -11,6 +13,9 @@ builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<DieBase, DieD6>();
+builder.Services.AddScoped<DieFactory>();
 
 var app = builder.Build();
 
