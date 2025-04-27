@@ -21,7 +21,7 @@ namespace Ludo.Tests.PlayerTurn.MovePiece
 
       StandardTile startTile = new()
       {
-        Location = (0,0),
+        IndexInBoard = 1,
         PlayerNr = 0,
         Pieces = [piece],
         NextTile = moveToTile
@@ -44,7 +44,7 @@ namespace Ludo.Tests.PlayerTurn.MovePiece
 
       HomeTile homeTile = new()
       {
-        Location = (0, 0),
+        IndexInBoard = 1,
         Pieces = [],
         PlayerNr = 0,
         NextTile = A.Fake<StandardTile>()
@@ -89,7 +89,7 @@ namespace Ludo.Tests.PlayerTurn.MovePiece
       
       HomeTile homeTile = new()
       {
-        Location = (0, 0),
+        IndexInBoard = 1,
         Pieces = [],
         PlayerNr = 0,
         NextTile = nextTile
@@ -125,7 +125,7 @@ namespace Ludo.Tests.PlayerTurn.MovePiece
       
       HomeTile homeTile = new()
       {
-        Location = (0, 0),
+        IndexInBoard = 1,
         NextTile = A.Fake<StandardTile>(),
         Pieces = [],
         PlayerNr = 0
@@ -170,7 +170,7 @@ namespace Ludo.Tests.PlayerTurn.MovePiece
       
       HomeTile homeTile = new()
       {
-        Location = (0, 0),
+        IndexInBoard = 1,
         Pieces = [],
         PlayerNr = 0,
         NextTile = nextTile

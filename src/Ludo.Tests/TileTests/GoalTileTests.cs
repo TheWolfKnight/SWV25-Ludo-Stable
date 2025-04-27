@@ -29,7 +29,7 @@ public class GoalTileTests
     DriveWayTile tile = new DriveWayTile
     {
       PlayerNr = 1,
-      Location = (1, 1),
+      IndexInBoard = 1,
       Pieces = [piece],
       NextTile = null!,
       PreviousTile = null!,
@@ -39,7 +39,7 @@ public class GoalTileTests
     GoalTile goal = new GoalTile
     {
       PlayerNr = 1,
-      Location = (1, 1),
+      IndexInBoard = 1,
       Pieces = [],
       PreviousTile = tile,
     };
@@ -76,7 +76,7 @@ public class GoalTileTests
     DriveWayTile tile = new DriveWayTile
     {
       PlayerNr = 1,
-      Location = (1, 1),
+      IndexInBoard = 1,
       Pieces = [piece],
       NextTile = null!,
       PreviousTile = null!,
@@ -86,7 +86,7 @@ public class GoalTileTests
     GoalTile goal = new GoalTile
     {
       PlayerNr = 1,
-      Location = (1, 1),
+      IndexInBoard = 1,
       Pieces = [],
       PreviousTile = tile,
     };

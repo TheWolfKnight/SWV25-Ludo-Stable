@@ -60,7 +60,7 @@ public class DriveWayTileTests
     DriveWayTile tile = GenerateDriveWay(2, 1);
     tile.NextTile = new GoalTile
     {
-      Location = (1, 1),
+      IndexInBoard = 1,
       Pieces = [],
       PlayerNr = 1,
       PreviousTile = tile
@@ -83,7 +83,7 @@ public class DriveWayTileTests
     DriveWayTile head = new DriveWayTile
     {
       PlayerNr = playerAlligiance,
-      Location = (1, 1),
+      IndexInBoard = 1,
       Pieces = [],
       NextTile = null!,
       PreviousTile = null!,
@@ -96,7 +96,7 @@ public class DriveWayTileTests
       DriveWayTile tail = new DriveWayTile
       {
         PlayerNr = playerAlligiance,
-        Location = (1, 1),
+        IndexInBoard = 1,
         Pieces = [],
         NextTile = null!,
         PreviousTile = null!,
