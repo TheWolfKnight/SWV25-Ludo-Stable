@@ -32,7 +32,7 @@ public class GoalTileTests
       Location = (1, 1),
       Pieces = [piece],
       NextTile = null!,
-      PreviusTile = null!,
+      PreviousTile = null!,
     };
     piece.CurrentTile = tile;
 
@@ -41,7 +41,7 @@ public class GoalTileTests
       PlayerNr = 1,
       Location = (1, 1),
       Pieces = [],
-      PreviusTile = tile,
+      PreviousTile = tile,
     };
     tile.NextTile = goal;
 
@@ -79,7 +79,7 @@ public class GoalTileTests
       Location = (1, 1),
       Pieces = [piece],
       NextTile = null!,
-      PreviusTile = null!,
+      PreviousTile = null!,
     };
     piece.CurrentTile = tile;
 
@@ -88,7 +88,7 @@ public class GoalTileTests
       PlayerNr = 1,
       Location = (1, 1),
       Pieces = [],
-      PreviusTile = tile,
+      PreviousTile = tile,
     };
     tile.NextTile = goal;
 

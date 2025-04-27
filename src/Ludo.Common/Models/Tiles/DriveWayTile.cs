@@ -1,3 +1,4 @@
+using Ludo.Common.Dtos;
 using Ludo.Common.Enums;
 using Ludo.Common.Interfaces.Tiles;
 using Ludo.Common.Models.Player;
@@ -9,7 +10,7 @@ public class DriveWayTile : TileBase, IGoalTile
   public required override byte? PlayerNr { get; init; }
 
   public required IGoalTile NextTile { get; set; }
-  public required DriveWayTile? PreviusTile { get; set; }
+  public required DriveWayTile? PreviousTile { get; set; }
 
   public override void MovePiece(Piece piece, int amount)
   {
@@ -51,7 +52,7 @@ public class DriveWayTile : TileBase, IGoalTile
 
     IGoalTile? nextTile = goForward
       ? NextTile
-      : PreviusTile;
+      : PreviousTile;
 
     if (nextTile is null)
     {
@@ -73,5 +74,25 @@ public class DriveWayTile : TileBase, IGoalTile
     piece.PieceState = PieceState.OnBoard;
     piece.CurrentTile = this;
     base.Pieces.Add(piece);
+  }
+  
+  internal new static DriveWayTile FromDto(TileDto tileDto, Board board)
+  {
+    int nextTileIndex = (int) (tileDto.Data[nameof(NextTile)] ?? throw new InvalidCastException("Could not get NextTile index"));
+    IGoalTile nextTile = board.Tiles[nextTileIndex] as IGoalTile ?? throw new InvalidCastException("Could not convert tile to IGoalTile");
+    
+    int previousTileIndex = (int) (tileDto.Data[nameof(PreviousTile)] ?? throw new InvalidCastException("Could not get PreviousTile index"));
+    DriveWayTile previousTile = board.Tiles[previousTileIndex] as DriveWayTile ?? throw new InvalidCastException("Could not convert tile to DriveWayTile");
+    
+    DriveWayTile tile = new()
+    {
+      PreviousTile = previousTile,
+      NextTile = nextTile,
+      PlayerNr = (byte?) tileDto.Data[nameof(PlayerNr)],
+      IndexInBoard = (int) (tileDto.Data[nameof(IndexInBoard)] ?? throw new InvalidCastException("Could not convert to Index on board")),
+      Pieces = [],
+    };
+
+    return tile;
   }
 }

@@ -63,7 +63,7 @@ public class DriveWayTileTests
       Location = (1, 1),
       Pieces = [],
       PlayerNr = 1,
-      PreviusTile = tile
+      PreviousTile = tile
     };
     tile.Pieces.Add(piece);
     piece.CurrentTile = tile;
@@ -86,7 +86,7 @@ public class DriveWayTileTests
       Location = (1, 1),
       Pieces = [],
       NextTile = null!,
-      PreviusTile = null!,
+      PreviousTile = null!,
     };
 
     DriveWayTile currentTile = head;
@@ -99,11 +99,11 @@ public class DriveWayTileTests
         Location = (1, 1),
         Pieces = [],
         NextTile = null!,
-        PreviusTile = null!,
+        PreviousTile = null!,
       };
 
       currentTile.NextTile = tail;
-      tail.PreviusTile = currentTile;
+      tail.PreviousTile = currentTile;
 
       currentTile = tail;
     }

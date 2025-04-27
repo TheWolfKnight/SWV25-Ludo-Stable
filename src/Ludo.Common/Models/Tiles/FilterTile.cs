@@ -1,3 +1,4 @@
+using Ludo.Common.Dtos;
 using Ludo.Common.Enums;
 using Ludo.Common.Models.Player;
 
@@ -58,5 +59,25 @@ public class FilterTile : TileBase
     piece.PieceState = PieceState.OnBoard;
     piece.CurrentTile = this;
     base.Pieces.Add(piece);
+  }
+  
+  internal new static FilterTile FromDto(TileDto tileDto, Board board)
+  {
+    int nextTileIndex = (int) (tileDto.Data[nameof(NextTile)] ?? throw new InvalidCastException("Could not get NextTile index"));
+    TileBase nextTile = board.Tiles[nextTileIndex];
+    
+    int filteredTileIndex = (int) (tileDto.Data[nameof(FilterdTile)] ?? throw new InvalidCastException("Could not get FilteredTile index"));
+    DriveWayTile filteredTile = board.Tiles[filteredTileIndex] as DriveWayTile ?? throw new InvalidCastException("Could not convert tile to DriveWayTile");
+
+    FilterTile tile = new()
+    {
+      NextTile = nextTile,
+      FilterdTile = filteredTile,
+      PlayerNr = (byte?)tileDto.Data[nameof(PlayerNr)],
+      IndexInBoard = (int)(tileDto.Data[nameof(IndexInBoard)] ?? throw new InvalidCastException("Could not convert to Index on board")),
+      Pieces = []
+    };
+
+    return tile;
   }
 }

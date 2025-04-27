@@ -103,7 +103,6 @@ public class MovementTests
       Pieces = [blue],
       NextTile = new StandardTile
       {
-        Location = (1,1),
         Pieces = [red, red],
         NextTile = null!
       }
@@ -186,7 +185,7 @@ public class MovementTests
       PlayerNr = 1,
       Location = (1,1),
       NextTile = goal,
-      PreviusTile = null!,
+      PreviousTile = null!,
       Pieces = [piece]
     };
 
@@ -194,7 +193,7 @@ public class MovementTests
     {
       PlayerNr = 1,
       Location = (1,1),
-      PreviusTile = tile,
+      PreviousTile = tile,
       Pieces = []
     };
 
@@ -221,7 +220,7 @@ public class MovementTests
       PlayerNr = 1,
       Location = (1,1),
       NextTile = goal,
-      PreviusTile = null!,
+      PreviousTile = null!,
       Pieces = [piece]
     };
 
@@ -230,7 +229,7 @@ public class MovementTests
       PlayerNr = 1,
       Location = (1,1),
       Pieces = [],
-      PreviusTile = tile
+      PreviousTile = tile
     };
 
     piece.CurrentTile = tile;

@@ -95,7 +95,7 @@ public class FilterTileTests
         Location = (1, 1),
         Pieces = [],
         NextTile = null!,
-        PreviusTile = null,
+        PreviousTile = null,
       }
     };
 

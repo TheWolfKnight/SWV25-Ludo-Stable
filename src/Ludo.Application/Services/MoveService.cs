@@ -27,7 +27,7 @@ public class MoveService
 
     tile.MovePiece(toMove, dto.Roll);
 
-    GameDto result = _boardService.ComperssBoardToDto(go);
+    GameDto result = _boardService.CompressBoardToDto(go);
     return result;
   }
 
