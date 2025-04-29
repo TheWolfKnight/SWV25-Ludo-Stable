@@ -1,4 +1,5 @@
 using Ludo.Application.Factories;
+using Ludo.Application.Services;
 using Ludo.Common.Models.Dice;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,8 +15,13 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<DieBase, DieD6>();
+builder.Services.AddTransient<DieBase, DieD6>();
 builder.Services.AddScoped<DieFactory>();
+
+builder.Services.AddScoped<DieService>();
+builder.Services.AddScoped<GameService>();
+builder.Services.AddScoped<MoveService>();
+builder.Services.AddScoped<BoardGenerationService>();
 
 var app = builder.Build();
 

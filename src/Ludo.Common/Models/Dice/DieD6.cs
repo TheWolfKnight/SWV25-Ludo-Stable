@@ -18,7 +18,9 @@ public class DieD6 : DieBase
 
   public override int Roll()
   {
-    CurrentRoll = Faces[_random.Next(1, Faces.Length)];
+    int no = _random.Next(0, Faces.Length);
+    
+    CurrentRoll = Faces[no];
 
     return CurrentRoll;
   }
@@ -31,7 +33,7 @@ public class DieD6 : DieBase
   private Random GetSeededRandom()
   {
     DateTime dt = DateTime.UtcNow;
-    Random rnd = new((dt.Day * dt.Month) / dt.Microsecond + dt.Year);
+    Random rnd = new((int) dt.Ticks);
     return rnd;
   }
 }
