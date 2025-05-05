@@ -2,15 +2,26 @@ using FakeItEasy;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Ludo.Common.Models;
+using Ludo.Common.Models.Dice;
 using Ludo.Common.Models.Player;
 
 namespace Ludo.Tests.PlayerTurn.RollDice;
 
 public class RollDiceTests
 {
-    /// <summary>
-    /// Missing methods/states?
-    /// </summary>
+    [Fact]
+    public void RollD6_OnDieRoll_RollDie()
+    {
+        // Arrange
+        DieBase die = new DieD6();
+        
+        // Act
+        int rolled = die.Roll();
+        
+        // Assert
+        rolled.Should().BeGreaterThanOrEqualTo(1).And.BeLessThanOrEqualTo(6);
+    }
+    
     [Fact]
     public void RollDie_OnPlayerTurn_RollDie()
     {
@@ -23,12 +34,12 @@ public class RollDiceTests
             Pieces = []
         };
         
-        GameOrchestrator orchestrator = new GameOrchestrator()
+        GameOrchestrator orchestrator = new()
         {
             Players = [A.Fake<Player>(), player],
-            CurrentPlayer = 0,
+            CurrentPlayer = 1,
             Board = A.Fake<Board>(),
-            Die = A.Fake<DieBase>()
+            Die = new DieD6()
         };
 
         // Act
@@ -52,7 +63,8 @@ public class RollDiceTests
         // Assert
         playerTurn.Should().BeFalse();
     }
-
+    
+    #region Helpers
     public static IEnumerable<object[]> GetGameOrchestratorWithPlayers()
     {
         Player player = new()
@@ -70,7 +82,7 @@ public class RollDiceTests
                 new GameOrchestrator()
                 {
                     Players = [player, A.Fake<Player>()],
-                    CurrentPlayer = 0,
+                    CurrentPlayer = 1,
                     Board = A.Fake<Board>(),
                     Die = A.Fake<DieBase>()
                 },
@@ -78,4 +90,5 @@ public class RollDiceTests
             }
         };
     }
+    #endregion
 }

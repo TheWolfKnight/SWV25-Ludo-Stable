@@ -3,6 +3,7 @@ using FluentAssertions;
 using FluentAssertions.Execution;
 using Ludo.Common.Enums;
 using Ludo.Common.Models;
+using Ludo.Common.Models.Dice;
 using Ludo.Common.Models.Player;
 using Ludo.Common.Models.Tiles;
 

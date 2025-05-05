@@ -1,6 +1,7 @@
 ﻿using FakeItEasy;
 using FluentAssertions;
 using Ludo.Common.Models;
+using Ludo.Common.Models.Dice;
 using Ludo.Common.Models.Player;
 using Ludo.Common.Models.Tiles;
 
@@ -11,11 +12,19 @@ namespace Ludo.Tests.GameOrchestratorTest
     public static IEnumerable<object[]> PlayerData =>
       new List<object[]>
       {
-          new object[] { new byte[] { 0, 1, 2, 3 }, 0, 1 },
-          new object[] { new byte[] { 0, 1, 2, 3 }, 1, 2 },
-          new object[] { new byte[] { 0, 1, 2, 3 }, 2, 3 },
-          new object[] { new byte[] { 0, 1, 2, 3 }, 3, 0 }
+        new object[] { new byte[] { 0, 1, 2, 3 }, 0, 1 },
+        new object[] { new byte[] { 0, 1, 2, 3 }, 1, 2 },
+        new object[] { new byte[] { 0, 1, 2, 3 }, 2, 3 },
+        new object[] { new byte[] { 0, 1, 2, 3 }, 3, 0 }
       };
+
+    public static IEnumerable<object[]> PlayerCycleData => new List<object[]>
+    {
+      new object[] { TestHelpers.CreateDummyPlayer(0) },
+      new object[] { TestHelpers.CreateDummyPlayer(1) },
+      new object[] { TestHelpers.CreateDummyPlayer(2) },
+      new object[] { TestHelpers.CreateDummyPlayer(3) }
+    };
 
     [Theory]
     [MemberData(nameof(PlayerData))]
@@ -38,7 +47,7 @@ namespace Ludo.Tests.GameOrchestratorTest
         };
       }
 
-      var gameOrchestrator = new GameOrchestrator
+      GameOrchestrator gameOrchestrator = new()
       {
         CurrentPlayer = currentPlayer,
         Players = players,
@@ -52,5 +61,85 @@ namespace Ludo.Tests.GameOrchestratorTest
       // Assert
       gameOrchestrator.CurrentPlayer.Should().Be(expectedNextPlayer);
     }
+
+    [Fact]
+    public void Starting_RollForStartAndTwoRollSame_ShouldRequireReRoll()
+    {
+      int[] playerRolls = [3, 5, 2, 5];
+
+      GameOrchestrator orchestrator = A.Fake<GameOrchestrator>();
+
+      // Act
+      byte[] returnedRollers = orchestrator.DetermineStartingPlayer(playerRolls);
+
+      // Assert
+      returnedRollers.Should().HaveCount(2);
+    }
+
+    [Theory]
+    [MemberData(nameof(PlayerCycleData))]
+    public void NextPlayer_WhenCurrentPlayerIs3_ShouldBe0(Player[] players)
+    {
+      // Arrange
+      GameOrchestrator orchestrator = new()
+      {
+        Players = players,
+        Die = A.Fake<DieBase>(),
+        Board = TestHelpers.CreateDummyBoard(),
+        CurrentPlayer = 3
+      };
+
+      // Act
+      orchestrator.NextPlayer();
+
+      // Assert
+      orchestrator.CurrentPlayer.Should().Be(0);
+    }
+
+    [Theory]
+    [MemberData(nameof(PlayerCycleData))]
+    public void NextPlayer_WhenCurrentPlayerIs1_ShouldBe2(Player[] players)
+    {
+      // Arrange
+      GameOrchestrator orchestrator = new()
+      {
+        Players = players,
+        Die = A.Fake<DieD6>(),
+        Board = A.Fake<Board>(),
+        CurrentPlayer = 1
+      };
+
+      // Act
+      orchestrator.NextPlayer();
+
+      // Assert
+      orchestrator.CurrentPlayer.Should().Be(2);
+    }
+
+    #region Helpers
+
+    private static class TestHelpers
+    {
+      public static Player CreateDummyPlayer(byte playerNr)
+      {
+        return new Player
+        {
+          PlayerNr = playerNr,
+          InPlay = true,
+          Pieces = A.CollectionOfFake<Piece>(4).ToArray(),
+          Home = A.Fake<Home>()
+        };
+      }
+
+      public static Board CreateDummyBoard()
+      {
+        return new Board
+        {
+          Tiles = []
+        };
+      }
+    }
+
+    #endregion
   }
 }

@@ -7,3 +7,5 @@
 /.vs/Ludo
 /.vs
 *.user
+
+**/.*
