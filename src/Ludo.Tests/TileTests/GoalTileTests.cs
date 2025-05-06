@@ -29,19 +29,19 @@ public class GoalTileTests
     DriveWayTile tile = new DriveWayTile
     {
       PlayerNr = 1,
-      Location = (1, 1),
+      IndexInBoard = 1,
       Pieces = [piece],
       NextTile = null!,
-      PreviusTile = null!,
+      PreviousTile = null!,
     };
     piece.CurrentTile = tile;
 
     GoalTile goal = new GoalTile
     {
       PlayerNr = 1,
-      Location = (1, 1),
+      IndexInBoard = 1,
       Pieces = [],
-      PreviusTile = tile,
+      PreviousTile = tile,
     };
     tile.NextTile = goal;
 
@@ -76,19 +76,19 @@ public class GoalTileTests
     DriveWayTile tile = new DriveWayTile
     {
       PlayerNr = 1,
-      Location = (1, 1),
+      IndexInBoard = 1,
       Pieces = [piece],
       NextTile = null!,
-      PreviusTile = null!,
+      PreviousTile = null!,
     };
     piece.CurrentTile = tile;
 
     GoalTile goal = new GoalTile
     {
       PlayerNr = 1,
-      Location = (1, 1),
+      IndexInBoard = 1,
       Pieces = [],
-      PreviusTile = tile,
+      PreviousTile = tile,
     };
     tile.NextTile = goal;
 

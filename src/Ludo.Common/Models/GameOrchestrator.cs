@@ -1,4 +1,3 @@
-using System;
 using Ludo.Common.Models.Dice;
 using Ludo.Common.Models.Player;
 
@@ -28,7 +27,12 @@ public class GameOrchestrator
 
   public virtual void NextPlayer()
   {
-    CurrentPlayer = (byte)((CurrentPlayer + 1) % Players.Length);
+    byte nextPlayer = CurrentPlayer;
+    int checkPlayers = 0;
+    while (checkPlayers++ < Players.Length)
+      nextPlayer = (byte)((CurrentPlayer + 1) % Players.Length);
+
+    CurrentPlayer = nextPlayer;
   }
 
   public bool IsValidMove(Piece piece)

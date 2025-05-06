@@ -1,6 +1,6 @@
-using System;
 using System.Threading.Tasks;
-using Ludo.Common.Dtos;
+using Ludo.Application.Services;
+using Ludo.Common.Dtos.Requests;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ludo.Api.Controllers;
@@ -9,9 +9,18 @@ namespace Ludo.Api.Controllers;
 [ApiController]
 public class PlayerController : ControllerBase
 {
-  [HttpPut("/v1/next")]
-  public Task<ActionResult<byte>> GetNextPlayerAsync([FromBody] GameDto request)
+  private readonly GameService _service;
+
+  public PlayerController(GameService service)
   {
-    throw new NotImplementedException();
+    _service = service;
+  }
+
+  [HttpPut("/v1/next")]
+  public async  Task<ActionResult<byte>> GetNextPlayerAsync([FromBody] GetNextPlayerRequestDto request)
+  {
+    byte nextPlayer = await Task.Run(() => _service.NextPlayer(request));
+
+    return Ok(nextPlayer);
   }
 }

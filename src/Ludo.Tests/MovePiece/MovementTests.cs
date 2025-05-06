@@ -22,7 +22,7 @@ public class MovementTests
 
     StandardTile startTile = new StandardTile
     {
-      Location = (1, 1),
+      IndexInBoard = 1,
       Pieces = [piece],
       NextTile = GenerateFakeTiles(tileDepth)
     };
@@ -49,7 +49,7 @@ public class MovementTests
 
     StandardTile startTile = new StandardTile
     {
-      Location = (1, 1),
+      IndexInBoard = 1,
       Pieces = [piece],
       NextTile = GenerateFakeTiles(tileDepth)
     };
@@ -99,11 +99,11 @@ public class MovementTests
 
     StandardTile blueStart = new()
     {
-      Location = (1,1),
+      IndexInBoard = 1,
       Pieces = [blue],
       NextTile = new StandardTile
       {
-        Location = (1,1),
+        IndexInBoard = 1,
         Pieces = [red, red],
         NextTile = null!
       }
@@ -153,11 +153,11 @@ public class MovementTests
 
     StandardTile redStart = new()
     {
-      Location = (1,1),
+      IndexInBoard = 1,
       Pieces = [red],
       NextTile = new StandardTile
       {
-        Location = (1,1),
+        IndexInBoard = 1,
         Pieces = [blue],
         NextTile = null!
       }
@@ -184,17 +184,17 @@ public class MovementTests
     DriveWayTile tile = new DriveWayTile
     {
       PlayerNr = 1,
-      Location = (1,1),
+      IndexInBoard = 1,
       NextTile = goal,
-      PreviusTile = null!,
+      PreviousTile = null!,
       Pieces = [piece]
     };
 
     goal = new()
     {
       PlayerNr = 1,
-      Location = (1,1),
-      PreviusTile = tile,
+      IndexInBoard = 1,
+      PreviousTile = tile,
       Pieces = []
     };
 
@@ -219,18 +219,18 @@ public class MovementTests
     DriveWayTile tile = new DriveWayTile
     {
       PlayerNr = 1,
-      Location = (1,1),
+      IndexInBoard = 1,
       NextTile = goal,
-      PreviusTile = null!,
+      PreviousTile = null!,
       Pieces = [piece]
     };
 
     goal = new()
     {
       PlayerNr = 1,
-      Location = (1,1),
+      IndexInBoard = 1,
       Pieces = [],
-      PreviusTile = tile
+      PreviousTile = tile
     };
 
     piece.CurrentTile = tile;
@@ -265,11 +265,11 @@ public class MovementTests
 
     StandardTile tile = new StandardTile
     {
-      Location = (1,1),
+      IndexInBoard = 1,
       Pieces = [piece1],
       NextTile = new StandardTile
       {
-        Location = (1,1),
+        IndexInBoard = 1,
         NextTile = GenerateFakeTiles(2),
         Pieces = [piece2]
       }
@@ -298,11 +298,11 @@ public class MovementTests
 
     StandardTile tile = new StandardTile
     {
-      Location = (1,1),
+      IndexInBoard = 1,
       Pieces = [piece1],
       NextTile = new StandardTile
       {
-        Location = (1,1),
+        IndexInBoard = 1,
         NextTile = GenerateFakeTiles(2),
         Pieces = []
       }
@@ -323,7 +323,7 @@ public class MovementTests
   {
     StandardTile tail = new StandardTile
     {
-      Location = (1,1),
+      IndexInBoard = 1,
       Pieces = [],
       NextTile = null!,
     };
@@ -333,7 +333,7 @@ public class MovementTests
     {
       StandardTile head = new StandardTile
       {
-        Location = (1,1),
+        IndexInBoard = 1,
         Pieces = [],
         NextTile = current
       };
