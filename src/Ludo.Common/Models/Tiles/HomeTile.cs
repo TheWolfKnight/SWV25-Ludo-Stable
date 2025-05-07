@@ -1,3 +1,4 @@
+using Ludo.Common.Dtos;
 using Ludo.Common.Models.Player;
 using Ludo.Common.Enums;
 
@@ -52,5 +53,21 @@ public class HomeTile: TileBase
     piece.PieceState = PieceState.Home;
     piece.CurrentTile = this;
     base.Pieces.Add(piece);
+  }
+  
+  internal new static HomeTile FromDto(TileDto tileDto, Board board)
+  {
+    int nextTileIndex = (int) (tileDto.Data[nameof(NextTile)] ?? throw new InvalidCastException("Could not get NextTile index"));
+    TileBase nextTile = board.Tiles[nextTileIndex];
+    
+    HomeTile tile = new()
+    {
+      NextTile = nextTile,
+      PlayerNr = (byte?) tileDto.Data[nameof(PlayerNr)],
+      IndexInBoard = (int) (tileDto.Data[nameof(IndexInBoard)] ?? throw new InvalidCastException("Could not convert to Index on board")),
+      Pieces = [],
+    };
+
+    return tile;
   }
 }

@@ -7,6 +7,6 @@ public enum TileTypes
   Standard,
   Home,
   Filter,
-  Driveway,
+  DriveWay,
   Goal
 }

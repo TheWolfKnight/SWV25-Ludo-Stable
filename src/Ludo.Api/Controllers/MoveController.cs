@@ -1,5 +1,5 @@
-using System;
 using System.Threading.Tasks;
+using Ludo.Application.Services;
 using Ludo.Common.Dtos;
 using Ludo.Common.Dtos.Requests;
 using Microsoft.AspNetCore.Mvc;
@@ -8,17 +8,30 @@ namespace Ludo.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class MoveController
+public class MoveController: ControllerBase
 {
-  [HttpPost("/v1/move")]
-  public Task<ActionResult<GameDto>> MovePieceAsync([FromBody] MakeMoveRequestDto request)
+  private readonly MoveService _service;
+
+  public MoveController(MoveService service)
   {
-    throw new NotImplementedException();
+    _service = service;
+  }
+
+  [HttpPost("/v1/move")]
+  public async Task<ActionResult<GameDto>> MovePieceAsync([FromBody] MakeMoveRequestDto request)
+  {
+    GameDto result = await Task.Run(() => _service.MovePiece(request));
+
+    if (result == request.Game)
+      return BadRequest("Could not find a piece on the designated tile");
+
+    return Ok(result);
   }
 
   [HttpPut("/v1/valid")]
-  public Task<ActionResult<bool>> CheckValidAsync([FromBody] CheckValidMoveRequestDto request)
+  public async Task<ActionResult<bool>> CheckValidAsync([FromBody] CheckValidMoveRequestDto request)
   {
-    throw new NotImplementedException();
+    bool result = await Task.Run(() => _service.PeekPieceMove(request));
+    return Ok(result);
   }
 }

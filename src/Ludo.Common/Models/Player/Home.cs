@@ -9,7 +9,7 @@ public class Home
 
   public HomeTile GetFirstAvailableHomeTile()
   {
-    HomeTile? availableTile = this.HomeTiles.FirstOrDefault(tile => tile.Pieces.Any());
+    HomeTile? availableTile = this.HomeTiles.FirstOrDefault(tile => !tile.Pieces.Any());
 
     if (availableTile is null)
       throw new InvalidOperationException("Could not find valid HomeTile for home move, please check home tile to piece ratio");

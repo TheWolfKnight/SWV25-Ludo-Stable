@@ -80,22 +80,22 @@ public class FilterTileTests
   {
     FilterTile result = new FilterTile
     {
-      Location = (1, 1),
+      IndexInBoard = 1,
       PlayerNr = playerAllegiance,
       Pieces = [piece],
       NextTile = new StandardTile
       {
-        Location = (1,1),
+        IndexInBoard = 1,
         Pieces = [],
         NextTile = null!
       },
       FilterdTile = new DriveWayTile
       {
         PlayerNr = playerAllegiance,
-        Location = (1, 1),
+        IndexInBoard = 1,
         Pieces = [],
         NextTile = null!,
-        PreviusTile = null,
+        PreviousTile = null,
       }
     };
 

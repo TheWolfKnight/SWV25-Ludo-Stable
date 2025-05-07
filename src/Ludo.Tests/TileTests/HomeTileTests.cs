@@ -33,11 +33,11 @@ public class HomeTileTests
     HomeTile tile = new HomeTile
     {
       PlayerNr = 1,
-      Location = (1, 1),
+      IndexInBoard = 1,
       Pieces = [piece],
       NextTile = new StandardTile
       {
-        Location = (1, 1),
+        IndexInBoard = 1,
         Pieces = [],
         NextTile = null!,
       }
@@ -75,11 +75,11 @@ public class HomeTileTests
     HomeTile tile = new HomeTile
     {
       PlayerNr = 1,
-      Location = (1, 1),
+      IndexInBoard = 1,
       Pieces = [piece],
       NextTile = new StandardTile
       {
-        Location = (1, 1),
+        IndexInBoard = 1,
         Pieces = [],
         NextTile = null!,
       }

@@ -1,5 +1,6 @@
 using Ludo.Common.Models.Player;
 using Ludo.Common.Models.Tiles;
+using Ludo.Common.Enums;
 using FakeItEasy;
 using FluentAssertions;
 using FluentAssertions.Execution;
@@ -9,20 +10,14 @@ namespace Ludo.Tests;
 public class HomeTests
 {
   [Theory]
-  [MemberData(nameof(GetSetupAvailableSpace), (byte)1)]
-  public void Home_TryGetEmptyHome_WithHomeTileAvailable_ReturnFirstHomeTile(Home home, Player player, int piecesAtHome)
+  [MemberData(nameof(GetSetupAvailableSpace), (byte)1, 10)]
+  public void Home_TryGetEmptyHome_WithHomeTileAvailable_ReturnFirstHomeTile(Home home, HomeTile expectedTile)
   {
-    //Arange
-    HomeTile[] tiles = GetHomeTiles(piecesAtHome, player.PlayerNr);
-    for (int i = 0; i < tiles.Length; ++i)
-      home.HomeTiles[i] = tiles[i];
-
     //Act
     HomeTile tile = home.GetFirstAvailableHomeTile();
 
     using AssertionScope scope = new();
-    tile.Should().Be(home.HomeTiles[piecesAtHome]);
-    tile.Pieces.Should().BeEmpty();
+    tile.Should().Be(expectedTile);
   }
 
   [Fact]
@@ -32,16 +27,19 @@ public class HomeTests
     byte playerAllegiance = 1;
 
     Home home = null!;
+
+    Player player = new Player
+    {
+      PlayerNr = playerAllegiance,
+      InPlay = true,
+      Pieces = [],
+      Home = home,
+    };
+
     home = new()
     {
-      Owner = new Player
-      {
-        PlayerNr = playerAllegiance,
-        InPlay = true,
-        Pieces = [],
-        Home = home,
-      },
-      HomeTiles = GetHomeTiles(4, playerAllegiance)
+      Owner = player,
+      HomeTiles = GetHomeTiles(4, player)
     };
 
     //Assert
@@ -51,85 +49,83 @@ public class HomeTests
       .WithMessage("Could not find valid HomeTile for home move, please check home tile to piece ratio");
   }
 
-  public static IEnumerable<object?[]> GetSetupAvailableSpace(byte playerAllegiance)
+  public static IEnumerable<object?[]> GetSetupAvailableSpace(byte playerAllegiance, int testCount = 1)
   {
-    Home home = null!;
-    home = new()
-    {
-      Owner = new Player
-      {
-        PlayerNr = playerAllegiance,
-        InPlay = true,
-        Pieces = A.CollectionOfFake<Piece>(4).ToArray(),
-        Home = home,
-      },
-      HomeTiles = new HomeTile[4]
-    };
+    IEnumerable<object?[]> data = Enumerable
+      .Range(0, testCount)
+      .Select(_ => {
+        Home home = null!;
+        Player player = new Player
+        {
+          PlayerNr = playerAllegiance,
+          InPlay = true,
+          Pieces = new Piece[4],
+          Home = home,
+        };
 
-    Player player = home.Owner;
+        DateTime dt = DateTime.Now;
+        Random rnd = new Random((int)(dt.Ticks * dt.Millisecond));
 
-    IEnumerable<object?[]> data = [
-      [
-        home,
-        player,
-        0
-      ],
-      [
-        home,
-        player,
-        1
-      ],
-      [
-        home,
-        player,
-        2
-      ],
-      [
-        home,
-        player,
-        3
-      ]
-    ];
+        int filedTiles = rnd.Next(3) + 1;
+        HomeTile[] tiles = GetHomeTiles(filedTiles, player);
+
+        home = new Home
+        {
+          HomeTiles = tiles,
+          Owner = player
+        };
+
+        HomeTile expectedResult = home
+          .HomeTiles
+          .First(tile => !tile.Pieces.Any());
+
+        return new object?[] {
+          home,
+          expectedResult
+        };
+      });
 
     return data;
   }
 
-  public static HomeTile[] GetHomeTiles(int filledTiles, byte playerAllegiance)
+  private static HomeTile[] GetHomeTiles(int filledTiles, Player owner)
   {
     StandardTile exitLocation = new StandardTile
     {
-      Location = (1, 1),
+      IndexInBoard = 0,
       Pieces = [],
       NextTile = null!,
     };
 
-    IEnumerable<HomeTile> empty = Enumerable
-      .Range(0, 4 - filledTiles)
-      .Select(_ =>
-        new HomeTile
-        {
-          Location = (1, 1),
-          Pieces = [],
-          NextTile = exitLocation,
-          PlayerNr = playerAllegiance
-        }
-      );
+    HomeTile[] tiles = Enumerable
+      .Range(0, 4)
+      .Select(_ => new HomeTile {
+        IndexInBoard = 1,
+        Pieces = new(),
+        PlayerNr = owner.PlayerNr,
+        NextTile = exitLocation
+      }).
+      ToArray();
 
-    IEnumerable<HomeTile> filled = Enumerable
-      .Range(0, filledTiles)
-      .Select(_ =>
-        new HomeTile
-        {
-          Location = (1, 1),
-          Pieces = [A.Fake<Piece>()],
-          NextTile = exitLocation,
-          PlayerNr = playerAllegiance
-        }
-      );
+    DateTime dt = DateTime.Now;
 
-    return empty
-      .Concat(filled)
-      .ToArray();
+    Random rnd = new Random((int)(dt.Ticks * dt.Millisecond));
+
+    for (int i = 0; i < filledTiles; ++i)
+    {
+      IEnumerable<HomeTile> emptyTile = tiles.Where(tile => !tile.Pieces.Any());
+      int noNextEmptyTile = rnd.Next(emptyTile.Count());
+
+      HomeTile tile = emptyTile.Skip(noNextEmptyTile).First();
+      tile.Pieces.Add(new Piece
+      {
+        CurrentTile = tile,
+        Owner = owner,
+        PieceState = PieceState.Home
+      });
+    }
+
+    return tiles;
   }
 }
 
