@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Ludo.Blazor.Client": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "BASE_ADDRESS": "https://localhost:7046"
+      }
+    }
+  }
+}
