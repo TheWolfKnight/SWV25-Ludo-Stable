@@ -6,7 +6,7 @@ namespace Ludo.Application.Services;
 
 public class GameService
 {
-  public GameOrchestrator GenerateGame(int amountOfPlayers)
+  public Task<GameOrchestrator> GenerateGame(int amountOfPlayers)
   {
     throw new NotImplementedException();
   }
