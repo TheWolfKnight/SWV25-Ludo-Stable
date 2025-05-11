@@ -4,13 +4,13 @@ using Ludo.Common.Models.Player;
 
 namespace Ludo.Common.Models.Tiles;
 
-public class StandardTile : TileBase
+public class StandardTile : MovementTile
 {
-  public required TileBase NextTile { get; set; }
+  public required MovementTile NextTile { get; set; }
 
   public override void MovePiece(Piece piece, int amount)
   {
-    (bool moveAccepted, TileBase targetTile) = InternalMakeMove(piece, amount);
+    (bool moveAccepted, MovementTile targetTile) = InternalMakeMove(piece, amount);
     if (!moveAccepted)
       return;
 
@@ -36,7 +36,7 @@ public class StandardTile : TileBase
     return InternalMakeMove(piece, amount).MoveAccepted;
   }
 
-  internal override (bool MoveAccepted, TileBase TargetTile) InternalMakeMove(Piece piece, int amount)
+  internal override (bool MoveAccepted, MovementTile TargetTile) InternalMakeMove(Piece piece, int amount)
   {
     if (amount is 0)
       return (true, this);
@@ -59,10 +59,13 @@ public class StandardTile : TileBase
   {
     int nextTileIndex = (int) (tileDto.Data[nameof(NextTile)] ?? throw new InvalidCastException("Could not get NextTile index"));
     TileBase nextTile = board.Tiles[nextTileIndex];
-    
+
+    if (nextTile is not MovementTile or null)
+      throw new InvalidOperationException("Cannot bind to non-MovementTile");
+
     StandardTile tile = new()
     {
-      NextTile = nextTile,
+      NextTile = (nextTile as MovementTile)!,
       PlayerNr = (byte?) tileDto.Data[nameof(PlayerNr)],
       IndexInBoard = (int) (tileDto.Data[nameof(IndexInBoard)] ?? throw new InvalidCastException("Could not convert to Index on board")),
       Pieces = [],

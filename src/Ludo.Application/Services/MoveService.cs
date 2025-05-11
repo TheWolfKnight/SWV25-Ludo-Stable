@@ -20,12 +20,15 @@ public class MoveService
     GameOrchestrator go = _boardService.GenerateBoard(dto.Game);
 
     TileBase tile = go.Board.Tiles[dto.PiecePosition];
-    Piece? toMove = tile.Pieces.FirstOrDefault();
+    if (tile is not MovementTile movementTile)
+      return dto.Game;
+
+    Piece? toMove = movementTile.Pieces.FirstOrDefault();
 
     if (toMove is null)
       return dto.Game;
 
-    tile.MovePiece(toMove, dto.Roll);
+    movementTile.MovePiece(toMove, dto.Roll);
 
     GameDto result = _boardService.CompressBoardToDto(go);
     return result;
@@ -36,12 +39,15 @@ public class MoveService
     GameOrchestrator go = _boardService.GenerateBoard(dto.Game);
 
     TileBase tile = go.Board.Tiles[dto.PiecePosition];
-    Piece? toMove = tile.Pieces.FirstOrDefault();
+    if (tile is not MovementTile movementTile)
+      return false;
+
+    Piece? toMove = movementTile.Pieces.FirstOrDefault();
 
     if (toMove is null)
       return false;
 
-    bool couldMakeMove = tile.PeekMove(toMove, dto.Roll);
+    bool couldMakeMove = movementTile.PeekMove(toMove, dto.Roll);
 
     return couldMakeMove;
   }

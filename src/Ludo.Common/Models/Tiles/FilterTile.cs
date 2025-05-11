@@ -4,14 +4,14 @@ using Ludo.Common.Models.Player;
 
 namespace Ludo.Common.Models.Tiles;
 
-public class FilterTile : TileBase
+public class FilterTile : MovementTile
 {
-  public required TileBase NextTile { get; set; }
+  public required MovementTile NextTile { get; set; }
   public required DriveWayTile FilterdTile { get; set; }
 
   public override void MovePiece(Piece piece, int amount)
   {
-    (bool moveAccepted, TileBase targetTile) = InternalMakeMove(piece, amount);
+    (bool moveAccepted, MovementTile targetTile) = InternalMakeMove(piece, amount);
     if (!moveAccepted)
       return;
 
@@ -37,7 +37,7 @@ public class FilterTile : TileBase
     return InternalMakeMove(piece, amount).MoveAccepted;
   }
 
-  internal override (bool MoveAccepted, TileBase TargetTile) InternalMakeMove(Piece piece, int amount)
+  internal override (bool MoveAccepted, MovementTile TargetTile) InternalMakeMove(Piece piece, int amount)
   {
     if (amount is 0)
       return (true, this);
@@ -47,7 +47,7 @@ public class FilterTile : TileBase
       return (false, this);
 
     bool isFilterdPlayer = base.PlayerNr == piece.Owner.PlayerNr;
-    Func<Piece, int, (bool MoveAccepted, TileBase TargetTile)> method = isFilterdPlayer
+    Func<Piece, int, (bool MoveAccepted, MovementTile TargetTile)> method = isFilterdPlayer
       ? FilterdTile.InternalMakeMove
       : NextTile.InternalMakeMove;
 
@@ -65,13 +65,16 @@ public class FilterTile : TileBase
   {
     int nextTileIndex = (int) (tileDto.Data[nameof(NextTile)] ?? throw new InvalidCastException("Could not get NextTile index"));
     TileBase nextTile = board.Tiles[nextTileIndex];
-    
+
+    if (nextTile is not MovementTile or null)
+      throw new InvalidOperationException("Cannot bind to non-MovementTile");
+
     int filteredTileIndex = (int) (tileDto.Data[nameof(FilterdTile)] ?? throw new InvalidCastException("Could not get FilteredTile index"));
     DriveWayTile filteredTile = board.Tiles[filteredTileIndex] as DriveWayTile ?? throw new InvalidCastException("Could not convert tile to DriveWayTile");
 
     FilterTile tile = new()
     {
-      NextTile = nextTile,
+      NextTile = (nextTile as MovementTile)!,
       FilterdTile = filteredTile,
       PlayerNr = (byte?)tileDto.Data[nameof(PlayerNr)],
       IndexInBoard = (int)(tileDto.Data[nameof(IndexInBoard)] ?? throw new InvalidCastException("Could not convert to Index on board")),

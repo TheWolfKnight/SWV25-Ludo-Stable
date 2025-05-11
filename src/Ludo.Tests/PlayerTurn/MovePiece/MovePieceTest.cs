@@ -2,7 +2,6 @@
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Ludo.Common.Enums;
-using Ludo.Common.Models;
 using Ludo.Common.Models.Dice;
 using Ludo.Common.Models.Player;
 using Ludo.Common.Models.Tiles;
@@ -83,7 +82,7 @@ namespace Ludo.Tests.PlayerTurn.MovePiece
     public void Move_NotRoll6AndNotAPieceAtHome_CannotMoveOut()
     {
       //Arrange
-      TileBase nextTile = A.Fake<StandardTile>();
+      MovementTile nextTile = A.Fake<StandardTile>();
       Player player = A.Fake<Player>();
       DieBase die = A.Fake<DieBase>();
       
@@ -164,7 +163,7 @@ namespace Ludo.Tests.PlayerTurn.MovePiece
     public void Move_Roll6andNoneAtHome_DontMoveOut()
     {
       //Arrange
-      TileBase nextTile = A.Fake<StandardTile>();
+      MovementTile nextTile = A.Fake<StandardTile>();
       Player player = A.Fake<Player>();
       DieBase die = A.Fake<DieBase>();
       

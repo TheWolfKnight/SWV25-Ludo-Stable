@@ -59,7 +59,7 @@ public class GameState
       {
         Piece piece = new Piece()
         {
-          CurrentTile = board.Tiles[i],
+          CurrentTile = (board.Tiles[i] as MovementTile)!,
           Owner = player,
           PieceState = board.Tiles[i] switch
           {
@@ -76,7 +76,7 @@ public class GameState
 
       Home playerHome = new Home()
       {
-        HomeTiles = players[i].HomeTiles.Select(i => board.Tiles[i] as HomeTile).ToArray(),
+        HomeTiles = players[i].HomeTiles.Select(i => (board.Tiles[i] as HomeTile)!).ToArray(),
         Owner = player,
         Pieces = new()
       };

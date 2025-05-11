@@ -5,7 +5,7 @@ using Ludo.Common.Enums;
 
 namespace Ludo.Common.Models.Tiles;
 
-public class GoalTile : TileBase, IGoalTile
+public class GoalTile : MovementTile, IGoalTile
 {
   public override required byte? PlayerNr { get; init; }
   public required DriveWayTile PreviousTile { get; set; }
@@ -18,7 +18,7 @@ public class GoalTile : TileBase, IGoalTile
       return;
     }
 
-    (bool moveAccepted, TileBase targetTile) = InternalMakeMove(piece, amount);
+    (bool moveAccepted, MovementTile targetTile) = InternalMakeMove(piece, amount);
 
     if (!moveAccepted)
       return;
@@ -34,7 +34,7 @@ public class GoalTile : TileBase, IGoalTile
     return InternalMakeMove(piece, amount).MoveAccepted;
   }
 
-  internal override (bool MoveAccepted, TileBase TargetTile) InternalMakeMove(Piece piece, int amount)
+  internal override (bool MoveAccepted, MovementTile TargetTile) InternalMakeMove(Piece piece, int amount)
   {
     if (amount is 0)
       return (true, this);

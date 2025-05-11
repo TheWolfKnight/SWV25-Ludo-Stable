@@ -319,7 +319,7 @@ public class MovementTests
   }
 
   #region Helpers
-  private TileBase GenerateFakeTiles(int depth = 1)
+  private MovementTile GenerateFakeTiles(int depth = 1)
   {
     StandardTile tail = new StandardTile
     {

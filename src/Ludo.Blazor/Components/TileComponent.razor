@@ -1,11 +1,10 @@
 ﻿<div class="grid-cell @GetTileStyle()" @onclick="GetTileAsync">
   <div class="tile-info">
-    @if (Tile is not null)
+    @if (Tile is MovementTile tile)
     {
-      @if (Tile.Pieces.Count > 0)
+      @if (tile.Pieces.Count > 0)
       {
-        <img src="tbd" width="3.5rem" height="3.5rem" /> <p> * @Tile.Pieces.Count</p>
-
+        <img src="tbd" width="3.5rem" height="3.5rem" /> <p> * @tile.Pieces.Count</p>
       }
     }
   </div>

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Reflection;
 using Ludo.Common.Enums;
 using Ludo.Common.Models.Tiles;
@@ -30,7 +29,7 @@ public record TileDto
     
     foreach (PropertyInfo property in tileProperties)
     {
-      if(property.Name is nameof(TileBase.Pieces))
+      if(property.Name is nameof(MovementTile.Pieces))
         continue;
       
       object? propertyObject = property.GetValue(tileBase);

@@ -5,7 +5,7 @@ using Ludo.Common.Models.Player;
 
 namespace Ludo.Common.Models.Tiles;
 
-public class DriveWayTile : TileBase, IGoalTile
+public class DriveWayTile : MovementTile, IGoalTile
 {
   public required override byte? PlayerNr { get; init; }
 
@@ -20,7 +20,7 @@ public class DriveWayTile : TileBase, IGoalTile
       return;
     }
 
-    (bool moveAccepted, TileBase targetTile) = InternalMakeMove(piece, amount);
+    (bool moveAccepted, MovementTile targetTile) = InternalMakeMove(piece, amount);
 
     if (!moveAccepted)
       return;
@@ -36,12 +36,12 @@ public class DriveWayTile : TileBase, IGoalTile
     return InternalMakeMove(piece, amount).MoveAccepted;
   }
 
-  internal override (bool MoveAccepted, TileBase TargetTile) InternalMakeMove(Piece piece, int amount)
+  internal override (bool MoveAccepted, MovementTile TargetTile) InternalMakeMove(Piece piece, int amount)
   {
     return DriveWayMakeMove(piece, amount, true);
   }
 
-  public (bool MoveAccepted, TileBase TargetTile) DriveWayMakeMove(Piece piece, int amount, bool goForward)
+  public (bool MoveAccepted, MovementTile TargetTile) DriveWayMakeMove(Piece piece, int amount, bool goForward)
   {
     if (amount is 0)
       return (true, this);
@@ -60,11 +60,11 @@ public class DriveWayTile : TileBase, IGoalTile
       goForward = true;
     }
 
-    (bool, TileBase) result;
+    (bool, MovementTile) result;
     if (nextTile is DriveWayTile)
       result = ((DriveWayTile)nextTile).DriveWayMakeMove(piece, amount - 1, goForward);
     else
-      result = ((TileBase)nextTile).InternalMakeMove(piece, amount - 1);
+      result = ((MovementTile)nextTile).InternalMakeMove(piece, amount - 1);
 
     return result;
   }
@@ -80,10 +80,10 @@ public class DriveWayTile : TileBase, IGoalTile
   {
     int nextTileIndex = (int) (tileDto.Data[nameof(NextTile)] ?? throw new InvalidCastException("Could not get NextTile index"));
     IGoalTile nextTile = board.Tiles[nextTileIndex] as IGoalTile ?? throw new InvalidCastException("Could not convert tile to IGoalTile");
-    
+
     int previousTileIndex = (int) (tileDto.Data[nameof(PreviousTile)] ?? throw new InvalidCastException("Could not get PreviousTile index"));
     DriveWayTile previousTile = board.Tiles[previousTileIndex] as DriveWayTile ?? throw new InvalidCastException("Could not convert tile to DriveWayTile");
-    
+
     DriveWayTile tile = new()
     {
       PreviousTile = previousTile,

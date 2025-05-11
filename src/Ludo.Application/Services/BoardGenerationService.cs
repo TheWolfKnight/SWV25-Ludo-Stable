@@ -2,10 +2,8 @@ using Ludo.Application.Factories;
 using Ludo.Common.Dtos;
 using Ludo.Common.Enums;
 using Ludo.Common.Models;
-using Ludo.Common.Models.Dice;
 using Ludo.Common.Models.Player;
 using Ludo.Common.Models.Tiles;
-using Microsoft.VisualBasic.CompilerServices;
 
 namespace Ludo.Application.Services;
 
@@ -82,7 +80,7 @@ public class BoardGenerationService
       {
         Piece piece = new Piece()
         {
-          CurrentTile = board.Tiles[i],
+          CurrentTile = (board.Tiles[i] as MovementTile)!,
           Owner = player,
           PieceState = board.Tiles[i] switch
           {
@@ -99,7 +97,7 @@ public class BoardGenerationService
 
       Home playerHome = new Home()
       {
-        HomeTiles = players[i].HomeTiles.Select(i => board.Tiles[i] as HomeTile).ToArray(),
+        HomeTiles = players[i].HomeTiles.Select(i => (board.Tiles[i] as HomeTile)!).ToArray(),
         Owner = player,
         Pieces = new()
       };
