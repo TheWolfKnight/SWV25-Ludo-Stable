@@ -10,4 +10,8 @@
     <ProjectReference Include="..\Ludo.Common\Ludo.Common.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="./GamePresets/*" CopyToOutputDirectory="Always" />
+  </ItemGroup>
+
 </Project>
