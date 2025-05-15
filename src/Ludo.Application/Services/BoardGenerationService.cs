@@ -61,7 +61,8 @@ public class BoardGenerationService
 
     for(int i = 0; i < board.Tiles.Length; i++)
     {
-      TileBase converted = TileBase.FromDto(tiles[i], board);
+      TileDto tile = tiles[i];
+      TileBase converted = TileBase.FromDto(tile, board);
       board.Tiles[i] = converted;
     }
 

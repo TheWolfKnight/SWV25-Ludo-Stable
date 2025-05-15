@@ -1,6 +1,7 @@
 using Ludo.Common.Dtos;
 using Ludo.Common.Enums;
 using Ludo.Common.Models.Player;
+using System.Text.Json;
 
 namespace Ludo.Common.Models.Tiles;
 
@@ -57,17 +58,21 @@ public class StandardTile : MovementTile
 
   internal new static StandardTile FromDto(TileDto tileDto, Board board)
   {
-    int nextTileIndex = (int) (tileDto.Data[nameof(NextTile)] ?? throw new InvalidCastException("Could not get NextTile index"));
+    int nextTileIndex = ((JsonElement?)tileDto.Data[nameof(NextTile)])?.Deserialize<int>() ?? throw new InvalidCastException("Could not get NextTile index");
     TileBase nextTile = board.Tiles[nextTileIndex];
 
     if (nextTile is not MovementTile or null)
       throw new InvalidOperationException("Cannot bind to non-MovementTile");
 
+    int? playerNr = ((JsonElement?)tileDto.Data[nameof(PlayerNr)])?.Deserialize<int>();
+    if (playerNr == -1)
+      playerNr = null;
+
     StandardTile tile = new()
     {
       NextTile = (nextTile as MovementTile)!,
-      PlayerNr = (byte?) tileDto.Data[nameof(PlayerNr)],
-      IndexInBoard = (int) (tileDto.Data[nameof(IndexInBoard)] ?? throw new InvalidCastException("Could not convert to Index on board")),
+      PlayerNr = (byte?)playerNr,
+      IndexInBoard = ((JsonElement?)tileDto.Data[nameof(IndexInBoard)])?.Deserialize<int>() ?? throw new InvalidCastException("Could not convert to Index on board"),
       Pieces = [],
     };
 

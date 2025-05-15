@@ -1,6 +1,7 @@
 using Ludo.Common.Dtos;
 using Ludo.Common.Enums;
 using Ludo.Common.Models.Player;
+using System.Text.Json;
 
 namespace Ludo.Common.Models.Tiles;
 
@@ -63,21 +64,25 @@ public class FilterTile : MovementTile
   
   internal new static FilterTile FromDto(TileDto tileDto, Board board)
   {
-    int nextTileIndex = (int) (tileDto.Data[nameof(NextTile)] ?? throw new InvalidCastException("Could not get NextTile index"));
+    int nextTileIndex = ((JsonElement?)tileDto.Data[nameof(NextTile)])?.Deserialize<int>() ?? throw new InvalidCastException("Could not get NextTile index");
     TileBase nextTile = board.Tiles[nextTileIndex];
 
     if (nextTile is not MovementTile or null)
       throw new InvalidOperationException("Cannot bind to non-MovementTile");
 
-    int filteredTileIndex = (int) (tileDto.Data[nameof(FilterdTile)] ?? throw new InvalidCastException("Could not get FilteredTile index"));
+    int filteredTileIndex = ((JsonElement?)tileDto.Data[nameof(FilterdTile)])?.Deserialize<int>() ?? throw new InvalidCastException("Could not get FilteredTile index");
     DriveWayTile filteredTile = board.Tiles[filteredTileIndex] as DriveWayTile ?? throw new InvalidCastException("Could not convert tile to DriveWayTile");
+
+    int? playerNr = ((JsonElement?)tileDto.Data[nameof(PlayerNr)])?.Deserialize<int>();
+    if (playerNr == -1)
+      playerNr = null;
 
     FilterTile tile = new()
     {
       NextTile = (nextTile as MovementTile)!,
       FilterdTile = filteredTile,
-      PlayerNr = (byte?)tileDto.Data[nameof(PlayerNr)],
-      IndexInBoard = (int)(tileDto.Data[nameof(IndexInBoard)] ?? throw new InvalidCastException("Could not convert to Index on board")),
+      PlayerNr = (byte?)playerNr,
+      IndexInBoard = ((JsonElement?)tileDto.Data[nameof(IndexInBoard)])?.Deserialize<int>() ?? throw new InvalidCastException("Could not convert to Index on board"),
       Pieces = []
     };
 

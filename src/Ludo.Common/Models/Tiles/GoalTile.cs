@@ -2,6 +2,7 @@ using Ludo.Common.Dtos;
 using Ludo.Common.Models.Player;
 using Ludo.Common.Interfaces.Tiles;
 using Ludo.Common.Enums;
+using System.Text.Json;
 
 namespace Ludo.Common.Models.Tiles;
 
@@ -51,14 +52,18 @@ public class GoalTile : MovementTile, IGoalTile
   
   internal new static GoalTile FromDto(TileDto tileDto, Board board)
   {
-    int previousTileIndex = (int) (tileDto.Data[nameof(PreviousTile)] ?? throw new InvalidCastException("Could not get PreviousTile index"));
+    int previousTileIndex = ((JsonElement?)tileDto.Data[nameof(PreviousTile)])?.Deserialize<int>() ?? throw new InvalidCastException("Could not get PreviousTile index");
     DriveWayTile previousTile = board.Tiles[previousTileIndex] as DriveWayTile ?? throw new InvalidCastException("Could not convert tile to DriveWayTile");
+
+    int? playerNr = ((JsonElement?)tileDto.Data[nameof(PlayerNr)])?.Deserialize<int>();
+    if (playerNr == -1)
+      playerNr = null;
 
     GoalTile tile = new()
     {
       PreviousTile = previousTile,
-      PlayerNr = (byte?)tileDto.Data[nameof(PlayerNr)],
-      IndexInBoard = (int)(tileDto.Data[nameof(IndexInBoard)] ?? throw new InvalidCastException("Could not convert to Index on board")),
+      PlayerNr = (byte?)playerNr,
+      IndexInBoard = ((JsonElement?)tileDto.Data[nameof(IndexInBoard)])?.Deserialize<int>() ?? throw new InvalidCastException("Could not convert to Index on board"),
       Pieces = []
     };
 
