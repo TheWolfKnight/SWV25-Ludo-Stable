@@ -37,6 +37,14 @@ public class StandardTile : MovementTile
     return InternalMakeMove(piece, amount).MoveAccepted;
   }
 
+  public override void BindTiles(TileDto tileDto, Board board)
+  {
+    int index = ((JsonElement?)tileDto.Data[nameof(NextTile)])?.Deserialize<int>() ?? throw new InvalidOperationException("Cannot find NextTile for StandardTile");
+
+    MovementTile next = board.Tiles[index] as MovementTile ?? throw new InvalidCastException($"Cannot cast tile at index {index} as a MovementTile");
+    NextTile = next;
+  }
+
   internal override (bool MoveAccepted, MovementTile TargetTile) InternalMakeMove(Piece piece, int amount)
   {
     if (amount is 0)
@@ -56,21 +64,15 @@ public class StandardTile : MovementTile
     base.Pieces.Add(piece);
   }
 
-  internal new static StandardTile FromDto(TileDto tileDto, Board board)
+  internal new static StandardTile FromDto(TileDto tileDto, Board board, TileDto[] tiles)
   {
-    int nextTileIndex = ((JsonElement?)tileDto.Data[nameof(NextTile)])?.Deserialize<int>() ?? throw new InvalidCastException("Could not get NextTile index");
-    TileBase nextTile = board.Tiles[nextTileIndex];
-
-    if (nextTile is not MovementTile or null)
-      throw new InvalidOperationException("Cannot bind to non-MovementTile");
-
     int? playerNr = ((JsonElement?)tileDto.Data[nameof(PlayerNr)])?.Deserialize<int>();
     if (playerNr == -1)
       playerNr = null;
 
     StandardTile tile = new()
     {
-      NextTile = (nextTile as MovementTile)!,
+      NextTile = null!,
       PlayerNr = (byte?)playerNr,
       IndexInBoard = ((JsonElement?)tileDto.Data[nameof(IndexInBoard)])?.Deserialize<int>() ?? throw new InvalidCastException("Could not convert to Index on board"),
       Pieces = [],

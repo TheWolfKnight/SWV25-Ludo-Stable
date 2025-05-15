@@ -51,7 +51,7 @@ public record TileDto
 
     string tileTypeName = tileType.Name[..stopIndex];
 
-    if (Enum.TryParse(tileTypeName, out TileTypes typeOfTile))
+    if (!Enum.TryParse(tileTypeName, out TileTypes typeOfTile))
       throw new InvalidOperationException($"Could not parse type name {tileTypeName} to a valid type.");
 
     return typeOfTile;

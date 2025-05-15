@@ -40,7 +40,7 @@ public class GameState
 
     for (int i = 0; i < board.Tiles.Length; i++)
     {
-      TileBase converted = TileBase.FromDto(tiles[i], board);
+      TileBase converted = TileBase.FromDto(tiles[i], board, tiles);
       board.Tiles[i] = converted;
     }
 

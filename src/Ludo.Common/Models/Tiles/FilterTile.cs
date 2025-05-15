@@ -38,6 +38,19 @@ public class FilterTile : MovementTile
     return InternalMakeMove(piece, amount).MoveAccepted;
   }
 
+  public override void BindTiles(TileDto tileDto, Board board)
+  {
+    int nextIndex = ((JsonElement?)tileDto.Data[nameof(NextTile)])?.Deserialize<int>() ?? throw new InvalidOperationException("Cannot find NextTile for FilterTile");
+
+    MovementTile next = board.Tiles[nextIndex] as MovementTile ?? throw new InvalidCastException($"Cannot cast tile at index {nextIndex} as a MovementTile");
+    NextTile = next;
+
+    int filterdIndex = ((JsonElement?)tileDto.Data[nameof(FilterdTile)])?.Deserialize<int>() ?? throw new InvalidOperationException("Cannot find FilterdTile for FilterTile");
+
+    DriveWayTile filterdTile = board.Tiles[filterdIndex] as DriveWayTile ?? throw new InvalidCastException($"Cannot cast tile at index {nextIndex} as a DriveWayTile");
+    FilterdTile = filterdTile;
+  }
+
   internal override (bool MoveAccepted, MovementTile TargetTile) InternalMakeMove(Piece piece, int amount)
   {
     if (amount is 0)
@@ -62,16 +75,17 @@ public class FilterTile : MovementTile
     base.Pieces.Add(piece);
   }
   
-  internal new static FilterTile FromDto(TileDto tileDto, Board board)
+  internal new static FilterTile FromDto(TileDto tileDto, Board board, TileDto[] tiles)
   {
     int nextTileIndex = ((JsonElement?)tileDto.Data[nameof(NextTile)])?.Deserialize<int>() ?? throw new InvalidCastException("Could not get NextTile index");
-    TileBase nextTile = board.Tiles[nextTileIndex];
+    TileDto nextTile = tiles[nextTileIndex];
 
-    if (nextTile is not MovementTile or null)
+    if (nextTile.Type is TileTypes.Filler)
       throw new InvalidOperationException("Cannot bind to non-MovementTile");
 
     int filteredTileIndex = ((JsonElement?)tileDto.Data[nameof(FilterdTile)])?.Deserialize<int>() ?? throw new InvalidCastException("Could not get FilteredTile index");
-    DriveWayTile filteredTile = board.Tiles[filteredTileIndex] as DriveWayTile ?? throw new InvalidCastException("Could not convert tile to DriveWayTile");
+    if (tiles[filteredTileIndex].Type is not TileTypes.DriveWay)
+      throw new InvalidCastException("Could not convert tile to DriveWayTile");
 
     int? playerNr = ((JsonElement?)tileDto.Data[nameof(PlayerNr)])?.Deserialize<int>();
     if (playerNr == -1)
@@ -79,8 +93,8 @@ public class FilterTile : MovementTile
 
     FilterTile tile = new()
     {
-      NextTile = (nextTile as MovementTile)!,
-      FilterdTile = filteredTile,
+      NextTile = (board.Tiles[nextTileIndex] as MovementTile)!,
+      FilterdTile = (board.Tiles[filteredTileIndex] as DriveWayTile)!,
       PlayerNr = (byte?)playerNr,
       IndexInBoard = ((JsonElement?)tileDto.Data[nameof(IndexInBoard)])?.Deserialize<int>() ?? throw new InvalidCastException("Could not convert to Index on board"),
       Pieces = []
