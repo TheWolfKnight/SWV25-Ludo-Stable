@@ -43,7 +43,6 @@ public static class PlayerHelpers
             .Select(_ => null as HomeTile!)
             .ToArray()!,
           Owner = player,
-          Pieces = new()
         };
 
         return player;
