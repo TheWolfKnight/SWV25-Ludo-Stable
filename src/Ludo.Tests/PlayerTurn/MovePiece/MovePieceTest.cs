@@ -41,6 +41,7 @@ namespace Ludo.Tests.PlayerTurn.MovePiece
       //Arrange
       Player player = A.Fake<Player>();
       DieBase die = A.Fake<DieBase>();
+      Piece piece = null!;
 
       HomeTile homeTile = new()
       {
@@ -50,7 +51,7 @@ namespace Ludo.Tests.PlayerTurn.MovePiece
         NextTile = A.Fake<StandardTile>()
       };
 
-      Piece piece = new()
+      piece = new()
       {
         Owner = player,
         PieceState = PieceState.Home,
@@ -62,7 +63,6 @@ namespace Ludo.Tests.PlayerTurn.MovePiece
       Home home = new()
       {
         Owner = player,
-        Pieces = [piece, A.Fake<Piece>()],
         HomeTiles = [homeTile]
       };
 
@@ -75,7 +75,6 @@ namespace Ludo.Tests.PlayerTurn.MovePiece
       //Assert
       using AssertionScope assertions = new();
       piece.PieceState.Should().Be(PieceState.Home);
-      home.Pieces.Should().Contain(piece).And.HaveCount(2);
       homeTile.Pieces.Should().Contain(piece);
     }
 
@@ -98,7 +97,6 @@ namespace Ludo.Tests.PlayerTurn.MovePiece
       Home home = new()
       {
         Owner = player,
-        Pieces = [],
         HomeTiles = [homeTile]
       };
 
@@ -112,7 +110,7 @@ namespace Ludo.Tests.PlayerTurn.MovePiece
       homeTile.MovePiece(A.Fake<Piece>(), i);
 
       //Assert
-      home.Pieces.Should().BeEmpty();
+      homeTile.Pieces.Should().BeEmpty();
       nextTile.Pieces.Should().BeEmpty();
     }
 
@@ -122,28 +120,28 @@ namespace Ludo.Tests.PlayerTurn.MovePiece
       //Arrange
       Player player = A.Fake<Player>();
       DieBase die = A.Fake<DieBase>();
-      
+      Piece piece = null!;
+
       HomeTile homeTile = new()
       {
         IndexInBoard = 1,
         NextTile = A.Fake<StandardTile>(),
-        Pieces = [],
+        Pieces = [piece],
         PlayerNr = 0
       };
 
-      Piece piece = new()
+      piece = new()
       {
         Owner = player,
         CurrentTile = homeTile,
         PieceState = PieceState.Home
       };
-      
+
       homeTile.Pieces.Add(piece);
-      
+
       Home home = new()
       {
         Owner = player,
-        Pieces = [piece],
         HomeTiles = [homeTile]
       };
 
@@ -155,7 +153,6 @@ namespace Ludo.Tests.PlayerTurn.MovePiece
 
       //Assert
       using AssertionScope scope = new();
-      home.Pieces.Should().HaveCount(1);
       homeTile.Pieces.Should().BeEmpty();
       piece.PieceState.Should().Be(PieceState.OnBoard);
     }
@@ -179,7 +176,6 @@ namespace Ludo.Tests.PlayerTurn.MovePiece
       Home home = new()
       {
         Owner = player,
-        Pieces = [],
         HomeTiles = [homeTile]
       };
 
@@ -193,7 +189,7 @@ namespace Ludo.Tests.PlayerTurn.MovePiece
       homeTile.MovePiece(A.Fake<Piece>(), i);
 
       //Assert
-      home.Pieces.Should().BeEmpty();
+      homeTile.Pieces.Should().BeEmpty();
       nextTile.Pieces.Should().BeEmpty();
     }
   }

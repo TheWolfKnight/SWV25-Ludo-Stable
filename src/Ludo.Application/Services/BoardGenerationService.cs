@@ -101,7 +101,6 @@ public class BoardGenerationService
       {
         HomeTiles = players[i].HomeTiles.Select(i => board.Tiles[i] as HomeTile).ToArray(),
         Owner = player,
-        Pieces = new()
       };
 
       player = new()
