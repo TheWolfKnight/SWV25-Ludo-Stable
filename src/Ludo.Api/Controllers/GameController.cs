@@ -2,14 +2,16 @@ using System;
 using System.Threading.Tasks;
 using Ludo.Application.Services;
 using Ludo.Common.Dtos;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace Ludo.Api.Controllers;
 
-[Route("api/[controller]")]
+[EnableCors]
 [ApiController]
+[Route("api/[controller]")]
 public class GameController : ControllerBase
 {
   private readonly GameService _gameService;
@@ -22,7 +24,7 @@ public class GameController : ControllerBase
     _boardGenerationService = boardGenerationService;
   }
 
-  [HttpGet("/v1/new")]
+  [HttpGet("v1/new")]
   [ProducesResponseType(StatusCodes.Status200OK)]
   [ProducesResponseType(StatusCodes.Status400BadRequest)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]

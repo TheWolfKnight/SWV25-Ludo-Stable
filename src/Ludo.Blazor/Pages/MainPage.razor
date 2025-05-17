@@ -1,6 +1,8 @@
-﻿<h3>MainPage</h3>
-@page "/"
+﻿@page "/"
 
-@code {
+<h3>Ludo</h3>
 
+@if (_gameState is not null)
+{
+  <BoardView Board="@_gameState.Board" />
 }

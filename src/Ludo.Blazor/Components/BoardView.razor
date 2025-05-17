@@ -1,13 +1,11 @@
 ﻿
-<h3>Board2</h3>
-
 <div class="tile-grid">
-  @for (int row = 0; row < 13; row++)
+  @for (int row = 0; row < Board.Y; row++)
   {
     <div class="grid-row">
-      @for (int col = 0; col < 13; col++)
+      @for (int col = 0; col < Board.X; col++)
       {
-        <TileComponent Tile="Board.Tiles[col + 13*row]" TileRow="@row" TileColumn="@col"
+        <TileComponent Tile="Board.Tiles[col + 15 * row]" TileRow="@row" TileColumn="@col"
                        GetTile="SetCurrentSelectedTile" />
       }
     </div>

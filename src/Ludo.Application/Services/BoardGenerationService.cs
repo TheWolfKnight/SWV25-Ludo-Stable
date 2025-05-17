@@ -19,7 +19,7 @@ public class BoardGenerationService
   
   public GameOrchestrator GenerateBoard(GameDto dto)
   {
-    Board board = GetBoard(dto.Tiles);
+    Board board = GetBoard(dto.Tiles, dto.X, dto.Y);
     Player[] players = GetPlayers(dto.Players, board);
 
     GameOrchestrator orchestrator = new()
@@ -53,10 +53,12 @@ public class BoardGenerationService
     return game;
   }
 
-  private Board GetBoard(TileDto[] tiles)
+  private Board GetBoard(TileDto[] tiles, int x, int y)
   {
     Board board = new()
     {
+      X = x,
+      Y = y,
       Tiles = tiles.Select(TileBase (_) => null!).ToArray()
     };
 

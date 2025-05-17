@@ -23,6 +23,15 @@ builder.Services.AddScoped<GameService>();
 builder.Services.AddScoped<MoveService>();
 builder.Services.AddScoped<BoardGenerationService>();
 
+builder.Services.AddCors(config =>
+{
+  config.AddDefaultPolicy(policy =>
+    policy.AllowAnyHeader()
+          .AllowAnyMethod()
+          .AllowAnyOrigin()
+  );
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -35,6 +44,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.MapControllers();
+
+app.UseCors();
+app.UseAuthentication();
 
 app.Run();
 

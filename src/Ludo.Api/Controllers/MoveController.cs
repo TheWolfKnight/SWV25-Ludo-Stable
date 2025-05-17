@@ -2,10 +2,12 @@ using System.Threading.Tasks;
 using Ludo.Application.Services;
 using Ludo.Common.Dtos;
 using Ludo.Common.Dtos.Requests;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ludo.Api.Controllers;
 
+[DisableCors]
 [Route("api/[controller]")]
 [ApiController]
 public class MoveController: ControllerBase

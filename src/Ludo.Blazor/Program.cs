@@ -1,3 +1,4 @@
+using System.Linq;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Ludo.Blazor;
@@ -11,10 +12,13 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddHttpClient<GameService>(client =>
 {
-  client.BaseAddress = new Uri(Environment.GetEnvironmentVariable("BASE_ADDRESS") ?? "http://localhost:5176");
+  client.BaseAddress = new Uri("https://localhost:7046/");
 });
+
 
 builder.Services.AddTransient<DieBase, DieD6>();
 builder.Services.AddScoped<DieFactory>();
 
-await builder.Build().RunAsync();
+var app = builder.Build();
+
+await app.RunAsync();

@@ -1,8 +1,9 @@
-using System.Net;
-using System.Net.Http.Json;
 using Ludo.Blazor.Features.Factory;
 using Ludo.Blazor.Models;
 using Ludo.Common.Dtos;
+using System.Net;
+using System.Net.Http.Json;
+using System.Reflection.PortableExecutable;
 
 namespace Ludo.Blazor.Features.Game;
 
@@ -19,7 +20,7 @@ public class GameService
 
   public async Task<GameState> GetNewGameAsync(int playerAmount)
   { 
-    string url = $"api/game/v1/new?playerCount={playerAmount}";
+    string url = $"api/Game/v1/new?playerCount={playerAmount}";
 
     var response = await _httpClient.GetAsync(url);
     if (response.StatusCode is not HttpStatusCode.OK)
@@ -34,7 +35,8 @@ public class GameService
       throw new InvalidOperationException("Failed to deserialize game data.");
     }
 
+    Console.WriteLine(gameDto.CurrentPlayer);
+
     return GameState.FromDto(gameDto, _dieFactory);
   }
-
 }

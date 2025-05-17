@@ -3,9 +3,11 @@ using System.Threading.Tasks;
 using Ludo.Common.Dtos;
 using Ludo.Application.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Cors;
 
 namespace Ludo.Api.Controllers;
 
+[DisableCors]
 [Route("api/[controller]")]
 [ApiController]
 public class DieController : ControllerBase

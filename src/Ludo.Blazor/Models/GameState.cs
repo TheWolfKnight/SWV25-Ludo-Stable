@@ -18,7 +18,7 @@ public class GameState
 
   public static GameState FromDto(GameDto dto, DieFactory dieFactory)
   {
-    Board board = GetBoard(dto.Tiles);
+    Board board = GetBoard(dto.Tiles, dto.X, dto.Y);
     Player[] players = GetPlayers(dto.Players, board);
     DieBase die = dieFactory.GetRolledDie(dto.Die);
 
@@ -31,17 +31,38 @@ public class GameState
     };
   }
 
-  private static Board GetBoard(TileDto[] tiles)
+  private static Board GetBoard(TileDto[] tiles, int x, int y)
   {
     Board board = new()
     {
+      X = x,
+      Y = y,
       Tiles = tiles.Select(TileBase (_) => null!).ToArray()
     };
 
     for (int i = 0; i < board.Tiles.Length; i++)
     {
-      TileBase converted = TileBase.FromDto(tiles[i], board, tiles);
+      TileDto tile = tiles[i];
+      TileBase converted = TileBase.FromDto(tile, board, tiles);
       board.Tiles[i] = converted;
+    }
+
+    for (int i = 0; i < board.Tiles.Length; i++)
+    {
+      TileBase tileBase = board.Tiles[i];
+      TileDto tileDto = tiles[i];
+
+      if (tileBase is MovementTile movementTile)
+      {
+        try
+        {
+          movementTile.BindTiles(tileDto, board);
+        }
+        catch (Exception e)
+        {
+          throw new InvalidOperationException($"could not handled tile at index {i} due to internal error: \"{e.Message}\"");
+        }
+      }
     }
 
     return board;
@@ -78,7 +99,6 @@ public class GameState
       {
         HomeTiles = players[i].HomeTiles.Select(i => (board.Tiles[i] as HomeTile)!).ToArray(),
         Owner = player,
-        Pieces = new()
       };
 
       player = new()
