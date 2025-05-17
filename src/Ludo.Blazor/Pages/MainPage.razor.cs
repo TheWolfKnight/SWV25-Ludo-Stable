@@ -9,12 +9,8 @@ namespace Ludo.Blazor.Pages
 
     private GameState? _gameState;
 
-    private readonly GameService _service;
-
-    public MainPage(GameService service)
-    {
-      _service = service;
-    }
+    [Inject]
+    public required GameService Service { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -23,7 +19,7 @@ namespace Ludo.Blazor.Pages
 
     public async Task NewGameAsync(int playerAmount)
     {
-      _gameState = await _service.GetNewGameAsync(playerAmount);
+      _gameState = await Service.GetNewGameAsync(playerAmount);
 
       StateHasChanged();
     }
