@@ -2,7 +2,6 @@ using FakeItEasy;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Ludo.Common.Models.Tiles;
-using Ludo.Common.Models;
 using Ludo.Common.Models.Player;
 using Ludo.Common.Enums;
 using Ludo.Common.Models.Dice;
@@ -17,7 +16,20 @@ public class MovementTests
   public void Movement_GivenRollX_DoNotMoveY(int roll, int check, int tileDepth)
   {
     // Arrange
-    Piece piece = A.Fake<Piece>();
+    Player player = new Player
+    {
+      PlayerNr = 1,
+      InPlay = true,
+      Home = null!,
+      Pieces = new Piece[4]
+    };
+    Piece piece = new Piece
+    {
+      CurrentTile = null!,
+      Owner = player,
+      PieceState = PieceState.OnBoard
+    };
+    player.Pieces[0] = piece;
     DieBase die = A.Fake<DieBase>();
 
     StandardTile startTile = new StandardTile
@@ -44,7 +56,20 @@ public class MovementTests
   public void Movement_GivenRoll3_Move3(int roll, int tileDepth)
   {
     // Arrange
-    Piece piece = A.Fake<Piece>();
+    Player player = new Player
+    {
+      PlayerNr = 1,
+      InPlay = true,
+      Home = null!,
+      Pieces = new Piece[4]
+    };
+    Piece piece = new Piece
+    {
+      CurrentTile = null!,
+      Owner = player,
+      PieceState = PieceState.OnBoard
+    };
+    player.Pieces[0] = piece;
     DieBase die = A.Fake<DieBase>();
 
     StandardTile startTile = new StandardTile
@@ -62,14 +87,27 @@ public class MovementTests
 
     // Assert
     using AssertionScope scepe = new();
-    GetTileAt(startTile, roll)?.Pieces.Should().HaveCount(1);
-    piece.CurrentTile.Should().Be(GetTileAt(startTile, roll));
+    MovementTile expectedTile = GetTileAt(startTile, roll)!;
+
+    expectedTile.Pieces.Should().HaveCount(1);
+    piece.CurrentTile.Should().Be(expectedTile);
   }
 
   [Fact]
   public void Movement_GivenBlueLandsOn2Red_SendBlueHome()
   {
     // Arrange
+    Home blueHome = A.Fake<Home>();
+    HomeTile blueHomeTile = new HomeTile
+    {
+      IndexInBoard = 0,
+      NextTile = null!,
+      Pieces = [],
+      PlayerNr = 2,
+    };
+
+    A.CallTo(() => blueHome.GetFirstAvailableHomeTile()).Returns(blueHomeTile);
+
     Player redPlayer = new()
     {
       PlayerNr = 1,
@@ -88,7 +126,7 @@ public class MovementTests
       PlayerNr = 2,
       InPlay = true,
       Pieces = [],
-      Home = null! // TODO: Make home for blue, to complete test
+      Home = blueHome
     };
     Piece blue = new Piece
     {
@@ -124,6 +162,17 @@ public class MovementTests
   public void Movement_GivenRedLandsOnBlue_SendBlueHome()
   {
     // Arrange
+    Home blueHome = A.Fake<Home>();
+    HomeTile blueHomeTile = new HomeTile
+    {
+      IndexInBoard = 0,
+      NextTile = null!,
+      Pieces = [],
+      PlayerNr = 2,
+    };
+
+    A.CallTo(() => blueHome.GetFirstAvailableHomeTile()).Returns(blueHomeTile);
+
     Player redPlayer = new()
     {
       PlayerNr = 1,
@@ -142,7 +191,7 @@ public class MovementTests
       PlayerNr = 2,
       InPlay = true,
       Pieces = [],
-      Home = null! // TODO: give home to complete test
+      Home = blueHome
     };
     Piece blue = new Piece
     {
@@ -179,18 +228,30 @@ public class MovementTests
   public void Movement_GivenPieceIs1FromGoal_AndDieRolls1_SendPieceIntoGoal()
   {
     // Arrange
-    Piece piece = A.Fake<Piece>();
-    GoalTile goal = null!;
+    Player player = new Player
+    {
+      PlayerNr = 1,
+      InPlay = true,
+      Home = null!,
+      Pieces = new Piece[4]
+    };
+    Piece piece = new Piece
+    {
+      CurrentTile = null!,
+      Owner = player,
+      PieceState = PieceState.OnBoard
+    };
+    player.Pieces[0] = piece;
+
     DriveWayTile tile = new DriveWayTile
     {
       PlayerNr = 1,
       IndexInBoard = 1,
-      NextTile = goal,
+      NextTile = null!,
       PreviousTile = null!,
       Pieces = [piece]
     };
-
-    goal = new()
+    GoalTile goal = new()
     {
       PlayerNr = 1,
       IndexInBoard = 1,
@@ -198,6 +259,7 @@ public class MovementTests
       Pieces = []
     };
 
+    tile.NextTile = goal;
     piece.CurrentTile = tile;
 
     // Act
@@ -213,19 +275,31 @@ public class MovementTests
   public void Movement_GivenPieceIs1FromGoal_AndDieRolls2_SendPiece1FromGoal()
   {
     // Arrange
-    Piece piece = A.Fake<Piece>();
+    Player player = new Player
+    {
+      PlayerNr = 1,
+      InPlay = true,
+      Home = null!,
+      Pieces = new Piece[4]
+    };
+    Piece piece = new Piece
+    {
+      CurrentTile = null!,
+      Owner = player,
+      PieceState = PieceState.OnBoard
+    };
+    player.Pieces[0] = piece;
 
-    GoalTile goal = null!;
     DriveWayTile tile = new DriveWayTile
     {
       PlayerNr = 1,
       IndexInBoard = 1,
-      NextTile = goal,
+      NextTile = null!,
       PreviousTile = null!,
       Pieces = [piece]
     };
 
-    goal = new()
+    GoalTile goal = new()
     {
       PlayerNr = 1,
       IndexInBoard = 1,
@@ -233,6 +307,7 @@ public class MovementTests
       PreviousTile = tile
     };
 
+    tile.NextTile = goal;
     piece.CurrentTile = tile;
 
     // Act
@@ -290,11 +365,19 @@ public class MovementTests
   public void Movement_GivenARollOf3_WithLegalMoves_ExecuteMovement()
   {
     // Arrange
-    Piece piece1 = new() {
+    Piece piece1 = new()
+    {
       CurrentTile = null!,
-      Owner = null!,
+      Owner = new Player
+      {
+        PlayerNr = 1,
+        Home = null!,
+        InPlay = true,
+        Pieces = new Piece[4]
+      },
       PieceState = PieceState.OnBoard
     };
+    piece1.Owner.Pieces[0] = piece1;
 
     StandardTile tile = new StandardTile
     {
@@ -307,15 +390,17 @@ public class MovementTests
         Pieces = []
       }
     };
-
     piece1.CurrentTile = tile;
 
     // Act
     tile.MovePiece(piece1, 3);
 
     // Assert
-    piece1.CurrentTile.Should().Be(tile.NextTile);
-    tile.NextTile.Pieces.Should().Contain(piece1);
+    using AssertionScope scope = new();
+    MovementTile expectedTile = GetTileAt(tile, 3)!;
+
+    piece1.CurrentTile.Should().Be(expectedTile);
+    expectedTile.Pieces.Should().Contain(piece1);
   }
 
   #region Helpers
@@ -348,7 +433,7 @@ public class MovementTests
   {
     StandardTile currentTile = tile;
 
-    for (int i = 0; i < depth-1; i++)
+    for (int i = 0; i < depth; i++)
       currentTile = (StandardTile)currentTile.NextTile;
 
     return currentTile;

@@ -17,7 +17,7 @@ public class StandardTile : MovementTile
 
     base.Pieces.Remove(piece);
 
-    int cntOpponentPieces = base.Pieces.Count(inner => inner.Owner.PlayerNr != piece.Owner.PlayerNr && inner != piece);
+    int cntOpponentPieces = targetTile.Pieces.Count(inner => inner.Owner.PlayerNr != piece.Owner.PlayerNr && inner != piece);
     if (cntOpponentPieces > 1)
     {
       piece.MoveToHome();
@@ -50,7 +50,7 @@ public class StandardTile : MovementTile
     if (amount is 0)
       return (true, this);
 
-    bool containsOwnPieces = base.Pieces.Any(inner => inner.Owner.PlayerNr == piece.Owner.PlayerNr);
+    bool containsOwnPieces = base.Pieces.Any(inner => inner.Owner.PlayerNr == piece.Owner.PlayerNr && inner != piece);
     if (amount is not 0 && containsOwnPieces)
       return (false, this);
 

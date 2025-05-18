@@ -11,6 +11,7 @@ public class Piece
 
   public void MoveToHome()
   {
-    throw new NotImplementedException();
+    HomeTile home = Owner.Home.GetFirstAvailableHomeTile();
+    home.SendPieceHome(this);
   }
 }

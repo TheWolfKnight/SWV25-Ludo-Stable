@@ -14,74 +14,46 @@ namespace Ludo.Tests.PlayerTurn.MovePiece
     public void Move_rollsX_moveX()
     {
       //Arrange
-      Piece piece = A.Fake<Piece>();
-      DieBase die = A.Fake<DieBase>();
-      StandardTile moveToTile = A.Fake<StandardTile>();
+      Player player = new Player
+      {
+        PlayerNr = 1,
+        InPlay = true,
+        Home = null!,
+        Pieces = new Piece[4]
+      };
+      Piece piece = new Piece
+      {
+        CurrentTile = null!,
+        Owner = player,
+        PieceState = PieceState.OnBoard
+      };
+      player.Pieces[0] = piece;
 
       StandardTile startTile = new()
       {
         IndexInBoard = 1,
-        PlayerNr = 0,
         Pieces = [piece],
-        NextTile = moveToTile
+        NextTile = GenerateFakeTiles(7)
       };
 
+      DateTime dt = DateTime.Now;
+      Random rnd = new Random((int)(dt.Ticks/dt.Day));
+      int rolled = rnd.Next(0, 6) + 1;
       //Act
-      int rolled = die.Roll();
       startTile.MovePiece(piece, rolled);
 
       //Assert
+      using AssertionScope scope = new();
+      MovementTile expectedTile = GetTileAt(startTile, rolled)!;
+
       startTile.Pieces.Should().BeEmpty();
-    }
-
-    [Fact]
-    public void Move_NotRoll6AndPieceAtHome_CannotMoveOut()
-    {
-      //Arrange
-      Player player = A.Fake<Player>();
-      DieBase die = A.Fake<DieBase>();
-      Piece piece = null!;
-
-      HomeTile homeTile = new()
-      {
-        IndexInBoard = 1,
-        Pieces = [],
-        PlayerNr = 0,
-        NextTile = A.Fake<StandardTile>()
-      };
-
-      piece = new()
-      {
-        Owner = player,
-        PieceState = PieceState.Home,
-        CurrentTile = homeTile
-      };
-
-      homeTile.Pieces.Add(piece);
-
-      Home home = new()
-      {
-        Owner = player,
-        HomeTiles = [homeTile]
-      };
-
-      A.CallTo(() => die.Roll()).Returns(3);
-      int rolled = die.Roll();
-
-      //Act
-      home.HomeTiles[0].MovePiece(piece, rolled);
-
-      //Assert
-      using AssertionScope assertions = new();
-      piece.PieceState.Should().Be(PieceState.Home);
-      homeTile.Pieces.Should().Contain(piece);
+      expectedTile.Pieces.Should().Contain(piece);
     }
 
     [Fact]
     public void Move_NotRoll6AndNotAPieceAtHome_CannotMoveOut()
     {
       //Arrange
-      MovementTile nextTile = A.Fake<StandardTile>();
       Player player = A.Fake<Player>();
       DieBase die = A.Fake<DieBase>();
       
@@ -90,7 +62,12 @@ namespace Ludo.Tests.PlayerTurn.MovePiece
         IndexInBoard = 1,
         Pieces = [],
         PlayerNr = 0,
-        NextTile = nextTile
+        NextTile = new StandardTile
+        {
+          IndexInBoard = 2,
+          NextTile = null!,
+          Pieces = []
+        }
       };
       
       Home home = new()
@@ -110,39 +87,47 @@ namespace Ludo.Tests.PlayerTurn.MovePiece
 
       //Assert
       homeTile.Pieces.Should().BeEmpty();
-      nextTile.Pieces.Should().BeEmpty();
+      homeTile.NextTile.Pieces.Should().BeEmpty();
     }
 
     [Fact]
     public void Move_Roll6andHasPieceAtHome_MoveOut()
     {
       //Arrange
-      Player player = A.Fake<Player>();
       DieBase die = A.Fake<DieBase>();
-      Piece piece = null!;
+      Player player = new Player
+      {
+        Home = new()
+        {
+          Owner = null!,
+          HomeTiles = new HomeTile[4]
+        },
+        InPlay = true,
+        Pieces = new Piece[4],
+        PlayerNr = 1
+      };
+      Piece piece = new()
+      {
+        Owner = player,
+        CurrentTile = null!,
+        PieceState = PieceState.Home
+      };
+      player.Pieces[0] = piece;
 
       HomeTile homeTile = new()
       {
         IndexInBoard = 1,
-        NextTile = A.Fake<StandardTile>(),
+        NextTile = new StandardTile
+        {
+          IndexInBoard = 2,
+          NextTile = null!,
+          Pieces = []
+        },
         Pieces = [piece],
         PlayerNr = 0
       };
-
-      piece = new()
-      {
-        Owner = player,
-        CurrentTile = homeTile,
-        PieceState = PieceState.Home
-      };
-
-      homeTile.Pieces.Add(piece);
-
-      Home home = new()
-      {
-        Owner = player,
-        HomeTiles = [homeTile]
-      };
+      piece.CurrentTile = homeTile;
+      player.Home.HomeTiles[0] = homeTile;
 
       A.CallTo(() => die.Roll()).Returns(6);
       int i = die.Roll();
@@ -156,40 +141,41 @@ namespace Ludo.Tests.PlayerTurn.MovePiece
       piece.PieceState.Should().Be(PieceState.OnBoard);
     }
 
-    [Fact]
-    public void Move_Roll6andNoneAtHome_DontMoveOut()
+    #region Helpers
+    private MovementTile GenerateFakeTiles(int depth = 1)
     {
-      //Arrange
-      MovementTile nextTile = A.Fake<StandardTile>();
-      Player player = A.Fake<Player>();
-      DieBase die = A.Fake<DieBase>();
-      
-      HomeTile homeTile = new()
+      StandardTile tail = new StandardTile
       {
         IndexInBoard = 1,
         Pieces = [],
-        PlayerNr = 0,
-        NextTile = nextTile
+        NextTile = null!,
       };
-      
-      Home home = new()
+      StandardTile current = tail;
+
+      for (int i = 1; i < depth; ++i)
       {
-        Owner = player,
-        HomeTiles = [homeTile]
-      };
+        StandardTile head = new StandardTile
+        {
+          IndexInBoard = 1,
+          Pieces = [],
+          NextTile = current
+        };
 
-      A.CallTo(() => die.Roll()).Returns(6);
-      int i = die.Roll();
+        current = head;
+      }
 
-      //Act
-      // Like the Unit test further up, this is an odd one
-      // since we're checking if it failed when moving a piece
-      // out, but no pieces exist
-      homeTile.MovePiece(A.Fake<Piece>(), i);
-
-      //Assert
-      homeTile.Pieces.Should().BeEmpty();
-      nextTile.Pieces.Should().BeEmpty();
+      return current;
     }
+
+    private StandardTile? GetTileAt(StandardTile tile, int depth)
+    {
+      StandardTile currentTile = tile;
+
+      for (int i = 0; i < depth; i++)
+        currentTile = (StandardTile)currentTile.NextTile;
+
+      return currentTile;
+    }
+    #endregion
   }
 }

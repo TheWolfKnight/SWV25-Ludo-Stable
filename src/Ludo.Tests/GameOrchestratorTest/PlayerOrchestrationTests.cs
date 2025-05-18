@@ -135,6 +135,8 @@ namespace Ludo.Tests.GameOrchestratorTest
       {
         return new Board
         {
+          X = 0,
+          Y = 0,
           Tiles = []
         };
       }

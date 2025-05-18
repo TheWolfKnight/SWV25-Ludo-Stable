@@ -10,34 +10,31 @@ public class GameOrchestrator
   public required Board Board { get; init; }
   public required Player.Player[] Players { get; set; }
 
-  public void StartGame()
+  public virtual bool HasValidMove(int roll)
   {
-    throw new NotImplementedException();
-  }
-
-  public void EndGame()
-  {
-    throw new NotImplementedException();
-  }
-
-  public void RestartGame()
-  {
+    //TODO: this when I complete the game
     throw new NotImplementedException();
   }
 
   public virtual void NextPlayer()
   {
+    Player.Player player = Players[CurrentPlayer];
+    if (!player.PieceOnBoardAtTurnStart && player.RollsThisTurn != 3)
+      return;
+
     byte nextPlayer = CurrentPlayer;
     int checkPlayers = 0;
     while (checkPlayers++ < Players.Length)
+    {
       nextPlayer = (byte)((CurrentPlayer + 1) % Players.Length);
+      if (Players[nextPlayer].InPlay)
+        break;
+    }
+
+    if (checkPlayers == Players.Length)
+      throw new InvalidOperationException("Ingen gyldigt spiller fundet");
 
     CurrentPlayer = nextPlayer;
-  }
-
-  public bool IsValidMove(Piece piece)
-  {
-    throw new NotImplementedException();
   }
 
   public byte[] DetermineStartingPlayer(int[] rolls)
