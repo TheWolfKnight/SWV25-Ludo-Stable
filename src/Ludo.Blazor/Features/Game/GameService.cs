@@ -35,8 +35,6 @@ public class GameService
       throw new InvalidOperationException("Failed to deserialize game data.");
     }
 
-    Console.WriteLine(gameDto.CurrentPlayer);
-
     return GameState.FromDto(gameDto, _dieFactory);
   }
 }

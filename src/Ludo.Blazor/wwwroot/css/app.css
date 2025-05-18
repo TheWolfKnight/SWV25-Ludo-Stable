@@ -112,3 +112,23 @@ code {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
     text-align: start;
 }
+
+.player-red {
+  background-color: red !important;
+  color: white;
+}
+
+.player-blue {
+  background-color: blue !important;
+  color: white;
+}
+
+.player-green {
+  background-color: green !important;
+  color: white;
+}
+
+.player-yellow {
+  background-color: yellow !important;
+  color: black;
+}

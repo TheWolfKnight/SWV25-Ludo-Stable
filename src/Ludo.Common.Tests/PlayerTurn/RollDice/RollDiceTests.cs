@@ -5,7 +5,7 @@ using Ludo.Common.Models;
 using Ludo.Common.Models.Dice;
 using Ludo.Common.Models.Player;
 
-namespace Ludo.Tests.PlayerTurn.RollDice;
+namespace Ludo.Common.Tests.PlayerTurn.RollDice;
 
 public class RollDiceTests
 {

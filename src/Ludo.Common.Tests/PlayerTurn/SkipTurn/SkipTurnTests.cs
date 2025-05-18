@@ -6,7 +6,7 @@
 //using Ludo.Common.Models.Dice;
 //using Ludo.Common.Models.Player;
 
-//namespace Ludo.Tests.PlayerTurn.SkipTurn;
+//namespace Ludo.Common.Tests.PlayerTurn.SkipTurn;
 
 //public class SkipTurnTests
 //{

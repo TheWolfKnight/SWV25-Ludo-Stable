@@ -5,7 +5,7 @@ using Ludo.Common.Models.Player;
 using Ludo.Common.Enums;
 
 
-namespace Ludo.Tests.TileTests;
+namespace Ludo.Common.Tests.TileTests;
 
 public class GoalTileTests
 {

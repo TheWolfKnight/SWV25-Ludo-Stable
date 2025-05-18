@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ludo.Tests", "src\Ludo.Tests\Ludo.Tests.csproj", "{EB40118F-2B0A-42CC-8C79-4D12776D78C4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ludo.Common.Tests", "src\Ludo.Common.Tests\Ludo.Common.Tests.csproj", "{EB40118F-2B0A-42CC-8C79-4D12776D78C4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ludo.Common", "src\Ludo.Common\Ludo.Common.csproj", "{67C8BEFA-742D-4A4C-B458-702B4D53C189}"
 EndProject
@@ -86,5 +86,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F4BFBDA5-51EE-4456-A24A-8925CF43278C}
 	EndGlobalSection
 EndGlobal

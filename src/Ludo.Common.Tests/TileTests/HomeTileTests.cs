@@ -4,7 +4,7 @@ using Ludo.Common.Enums;
 using Ludo.Common.Models.Player;
 using Ludo.Common.Models.Tiles;
 
-namespace Ludo.Tests.TileTests;
+namespace Ludo.Common.Tests.TileTests;
 
 public class HomeTileTests
 {

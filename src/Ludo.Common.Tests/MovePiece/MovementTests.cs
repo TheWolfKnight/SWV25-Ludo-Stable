@@ -6,7 +6,7 @@ using Ludo.Common.Models.Player;
 using Ludo.Common.Enums;
 using Ludo.Common.Models.Dice;
 
-namespace Ludo.Tests.MovePiece;
+namespace Ludo.Common.Tests.MovePiece;
 
 public class MovementTests
 {

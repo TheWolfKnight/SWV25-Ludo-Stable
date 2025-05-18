@@ -5,7 +5,7 @@ using FakeItEasy;
 using FluentAssertions;
 using FluentAssertions.Execution;
 
-namespace Ludo.Tests;
+namespace Ludo.Common.Tests;
 
 public class HomeTests
 {

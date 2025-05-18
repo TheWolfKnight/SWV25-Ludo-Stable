@@ -2,7 +2,26 @@
 
 <h3>Ludo</h3>
 
-@if (_gameState is not null)
-{
-  <BoardView Board="@_gameState.Board" />
-}
+<div class="container-fluid">
+  @if (_gameState is not null)
+  {
+    <div class="row">
+      <div class="col-auto">
+        <BoardView Board="@_gameState.Board" />
+      </div>
+      <div class="col">
+        <UserInfoComponent GameState="@_gameState"
+                           AvailableMoves="@_availableMoves"
+                           Style="height: 25%; width: 100%" />
+        <UserActionComponent OnRollDieClicked="@(() => Console.WriteLine("Clicked roll die"))"
+                             OnSkipTurnClicked="@(() => Console.WriteLine("clicked skip turn"))"
+                             EnableSkipTurnButton="!_availableMoves"
+                             Style="height: 75%; width: 100%" />
+      </div>
+    </div>
+  }
+  else
+  {
+    <!-- TBD -->
+  }
+</div>

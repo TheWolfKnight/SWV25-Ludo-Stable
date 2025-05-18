@@ -1,5 +1,5 @@
 ﻿
-<div class="grid-cell @GetTileStyle()" @onclick="GetTileAsync">
+<div class="grid-cell @GetTileStyle() @(Tile is MovementTile ? "movement-tile" : "")" @onclick="GetTileAsync">
   <div class="tile-info">
     @if (Tile is MovementTile tile)
     {

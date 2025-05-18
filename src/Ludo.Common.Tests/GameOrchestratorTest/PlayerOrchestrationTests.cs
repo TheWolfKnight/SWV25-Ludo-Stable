@@ -5,7 +5,7 @@ using Ludo.Common.Models.Dice;
 using Ludo.Common.Models.Player;
 using Ludo.Common.Models.Tiles;
 
-namespace Ludo.Tests.GameOrchestratorTest
+namespace Ludo.Common.Tests.GameOrchestratorTest
 {
   public class PlayerOrchestrationTests
   {

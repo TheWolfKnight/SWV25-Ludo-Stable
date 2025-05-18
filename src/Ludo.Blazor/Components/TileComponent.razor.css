@@ -11,7 +11,7 @@
 }
 
   .grid-cell:hover {
-    background-color: cyan;
+    filter: brightness(50%);
   }
 
 .tile-info {
@@ -31,22 +31,6 @@
   font-size: 0.9rem;
 }
 
-.player-0 {
-  background-color: red !important;
-  color: white;
-}
-
-.player-1 {
-  background-color: blue !important;
-  color: white;
-}
-
-.player-2 {
-  background-color: green !important;
-  color: white;
-}
-
-.player-3 {
-  background-color: yellow !important;
-  color: white;
+.standard-tile-no-aligance {
+  background-color: gray;
 }

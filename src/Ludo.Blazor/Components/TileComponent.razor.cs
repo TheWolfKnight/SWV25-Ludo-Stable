@@ -1,3 +1,4 @@
+using Ludo.Blazor.Models;
 using Ludo.Common.Models.Tiles;
 using Microsoft.AspNetCore.Components;
 using System.Text;
@@ -6,6 +7,9 @@ namespace Ludo.Blazor.Components;
 
 public partial class TileComponent : ComponentBase
 {
+  [Inject]
+  public required PlayerColorMap ColorMap { get; set; }
+
   [Parameter, EditorRequired]
   public TileBase? Tile { get; set; }
 
@@ -27,13 +31,12 @@ public partial class TileComponent : ComponentBase
   {
     StringBuilder sb = new();
 
-    if (Tile is null)
-      return string.Empty;
+    if (Tile?.PlayerNr is not null)
+      sb.Append($"player-{ColorMap.GetPlayerColor(Tile.PlayerNr.Value)}");
+    else if (Tile is StandardTile)
+      sb.Append("standard-tile-no-aligance");
 
-    if (Tile.PlayerNr is not null)
-      sb.Append($"player-{Tile.PlayerNr}");
-
-    return sb.ToString();
+      return sb.ToString();
   }
 
 }

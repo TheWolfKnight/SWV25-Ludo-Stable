@@ -6,7 +6,7 @@ using Ludo.Common.Models.Dice;
 using Ludo.Common.Models.Player;
 using Ludo.Common.Models.Tiles;
 
-namespace Ludo.Tests.PlayerTurn.MovePiece
+namespace Ludo.Common.Tests.PlayerTurn.MovePiece
 {
   public class MovePieceTest
   {
