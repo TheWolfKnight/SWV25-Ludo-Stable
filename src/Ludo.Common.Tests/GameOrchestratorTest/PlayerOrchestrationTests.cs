@@ -67,10 +67,8 @@ namespace Ludo.Common.Tests.GameOrchestratorTest
     {
       int[] playerRolls = [3, 5, 2, 5];
 
-      GameOrchestrator orchestrator = A.Fake<GameOrchestrator>();
-
       // Act
-      byte[] returnedRollers = orchestrator.DetermineStartingPlayer(playerRolls);
+      byte[] returnedRollers = GameOrchestrator.DetermineStartingPlayer(playerRolls);
 
       // Assert
       returnedRollers.Should().HaveCount(2);
