@@ -1,6 +1,7 @@
 using Ludo.Blazor.Features.Factory;
 using Ludo.Blazor.Models;
 using Ludo.Common.Dtos;
+using Ludo.Common.Dtos.Requests;
 using System.Net;
 using System.Net.Http.Json;
 using System.Reflection.PortableExecutable;
@@ -20,7 +21,7 @@ public class GameService
 
   public async Task<GameState> GetNewGameAsync(int playerAmount)
   { 
-    string url = $"api/Game/v1/new?playerCount={playerAmount}";
+    string url = $"v1/new?playerCount={playerAmount}";
 
     var response = await _httpClient.GetAsync(url);
     if (response.StatusCode is not HttpStatusCode.OK)
@@ -36,5 +37,46 @@ public class GameService
     }
 
     return GameState.FromDto(gameDto, _dieFactory);
+  }
+
+  public async Task<bool> PlayerHasValidMoveAsync(GameState state, int roll)
+  {
+    const string url = "v1/any-valid-move";
+
+    AnyValidMoveRequeset request = new()
+    {
+      Game = state.ToDto(),
+      Roll = roll,
+    };
+
+    HttpResponseMessage response = await _httpClient.PutAsJsonAsync(url, request);
+
+    if (response.StatusCode is not HttpStatusCode.OK)
+    {
+
+    }
+
+    return await response.Content.ReadAsStringAsync() is "true";
+  }
+
+  public async Task<byte[]> DetirminStaringPlayerAsync(int[] playerRolls)
+  {
+    string url = $"v1/detirmin-starting-player?playerRolls={string.Join("&playerRolls=", playerRolls)}";
+
+    HttpResponseMessage response = await _httpClient.GetAsync(url);
+
+    if (response.StatusCode is not HttpStatusCode.OK)
+    {
+      //TODO: this
+    }
+
+    byte[]? highestRollers = await response.Content.ReadFromJsonAsync<byte[]>();
+    if (highestRollers is null)
+    {
+      //TODO: this
+      return [];
+    }
+
+    return highestRollers;
   }
 }

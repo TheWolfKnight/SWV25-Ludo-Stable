@@ -2,10 +2,11 @@ using System;
 using System.Threading.Tasks;
 using Ludo.Application.Services;
 using Ludo.Common.Dtos;
+using Ludo.Common.Dtos.Requests;
+using Ludo.Common.Models;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
 
 namespace Ludo.Api.Controllers;
 
@@ -33,7 +34,7 @@ public class GameController : ControllerBase
     if (playerCount < 2 || playerCount > 4) return BadRequest("Invalid player count.");
     try
     {
-      var response = await _gameService.GenerateGame(playerCount);
+      var response = await _gameService.GenerateGameAsync(playerCount);
 
       var boardDto = _boardGenerationService.CompressBoardToDto(response);
 
@@ -43,5 +44,31 @@ public class GameController : ControllerBase
     {
       return Problem(title: "Error", detail: e.Message);
     }
+  }
+
+  [HttpPut("v1/any-valid-move")]
+  public async Task<ActionResult<bool>> AnyValidMovesAsync([FromBody] AnyValidMoveRequeset request)
+  {
+    GameOrchestrator game;
+    try
+    {
+      game = _boardGenerationService.GenerateBoard(request.Game);
+    }
+    catch (Exception e)
+    {
+      return BadRequest("Bad GameDto: "+ e.Message);
+    }
+
+    bool isValid = game.HasValidMove(request.Roll);
+
+    return await Task.FromResult(Ok(isValid));
+  }
+
+  [HttpGet("v1/detirmin-starting-player")]
+  public async Task<ActionResult<byte[]>> DetirminStartingPlayerAsync([FromQuery] int[] playerRolls)
+  {
+    byte[] highestRollers = GameOrchestrator.DetermineStartingPlayer(playerRolls);
+    
+    return Ok(await Task.FromResult(highestRollers));
   }
 }

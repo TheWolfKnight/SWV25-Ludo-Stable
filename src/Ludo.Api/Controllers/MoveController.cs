@@ -8,8 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace Ludo.Api.Controllers;
 
 [DisableCors]
-[Route("api/[controller]")]
 [ApiController]
+[Route("api/[controller]")]
 public class MoveController: ControllerBase
 {
   private readonly MoveService _service;
@@ -19,7 +19,7 @@ public class MoveController: ControllerBase
     _service = service;
   }
 
-  [HttpPost("/v1/move")]
+  [HttpPost("v1/move")]
   public async Task<ActionResult<GameDto>> MovePieceAsync([FromBody] MakeMoveRequestDto request)
   {
     GameDto result = await Task.Run(() => _service.MovePiece(request));
@@ -30,7 +30,7 @@ public class MoveController: ControllerBase
     return Ok(result);
   }
 
-  [HttpPut("/v1/valid")]
+  [HttpPut("v1/valid")]
   public async Task<ActionResult<bool>> CheckValidAsync([FromBody] CheckValidMoveRequestDto request)
   {
     bool result = await Task.Run(() => _service.PeekPieceMove(request));

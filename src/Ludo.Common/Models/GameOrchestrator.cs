@@ -1,5 +1,5 @@
 using Ludo.Common.Models.Dice;
-using Ludo.Common.Models.Player;
+using Ludo.Common.Enums;
 
 namespace Ludo.Common.Models;
 
@@ -12,8 +12,14 @@ public class GameOrchestrator
 
   public virtual bool HasValidMove(int roll)
   {
-    //TODO: this when I complete the game
-    throw new NotImplementedException();
+    Player.Player player = Players[CurrentPlayer];
+
+    bool anyValidMoves = player.Pieces.Any(piece =>
+      piece.PieceState is not PieceState.InGoal &&
+      piece.CurrentTile.PeekMove(piece, roll)
+    );
+
+    return anyValidMoves;
   }
 
   public virtual void NextPlayer()
@@ -37,7 +43,7 @@ public class GameOrchestrator
     CurrentPlayer = nextPlayer;
   }
 
-  public byte[] DetermineStartingPlayer(int[] rolls)
+  public static byte[] DetermineStartingPlayer(int[] rolls)
   {
     int highestRoll = rolls.Max();
 

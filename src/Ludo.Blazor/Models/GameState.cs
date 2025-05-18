@@ -16,6 +16,26 @@ public class GameState
   public required List<Player> Players { get; set; }
   public required Player CurrentPlayer { get; set; }
 
+  public GameDto ToDto()
+  {
+    GameDto game = new GameDto()
+    {
+      Version = 1,
+      X = Board.X,
+      Y = Board.Y,
+      CurrentPlayer = CurrentPlayer.PlayerNr,
+      Tiles = Board.Tiles.Select(TileDto.FromTile).ToArray(),
+      Players = Players.Select(PlayerDto.FromPlayer).ToArray(),
+      Die = new DieDto()
+      {
+        DieType = Die.GetType().FullName ?? "Unknown",
+        CurrentRoll = Die.PeekRoll()
+      },
+    };
+
+    return game;
+  }
+
   public static GameState FromDto(GameDto dto, DieFactory dieFactory)
   {
     Board board = GetBoard(dto.Tiles, dto.X, dto.Y);

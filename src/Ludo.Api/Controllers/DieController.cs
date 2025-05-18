@@ -8,8 +8,8 @@ using Microsoft.AspNetCore.Cors;
 namespace Ludo.Api.Controllers;
 
 [DisableCors]
-[Route("api/[controller]")]
 [ApiController]
+[Route("api/[controller]")]
 public class DieController : ControllerBase
 {
   private readonly DieService _dieService;
@@ -19,7 +19,7 @@ public class DieController : ControllerBase
     _dieService = dieService;
   }
 
-  [HttpPost("/v1/roll")]
+  [HttpPost("v1/roll")]
   public async Task<ActionResult<DieDto>> RollDieAsync([FromQuery] DieDto dto)
   {
     int roll = await Task.Run(() => _dieService.RollDie(dto));
@@ -27,7 +27,7 @@ public class DieController : ControllerBase
     return Ok(roll);
   }
 
-  [HttpGet("/v1/peek")]
+  [HttpGet("v1/peek")]
   public async Task<ActionResult<DieDto>> PeekDieAsync([FromQuery] DieDto dto)
   {
     int roll = await Task.Run(() => _dieService.PeekDieRoll(dto));

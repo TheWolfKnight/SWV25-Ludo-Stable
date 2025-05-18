@@ -38,8 +38,8 @@ public class BoardGenerationService
     GameDto game = new GameDto()
     {
       Version = 1,
-      X = 15,
-      Y = 15,
+      X = go.Board.X,
+      Y = go.Board.Y,
       CurrentPlayer = go.CurrentPlayer,
       Tiles = go.Board.Tiles.Select(TileDto.FromTile).ToArray(),
       Players = go.Players.Select(PlayerDto.FromPlayer).ToArray(),
