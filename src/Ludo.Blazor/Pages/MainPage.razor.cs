@@ -8,6 +8,7 @@ namespace Ludo.Blazor.Pages
   {
     [Inject]
     public required GameService Service { get; set; }
+    
     [Inject]
     public required PlayerColorMap ColorMap { get; set; }
 

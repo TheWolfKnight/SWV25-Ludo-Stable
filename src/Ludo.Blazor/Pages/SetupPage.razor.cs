@@ -13,8 +13,12 @@ public partial class SetupPage : ComponentBase
     [Inject]
     public required DieService DieService { get; set; }
     
+    [Inject]
+    public required PlayerColorMap ColorMap { get; set; }
+    
     private GameState? _gameState;
     private List<PlayerSetup> _players = [];
+    private int[] _rolls = [];
     
     private bool _isGameCreated = false;
 
@@ -30,12 +34,19 @@ public partial class SetupPage : ComponentBase
 
     private async Task RollDiceAsync(int playerNr)
     {
-        int roll = await DieService.RollDieAsync(_gameState, _gameState.Die.PeekRoll());
+        // int roll = await DieService.RollDieAsync(_gameState, _gameState.Die.PeekRoll());
+
+        Random rnd = new();
         
-        _players.First(x => x.PlayerNr == playerNr).Roll = roll;
+        _players.First(x => x.PlayerNr == playerNr).Roll = rnd.Next(1,6);
         _players.First(x => x.PlayerNr == playerNr).CanRoll = false;
         
         StateHasChanged();
+    }
+
+    private void SetPlayerColor((byte, string) playerColor)
+    {
+        ColorMap.AddPlayerColor(playerColor.Item1, playerColor.Item2);;
     }
     
     private void AddPlayer()

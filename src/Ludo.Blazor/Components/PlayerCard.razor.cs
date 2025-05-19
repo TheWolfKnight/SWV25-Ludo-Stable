@@ -13,9 +13,27 @@ public partial class PlayerCard : ComponentBase
 
     [Parameter]
     public EventCallback<int> OnRollClicked { get; set; }
+    
+    [Parameter]
+    public EventCallback<(byte, string)> OnColorClicked { get; set; }
+    
+    [Inject]
+    public required PlayerColorMap ColorMap { get; set; }
 
     private async Task RollClickedAsync()
     {
         await OnRollClicked.InvokeAsync(Player.PlayerNr);
+    }
+
+    private async Task ColorClickedAsync(string color)
+    {
+        await OnColorClicked.InvokeAsync(((byte) Player.PlayerNr, color));   
+    }
+
+    private string GetPlayerColorStyle()
+    {
+        string playerColor = ColorMap.GetPlayerColor((byte)Player.PlayerNr);
+        
+        return $"{playerColor}-background";
     }
 }

@@ -1,4 +1,4 @@
-<div class="player-card-body">
+<div class="player-card-body @GetPlayerColorStyle()">
     <div class="text-center">
         <h3>Spiller @(Player.PlayerNr + 1)</h3>
     </div>
@@ -8,6 +8,15 @@
             <span>@Player.Roll</span>
         }
     </div>
+    <div class="row">
+        <div class="color-cards">
+            <div class="color-card red-card" @onclick="@(_ => ColorClickedAsync("red"))"></div>
+            <div class="color-card green-card" @onclick="@(_ => ColorClickedAsync("green"))"></div>
+            <div class="color-card yellow-card" @onclick="@(_ => ColorClickedAsync("yellow"))"></div>
+            <div class="color-card blue-card" @onclick="@(_ => ColorClickedAsync("blue"))"></div>
+        </div>
+    </div>
+
     <div>
         @if (IsGameCreated)
         {
