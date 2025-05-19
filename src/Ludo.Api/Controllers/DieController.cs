@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Cors;
 
 namespace Ludo.Api.Controllers;
 
-[DisableCors]
+[EnableCors]
 [ApiController]
 [Route("api/[controller]")]
 public class DieController : ControllerBase

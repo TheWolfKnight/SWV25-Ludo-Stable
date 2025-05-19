@@ -13,11 +13,11 @@ public class DieService
     _httpClient = httpClient;
   }
 
-  public async Task<int> RollDieAsync(GameState state, int currentRoll)
+  public async Task<int> RollDieAsync(GameState state)
   {
-    string url = $"v1/roll?DieType={state.Die.GetType().Name}&CurrentRoll={currentRoll}";
+    string url = $"v1/roll?DieType={state.Die.GetType().FullName}&CurrentRoll={state.Die.PeekRoll()}";
 
-    var response = await _httpClient.GetAsync(url);
+    var response = await _httpClient.PostAsync(url, null);
     
     if (response.StatusCode is not HttpStatusCode.OK)
       throw new InvalidOperationException($"Failed to get new roll. Status code: {response.StatusCode}");

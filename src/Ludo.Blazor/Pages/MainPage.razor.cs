@@ -16,6 +16,7 @@ namespace Ludo.Blazor.Pages
 
     protected override async Task OnInitializedAsync()
     {
+
       ColorMap.MakeDefaultColorMap();
       await NewGameAsync(4);
     }
