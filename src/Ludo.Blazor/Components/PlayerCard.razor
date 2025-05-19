@@ -1,0 +1,17 @@
+<div class="player-card-body">
+    <div class="text-center">
+        <h3>Spiller @(Player.PlayerNr + 1)</h3>
+    </div>
+    <div class="roll-value">
+        @if (Player.Roll is not null)
+        {
+            <span>@Player.Roll</span>
+        }
+    </div>
+    <div>
+        @if (IsGameCreated)
+        {
+            <button type="button" disabled="@Player.CanRoll" class="btn btn-primary">Roll</button>
+        }
+    </div>
+</div>

@@ -22,7 +22,7 @@ public class GameService
   public async Task<GameOrchestrator> GenerateGameAsync(int amountOfPlayers)
   {
     string asmPath = Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location) ?? ".";
-    string path = asmPath + "\\GamePresets\\4v4Game.json";
+    string path = asmPath + "/GamePresets/4v4Game.json";
 
     FileStream fs = File.OpenRead(path);
     GameDto? dto = await JsonSerializer.DeserializeAsync<GameDto>(fs);

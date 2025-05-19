@@ -1,0 +1,19 @@
+@page "/SetupPage"
+
+<div class="container">
+    <div class="row d-flex justify-content-center mb-4">
+        @foreach (PlayerSetup player in _players)
+        {
+            <PlayerCard Player="@player" IsGameCreated="_isGameCreated"/>
+        }
+        @if (_players.Count < 4 && _isGameCreated is false)
+        {
+            <EmptyCard OnClicked="AddPlayer"/>
+        }
+    </div>
+    <div class="row">
+        <div class="col text-center">
+            <button class="btn btn-primary btn-lg px-5">START</button>
+        </div>
+    </div>
+</div>
