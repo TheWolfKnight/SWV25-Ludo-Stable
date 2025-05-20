@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Ludo.Application.Interfaces;
 using Ludo.Application.Services;
 using Ludo.Common.Dtos;
 using Ludo.Common.Dtos.Requests;
@@ -13,9 +14,9 @@ namespace Ludo.Api.Controllers;
 [Route("api/[controller]")]
 public class MoveController: ControllerBase
 {
-  private readonly MoveService _service;
+  private readonly IMoveService _service;
 
-  public MoveController(MoveService service)
+  public MoveController(IMoveService service)
   {
     _service = service;
   }

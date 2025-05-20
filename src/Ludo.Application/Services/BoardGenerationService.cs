@@ -4,11 +4,12 @@ using Ludo.Common.Enums;
 using Ludo.Common.Models;
 using Ludo.Common.Models.Player;
 using Ludo.Common.Models.Tiles;
+using Ludo.Application.Interfaces;
 using System.Text.Json;
 
 namespace Ludo.Application.Services;
 
-public class BoardGenerationService
+public class BoardGenerationService: IBoardGenerationService
 {
   private readonly DieFactory _dieFactory;
 

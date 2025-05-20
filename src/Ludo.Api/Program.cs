@@ -4,6 +4,7 @@ using Ludo.Common.Models.Dice;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Ludo.Application.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,10 +19,10 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<DieBase, DieD6>();
 builder.Services.AddScoped<DieFactory>();
 
-builder.Services.AddScoped<DieService>();
-builder.Services.AddScoped<GameService>();
-builder.Services.AddScoped<MoveService>();
-builder.Services.AddScoped<BoardGenerationService>();
+builder.Services.AddScoped<IDieService, DieService>();
+builder.Services.AddScoped<IGameService, GameService>();
+builder.Services.AddScoped<IMoveService, MoveService>();
+builder.Services.AddScoped<IBoardGenerationService, BoardGenerationService>();
 
 builder.Services.AddCors(config =>
 {

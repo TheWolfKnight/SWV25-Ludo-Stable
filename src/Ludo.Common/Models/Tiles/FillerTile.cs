@@ -9,8 +9,6 @@ public class FillerTile: TileBase
   internal static FillerTile FromDto(TileDto tileDto)
   {
     int? playerNr = ((JsonElement?)tileDto.Data[nameof(PlayerNr)])?.Deserialize<int?>();
-    if (playerNr == -1)
-      playerNr = null;
 
     FillerTile result = new()
     {

@@ -67,8 +67,6 @@ public class StandardTile : MovementTile
   internal new static StandardTile FromDto(TileDto tileDto, Board board, TileDto[] tiles)
   {
     int? playerNr = ((JsonElement?)tileDto.Data[nameof(PlayerNr)])?.Deserialize<int>();
-    if (playerNr == -1)
-      playerNr = null;
 
     StandardTile tile = new()
     {

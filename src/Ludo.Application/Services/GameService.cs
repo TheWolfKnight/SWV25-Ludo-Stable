@@ -2,21 +2,19 @@ using System;
 using System.Reflection;
 using System.Text.Json;
 using Ludo.Application.Factories;
-using Ludo.Application.Helpers;
 using Ludo.Common.Dtos;
 using Ludo.Common.Dtos.Requests;
-using Ludo.Common.Enums;
 using Ludo.Common.Models;
-using Ludo.Common.Models.Tiles;
+using Ludo.Application.Interfaces;
 
 namespace Ludo.Application.Services;
 
-public class GameService
+public class GameService : IGameService
 {
-  private readonly BoardGenerationService _service;
+  private readonly IBoardGenerationService _service;
   private readonly DieFactory _dieFactory;
 
-  public GameService(BoardGenerationService service, DieFactory dieFactory)
+  public GameService(IBoardGenerationService service, DieFactory dieFactory)
   {
     _service = service;
     _dieFactory = dieFactory;

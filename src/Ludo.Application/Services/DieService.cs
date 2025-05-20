@@ -1,10 +1,11 @@
 using Ludo.Application.Factories;
 using Ludo.Common.Models.Dice;
 using Ludo.Common.Dtos;
+using Ludo.Application.Interfaces;
 
 namespace Ludo.Application.Services;
 
-public class DieService
+public class DieService: IDieService
 {
   private readonly DieFactory _factory;
 

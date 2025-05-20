@@ -1,6 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using Ludo.Application.Services;
+using Ludo.Application.Interfaces;
 using Ludo.Common.Dtos;
 using Ludo.Common.Dtos.Requests;
 using Ludo.Common.Models;
@@ -15,11 +15,10 @@ namespace Ludo.Api.Controllers;
 [Route("api/[controller]")]
 public class GameController : ControllerBase
 {
-  private readonly GameService _gameService;
-  private readonly BoardGenerationService _boardGenerationService;
+  private readonly IGameService _gameService;
+  private readonly IBoardGenerationService _boardGenerationService;
 
-
-  public GameController(GameService gameService, BoardGenerationService boardGenerationService)
+  public GameController(IGameService gameService, IBoardGenerationService boardGenerationService)
   {
     _gameService = gameService;
     _boardGenerationService = boardGenerationService;

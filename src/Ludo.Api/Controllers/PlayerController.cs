@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using Ludo.Application.Services;
 using Ludo.Common.Dtos;
 using Ludo.Common.Dtos.Requests;
+using Ludo.Application.Interfaces;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,9 +13,9 @@ namespace Ludo.Api.Controllers;
 [Route("api/[controller]")]
 public class PlayerController : ControllerBase
 {
-  private readonly GameService _service;
+  private readonly IGameService _service;
 
-  public PlayerController(GameService service)
+  public PlayerController(IGameService service)
   {
     _service = service;
   }

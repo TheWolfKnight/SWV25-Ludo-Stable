@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Ludo.Common.Dtos;
+using Ludo.Application.Interfaces;
 using Ludo.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Cors;
@@ -12,9 +13,9 @@ namespace Ludo.Api.Controllers;
 [Route("api/[controller]")]
 public class DieController : ControllerBase
 {
-  private readonly DieService _dieService;
+  private readonly IDieService _dieService;
 
-  public DieController(DieService dieService)
+  public DieController(IDieService dieService)
   {
     _dieService = dieService;
   }

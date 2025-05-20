@@ -73,8 +73,6 @@ public class HomeTile: MovementTile
       throw new InvalidOperationException("Cannot bind to non-MovementTile");
 
     int? playerNr = ((JsonElement?)tileDto.Data[nameof(PlayerNr)])?.Deserialize<int>();
-    if (playerNr == -1)
-      playerNr = null;
 
     HomeTile tile = new()
     {

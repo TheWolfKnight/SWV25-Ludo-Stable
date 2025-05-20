@@ -3,14 +3,15 @@ using Ludo.Common.Dtos;
 using Ludo.Common.Models;
 using Ludo.Common.Models.Tiles;
 using Ludo.Common.Models.Player;
+using Ludo.Application.Interfaces;
 
 namespace Ludo.Application.Services;
 
-public class MoveService
+public class MoveService: IMoveService
 {
-  private readonly BoardGenerationService _boardService;
+  private readonly IBoardGenerationService _boardService;
 
-  public MoveService(BoardGenerationService boardService)
+  public MoveService(IBoardGenerationService boardService)
   {
     _boardService = boardService;
   }

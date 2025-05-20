@@ -65,8 +65,6 @@ public class GoalTile : MovementTile, IGoalTile
       throw new InvalidCastException("Could not convert tile to DriveWayTile");
 
     int? playerNr = ((JsonElement?)tileDto.Data[nameof(PlayerNr)])?.Deserialize<int>();
-    if (playerNr == -1)
-      playerNr = null;
 
     GoalTile tile = new()
     {
