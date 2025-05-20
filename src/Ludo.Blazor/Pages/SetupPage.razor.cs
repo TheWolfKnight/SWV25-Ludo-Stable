@@ -1,6 +1,8 @@
+using System.Text.Json;
 using Ludo.Blazor.Features.Game;
 using Ludo.Blazor.Models;
 using Ludo.Common.Dtos;
+using Ludo.Common.Models.Dice;
 using Microsoft.AspNetCore.Components;
 
 namespace Ludo.Blazor.Pages;
@@ -16,12 +18,25 @@ public partial class SetupPage : ComponentBase
     [Inject]
     public required PlayerColorMap ColorMap { get; set; }
     
+    [Inject]
+    public required NavigationManager NavigationManager { get; set; }
+    
+    [Inject]
+    public required GameStateService GameStateService { get; set; }
+    
     private GameState? _gameState;
     private List<PlayerSetup> _players = [];
-    private int[] _rolls = [];
+    private Dictionary<int, int> _rolls = new();
     
-    private bool _isGameCreated = false;
+    private bool _isGameCreated;
+    private bool _isReadyToStart;
 
+    protected override void OnInitialized()
+    {
+        if(!_players.Any())
+            ColorMap.MakeDefaultColorMap();
+    }
+    
     private async Task CreateGameAsync()
     {
         _gameState = await GameService.GetNewGameAsync(_players.Count);
@@ -34,19 +49,49 @@ public partial class SetupPage : ComponentBase
 
     private async Task RollDiceAsync(int playerNr)
     {
-        // int roll = await DieService.RollDieAsync(_gameState, _gameState.Die.PeekRoll());
-
-        Random rnd = new();
+        if (_gameState is null)
+            return;
         
-        _players.First(x => x.PlayerNr == playerNr).Roll = rnd.Next(1,6);
+        DieBase die = await DieService.RollDieAsync(_gameState);
+
+        _rolls[playerNr] = die.PeekRoll();
+        
+        _players.First(x => x.PlayerNr == playerNr).Roll = _rolls[playerNr];
         _players.First(x => x.PlayerNr == playerNr).CanRoll = false;
         
         StateHasChanged();
     }
 
-    private void SetPlayerColor((byte, string) playerColor)
+    private async Task DetermineStartingAsync()
     {
-        ColorMap.AddPlayerColor(playerColor.Item1, playerColor.Item2);;
+        if(_gameState is null)
+            return;
+        
+        byte[] remaining = await GameService.DetirminStaringPlayerAsync(_rolls.Values.ToArray());
+
+        if (remaining.Length is not 1)
+        {
+            _rolls.Clear();
+            
+            foreach(var playerNr in remaining)
+                _players.First(x => x.PlayerNr == playerNr).CanRoll = true;
+
+            return;
+        }
+        
+        _isReadyToStart = true;
+
+        _gameState.CurrentPlayer = _gameState.Players.First(x => x.PlayerNr == remaining[0]);
+    }
+
+    private void BeginGameAsync()
+    {
+        if(_gameState is null)
+            return;
+        
+        GameStateService.SetGameState(_gameState);
+        
+        NavigationManager.NavigateTo($"/game");
     }
     
     private void AddPlayer()
