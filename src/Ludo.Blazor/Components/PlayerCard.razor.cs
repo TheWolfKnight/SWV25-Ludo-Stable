@@ -10,6 +10,9 @@ public partial class PlayerCard : ComponentBase
     
     [Parameter, EditorRequired]
     public required bool IsGameCreated { get; set; }
+    
+    [Parameter, EditorRequired]
+    public required int? Roll { get; set; }
 
     [Parameter]
     public EventCallback<int> OnRollClicked { get; set; }
@@ -23,11 +26,6 @@ public partial class PlayerCard : ComponentBase
     private async Task RollClickedAsync()
     {
         await OnRollClicked.InvokeAsync(Player.PlayerNr);
-    }
-
-    private async Task ColorClickedAsync(string color)
-    {
-        await OnColorClicked.InvokeAsync(((byte) Player.PlayerNr, color));   
     }
 
     private string GetPlayerColorStyle()

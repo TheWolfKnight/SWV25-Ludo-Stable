@@ -56,7 +56,6 @@ public partial class SetupPage : ComponentBase
 
         _rolls[playerNr] = die.PeekRoll();
         
-        _players.First(x => x.PlayerNr == playerNr).Roll = _rolls[playerNr];
         _players.First(x => x.PlayerNr == playerNr).CanRoll = false;
         
         StateHasChanged();
