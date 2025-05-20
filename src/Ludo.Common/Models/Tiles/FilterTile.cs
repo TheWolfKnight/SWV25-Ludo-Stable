@@ -56,16 +56,16 @@ public class FilterTile : MovementTile
     if (amount is 0)
       return (true, this);
 
-    bool containsOwnPiece = base.Pieces.Any(inner => inner.Owner.PlayerNr == piece.Owner.PlayerNr && inner != piece);
-    if (containsOwnPiece)
+    bool isFilterdPlayer = base.PlayerNr == piece.Owner.PlayerNr;
+    MovementTile targetTile = isFilterdPlayer
+      ? FilterdTile
+      : NextTile;
+
+    bool containsOwnPiece = targetTile.Pieces.Any(inner => inner.Owner.PlayerNr == piece.Owner.PlayerNr);
+    if (amount is <= 1 && containsOwnPiece)
       return (false, this);
 
-    bool isFilterdPlayer = base.PlayerNr == piece.Owner.PlayerNr;
-    Func<Piece, int, (bool MoveAccepted, MovementTile TargetTile)> method = isFilterdPlayer
-      ? FilterdTile.InternalMakeMove
-      : NextTile.InternalMakeMove;
-
-    return method(piece, amount - 1);
+    return targetTile.InternalMakeMove(piece, amount - 1);
   }
 
   internal override void TakePiece(Piece piece)

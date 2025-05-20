@@ -50,8 +50,8 @@ public class StandardTile : MovementTile
     if (amount is 0)
       return (true, this);
 
-    bool containsOwnPieces = base.Pieces.Any(inner => inner.Owner.PlayerNr == piece.Owner.PlayerNr && inner != piece);
-    if (amount is not 0 && containsOwnPieces)
+    bool containsOwnPieces = NextTile.Pieces.Any(inner => inner.Owner.PlayerNr == piece.Owner.PlayerNr);
+    if (amount is not <= 1 && containsOwnPieces)
       return (false, this);
 
     return NextTile.InternalMakeMove(piece, amount - 1);

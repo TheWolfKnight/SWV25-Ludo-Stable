@@ -68,7 +68,6 @@ namespace Ludo.Blazor.Pages
       _gameState.Die = die;
 
       _gameState.CurrentPlayer.RollsThisTurn++;
-      Console.WriteLine(_gameState.CurrentPlayer.RollsThisTurn);
       await HasAvaliableMovesAsync();
 
       StateHasChanged();

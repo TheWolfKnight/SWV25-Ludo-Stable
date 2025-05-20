@@ -26,7 +26,10 @@ public class GameOrchestrator
   public virtual void NextPlayer(bool madeMove)
   {
     Player.Player player = Players[CurrentPlayer];
-    if (!madeMove && (!player.PieceOnBoardAtTurnStart && player.RollsThisTurn < 3))
+    if (
+      (!madeMove && (!player.PieceOnBoardAtTurnStart && player.RollsThisTurn < 3)) ||
+      Die.PeekRoll() == 6
+    )
       return;
 
     byte nextPlayer = CurrentPlayer;

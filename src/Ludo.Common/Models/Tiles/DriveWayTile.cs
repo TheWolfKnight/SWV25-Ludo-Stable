@@ -62,10 +62,6 @@ public class DriveWayTile : MovementTile, IGoalTile
     if (amount is 0)
       return (true, this);
 
-    bool containsOwnPiece = base.Pieces.Any(inner => inner.Owner.PlayerNr == piece.Owner.PlayerNr && inner != piece);
-    if (containsOwnPiece)
-      return (false, this);
-
     IGoalTile? nextTile = goForward
       ? NextTile
       : PreviousTile;
@@ -77,8 +73,14 @@ public class DriveWayTile : MovementTile, IGoalTile
     }
 
     (bool, MovementTile) result;
-    if (nextTile is DriveWayTile)
+    if (nextTile is DriveWayTile dwTile)
+    {
+      bool containsOwnPiece = dwTile.Pieces.Any(inner => inner.Owner.PlayerNr == piece.Owner.PlayerNr);
+      if (containsOwnPiece)
+        return (false, this);
+
       result = ((DriveWayTile)nextTile).DriveWayMakeMove(piece, amount - 1, goForward);
+    }
     else
       result = ((MovementTile)nextTile).InternalMakeMove(piece, amount - 1);
 
