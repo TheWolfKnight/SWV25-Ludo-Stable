@@ -8,7 +8,7 @@ public static class DependencyInjectionHelpers
   {
     @this.AddHttpClient<TService>(client =>
     {
-      client.BaseAddress = new Uri("https://localhost:7046/api/Game/");
+      client.BaseAddress = new Uri(uri);
     });
 
     return @this;

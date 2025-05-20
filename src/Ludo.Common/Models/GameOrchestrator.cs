@@ -1,5 +1,6 @@
 using Ludo.Common.Models.Dice;
 using Ludo.Common.Enums;
+using Ludo.Common.Models.Tiles;
 
 namespace Ludo.Common.Models;
 
@@ -41,6 +42,11 @@ public class GameOrchestrator
       throw new InvalidOperationException("Ingen gyldigt spiller fundet");
 
     CurrentPlayer = nextPlayer;
+
+    player = Players[nextPlayer];
+    player.RollsThisTurn = 0;
+    player.PieceOnBoardAtTurnStart = player.Pieces
+      .Any(piece => piece.CurrentTile is not (HomeTile or GoalTile));
   }
 
   public static byte[] DetermineStartingPlayer(int[] rolls)

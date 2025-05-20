@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Ludo.Api.Controllers;
 
-[DisableCors]
+[EnableCors]
 [ApiController]
 [Route("api/[controller]")]
 public class PlayerController : ControllerBase

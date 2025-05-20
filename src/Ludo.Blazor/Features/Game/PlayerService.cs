@@ -2,6 +2,7 @@
 using Ludo.Blazor.Models;
 using Ludo.Common.Dtos;
 using Ludo.Common.Dtos.Requests;
+using Ludo.Common.Models.Player;
 using System.Net;
 using System.Net.Http.Json;
 
@@ -10,37 +11,30 @@ namespace Ludo.Blazor.Features.Game;
 public class PlayerService
 {
   private readonly HttpClient _httpClient;
-  private readonly DieFactory _dieFactory;
 
-  public PlayerService(HttpClient httpClient, DieFactory dieFactory)
+  public PlayerService(HttpClient httpClient)
   {
     _httpClient = httpClient;
-    _dieFactory = dieFactory;
   }
 
-  public async Task<GameState> MakeMoveAsync(GameState state, int pieceTilePosition, int roll)
+  public async Task<byte> GetNextPlayerAsync(GameState state)
   {
-    const string url = "v1/move";
+    const string url = "v1/next";
 
-    MakeMoveRequestDto request = new()
+    GetNextPlayerRequestDto request = new()
     {
-      Game = state.ToDto(),
-      PiecePosition = pieceTilePosition,
-      Roll = roll
+      Game = state.ToDto()
     };
 
-    HttpResponseMessage response = await _httpClient.PostAsJsonAsync(url, request);
+    HttpResponseMessage response = await _httpClient.PutAsJsonAsync(url, request);
 
     if (response.StatusCode is not HttpStatusCode.OK)
-    {
-      //TODO: this
-    }
+      throw new InvalidOperationException($"Could not get valid response from game server, response: {response.StatusCode}");
 
-    GameDto? game = await response.Content.ReadFromJsonAsync<GameDto>();
-    if (game is null)
-      throw new InvalidOperationException("Could not deserialize response to GameDto object");
+    string? nextPlayer = await response.Content.ReadAsStringAsync();
+    if (nextPlayer is not string str || !byte.TryParse(str, out byte playerNr))
+      throw new InvalidOperationException($"Invalid response from game server, response was: \"{nextPlayer}\"");
 
-    GameState result = GameState.FromDto(game, _dieFactory);
-    return result;
+    return playerNr;
   }
 }
