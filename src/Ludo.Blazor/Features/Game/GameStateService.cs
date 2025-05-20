@@ -1,8 +1,9 @@
+using Ludo.Blazor.Features.Interfaces;
 using Ludo.Blazor.Models;
 
 namespace Ludo.Blazor.Features.Game;
 
-public class GameStateService
+public class GameStateService : IGameStateService
 {
     private GameState? _gameState; 
     

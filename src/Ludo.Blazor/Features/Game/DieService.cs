@@ -1,20 +1,21 @@
 ﻿using System.Net;
 using System.Net.Http.Json;
 using Ludo.Blazor.Features.Factory;
+using Ludo.Blazor.Features.Interfaces;
 using Ludo.Blazor.Models;
 using Ludo.Common.Dtos;
 using Ludo.Common.Models.Dice;
 
 namespace Ludo.Blazor.Features.Game;
 
-public class DieService
+public class DieService: IDieService
 {
   private readonly HttpClient _httpClient;
   private readonly DieFactory _dieFactory;
 
-  public DieService(HttpClient httpClient, DieFactory dieFactory)
+  public DieService(IHttpClientFactory clientFactory, DieFactory dieFactory)
   {
-    _httpClient = httpClient;
+    _httpClient = clientFactory.CreateClient("die");
     _dieFactory = dieFactory;
   }
 

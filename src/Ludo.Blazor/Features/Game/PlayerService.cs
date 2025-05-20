@@ -2,20 +2,20 @@
 using Ludo.Blazor.Models;
 using Ludo.Common.Dtos;
 using Ludo.Common.Dtos.Requests;
-using Ludo.Common.Models.Player;
-using System.Net;
+using Ludo.Blazor.Features.Interfaces;
 using System.Net.Http.Json;
+using System.Net;
 
 namespace Ludo.Blazor.Features.Game;
 
-public class PlayerService
+public class PlayerService: IPlayerService
 {
   private readonly HttpClient _httpClient;
   private readonly DieFactory _dieFactory;
 
-  public PlayerService(HttpClient httpClient, DieFactory dieFactory)
+  public PlayerService(IHttpClientFactory clientFactory, DieFactory dieFactory)
   {
-    _httpClient = httpClient;
+    _httpClient = clientFactory.CreateClient("player");
     _dieFactory = dieFactory;
   }
 

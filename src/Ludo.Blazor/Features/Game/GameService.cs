@@ -4,18 +4,18 @@ using Ludo.Common.Dtos;
 using Ludo.Common.Dtos.Requests;
 using System.Net;
 using System.Net.Http.Json;
-using System.Reflection.PortableExecutable;
+using Ludo.Blazor.Features.Interfaces;
 
 namespace Ludo.Blazor.Features.Game;
 
-public class GameService
+public class GameService : IGameService
 {
   private readonly HttpClient _httpClient;
   private readonly DieFactory _dieFactory;
 
-  public GameService(HttpClient httpClient, DieFactory dieFactory)
+  public GameService(IHttpClientFactory clientFactory, DieFactory dieFactory)
   {
-    _httpClient = httpClient;
+    _httpClient = clientFactory.CreateClient("game");
     _dieFactory = dieFactory;
   }
 
@@ -64,16 +64,11 @@ public class GameService
     HttpResponseMessage response = await _httpClient.GetAsync(url);
 
     if (response.StatusCode is not HttpStatusCode.OK)
-    {
-      //TODO: this
-    }
+      throw new InvalidOperationException($"Could not get valid response from game server, response {response.StatusCode}");
 
     byte[]? highestRollers = await response.Content.ReadFromJsonAsync<byte[]>();
     if (highestRollers is null)
-    {
-      //TODO: this
-      return [];
-    }
+      throw new InvalidCastException($"Could not deserialize response to byte[], response: \"{await response.Content.ReadAsStringAsync()}\"");
 
     return highestRollers;
   }

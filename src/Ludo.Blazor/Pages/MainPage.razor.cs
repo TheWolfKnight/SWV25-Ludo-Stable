@@ -1,4 +1,5 @@
 ﻿using Ludo.Blazor.Features.Game;
+using Ludo.Blazor.Features.Interfaces;
 using Ludo.Blazor.Models;
 using Ludo.Common.Models.Dice;
 using Ludo.Common.Models.Player;
@@ -9,17 +10,17 @@ namespace Ludo.Blazor.Pages
   public partial class MainPage : ComponentBase
   {
     [Inject]
-    public required GameService GameService { get; set; }
+    public required IGameService GameService { get; set; }
     [Inject]
-    public required MoveService MoveService { get; set; }
+    public required IMoveService MoveService { get; set; }
     [Inject]
-    public required DieService DieService { get; set; }
+    public required IDieService DieService { get; set; }
     [Inject]
-    public required PlayerService PlayerService { get; set; }
+    public required IPlayerService PlayerService { get; set; }
     [Inject]
     public required PlayerColorMap ColorMap { get; set; }
     [Inject]
-    public required GameStateService GameStateService { get; set; }
+    public required IGameStateService GameStateService { get; set; }
 
     private GameState? _gameState;
 

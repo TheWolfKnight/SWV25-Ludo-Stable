@@ -1,7 +1,6 @@
-using System.Text.Json;
 using Ludo.Blazor.Features.Game;
+using Ludo.Blazor.Features.Interfaces;
 using Ludo.Blazor.Models;
-using Ludo.Common.Dtos;
 using Ludo.Common.Models.Dice;
 using Ludo.Common.Models.Player;
 using Microsoft.AspNetCore.Components;
@@ -11,10 +10,10 @@ namespace Ludo.Blazor.Pages;
 public partial class SetupPage : ComponentBase
 {
   [Inject]
-  public required GameService GameService { get; set; }
+  public required IGameService GameService { get; set; }
 
   [Inject]
-  public required DieService DieService { get; set; }
+  public required IDieService DieService { get; set; }
 
   [Inject]
   public required PlayerColorMap ColorMap { get; set; }
@@ -23,7 +22,7 @@ public partial class SetupPage : ComponentBase
   public required NavigationManager NavigationManager { get; set; }
 
   [Inject]
-  public required GameStateService GameStateService { get; set; }
+  public required IGameStateService GameStateService { get; set; }
 
   private GameState? _gameState;
   private List<PlayerSetup> _players = [];

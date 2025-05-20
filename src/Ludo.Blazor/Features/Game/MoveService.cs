@@ -1,4 +1,5 @@
 ﻿using Ludo.Blazor.Features.Factory;
+using Ludo.Blazor.Features.Interfaces;
 using Ludo.Blazor.Models;
 using Ludo.Common.Dtos;
 using Ludo.Common.Dtos.Requests;
@@ -7,14 +8,14 @@ using System.Net.Http.Json;
 
 namespace Ludo.Blazor.Features.Game;
 
-public class MoveService
+public class MoveService: IMoveService
 {
   private readonly HttpClient _httpClient;
   private readonly DieFactory _dieFactory;
 
-  public MoveService(HttpClient httpClient, DieFactory dieFactory)
+  public MoveService(IHttpClientFactory clientFactory, DieFactory dieFactory)
   {
-    _httpClient = httpClient;
+    _httpClient = clientFactory.CreateClient("move");
     _dieFactory = dieFactory;
   }
 
