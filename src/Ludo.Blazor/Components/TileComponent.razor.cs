@@ -20,11 +20,11 @@ public partial class TileComponent : ComponentBase
   public required int TileColumn { get; set; }
 
   [Parameter]
-  public EventCallback<(int, int, TileBase?)> GetTile { get; set; }
+  public EventCallback<TileBase?> GetTile { get; set; }
 
   private async Task GetTileAsync()
   {
-    await GetTile.InvokeAsync((TileRow, TileColumn, Tile));
+    await GetTile.InvokeAsync(Tile);
   }
 
   private string GetTileStyle()

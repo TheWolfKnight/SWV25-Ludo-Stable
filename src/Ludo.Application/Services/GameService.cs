@@ -35,14 +35,7 @@ public class GameService
 
   public byte NextPlayer(GetNextPlayerRequestDto request)
   {
-    GameOrchestrator go = new GameOrchestrator
-    {
-      Board = null!,
-      Die = null!,
-      CurrentPlayer = request.CurrentPlayer,
-      Players = request.Players.ToPlayerNrModels(),
-    };
-
+    GameOrchestrator go = _service.GenerateBoard(request.Game);
     go.NextPlayer();
 
     return go.CurrentPlayer;

@@ -32,9 +32,7 @@ public class MoveService
     HttpResponseMessage response = await _httpClient.PostAsJsonAsync(url, request);
 
     if (response.StatusCode is not HttpStatusCode.OK)
-    {
-      //TODO: this
-    }
+      throw new InvalidOperationException($"Could not get valid response from game server, response: {response.StatusCode}");
 
     GameDto? game = await response.Content.ReadFromJsonAsync<GameDto>();
     if (game is null)
@@ -58,9 +56,7 @@ public class MoveService
     HttpResponseMessage response = await _httpClient.PutAsJsonAsync(url, request);
 
     if (response.StatusCode is not HttpStatusCode.OK)
-    {
-      //TODO: this
-    }
+      throw new InvalidOperationException($"Could not get valid response from game server, response: {response.StatusCode}");
 
     string? canMakeMove = await response.Content.ReadAsStringAsync();
     return canMakeMove is "true";

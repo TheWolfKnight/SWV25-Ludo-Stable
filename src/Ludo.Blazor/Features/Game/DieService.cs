@@ -1,19 +1,24 @@
 ﻿using System.Net;
 using System.Net.Http.Json;
+using Ludo.Blazor.Features.Factory;
 using Ludo.Blazor.Models;
+using Ludo.Common.Dtos;
+using Ludo.Common.Models.Dice;
 
 namespace Ludo.Blazor.Features.Game;
 
 public class DieService
 {
   private readonly HttpClient _httpClient;
+  private readonly DieFactory _dieFactory;
 
-  public DieService(HttpClient httpClient)
+  public DieService(HttpClient httpClient, DieFactory dieFactory)
   {
     _httpClient = httpClient;
+    _dieFactory = dieFactory;
   }
 
-  public async Task<int> RollDieAsync(GameState state)
+  public async Task<DieBase> RollDieAsync(GameState state)
   {
     string url = $"v1/roll?DieType={state.Die.GetType().FullName}&CurrentRoll={state.Die.PeekRoll()}";
 
@@ -22,11 +27,12 @@ public class DieService
     if (response.StatusCode is not HttpStatusCode.OK)
       throw new InvalidOperationException($"Failed to get new roll. Status code: {response.StatusCode}");
 
-    int? roll = await response.Content.ReadFromJsonAsync<int>();
+    DieDto? result = await response.Content.ReadFromJsonAsync<DieDto>();
     
-    if(roll is null)
+    if(result is null)
       throw new InvalidOperationException("Failed to get roll.");
-    
-    return roll.Value;
+
+    DieBase die = _dieFactory.GetRolledDie(result);
+    return die;
   } 
 }

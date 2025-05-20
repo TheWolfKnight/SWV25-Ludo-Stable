@@ -16,6 +16,11 @@ public class GameState
   public required List<Player> Players { get; set; }
   public required Player CurrentPlayer { get; set; }
 
+  public void SetNextPlayerByNr(byte playerNr)
+  {
+    CurrentPlayer = Players.First(player => player.PlayerNr == playerNr);
+  }
+
   public GameDto ToDto()
   {
     GameDto game = new GameDto()
