@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Ludo.Application.Services;
+using Ludo.Common.Dtos;
 using Ludo.Common.Dtos.Requests;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -19,10 +20,10 @@ public class PlayerController : ControllerBase
   }
 
   [HttpPut("v1/next")]
-  public async  Task<ActionResult<byte>> GetNextPlayerAsync([FromBody] GetNextPlayerRequestDto request)
+  public async  Task<ActionResult<GameDto>> GetNextPlayerAsync([FromBody] GetNextPlayerRequestDto request)
   {
-    byte nextPlayer = await Task.Run(() => _service.NextPlayer(request));
+    GameDto dto = await Task.Run(() => _service.NextPlayer(request));
 
-    return Ok(nextPlayer);
+    return Ok(dto);
   }
 }

@@ -13,6 +13,7 @@
       <div class="col">
         <UserInfoComponent GameState="@_gameState"
                            AvailableMoves="@_availableMoves"
+                           MadeInvalidMove="@_showFailedMoveMsg"
                            Style="height: 25%; width: 100%" />
         <UserActionComponent OnRollDieClicked="@(() => RollDieAsync())"
                              OnSkipTurnClicked="@(() => RequestNextPlayerAsync())"

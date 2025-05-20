@@ -39,22 +39,20 @@ public class GameService
     return GameState.FromDto(gameDto, _dieFactory);
   }
 
-  public async Task<bool> PlayerHasValidMoveAsync(GameState state, int roll)
+  public async Task<bool> PlayerHasValidMoveAsync(GameState state)
   {
     const string url = "v1/any-valid-move";
 
     AnyValidMoveRequeset request = new()
     {
       Game = state.ToDto(),
-      Roll = roll,
+      Roll = state.Die.PeekRoll(),
     };
 
     HttpResponseMessage response = await _httpClient.PutAsJsonAsync(url, request);
 
     if (response.StatusCode is not HttpStatusCode.OK)
-    {
-
-    }
+      throw new InvalidOperationException($"Could not get valid response from game server, response: {response.StatusCode}");
 
     return await response.Content.ReadAsStringAsync() is "true";
   }

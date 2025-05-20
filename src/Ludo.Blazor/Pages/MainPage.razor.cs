@@ -21,7 +21,8 @@ namespace Ludo.Blazor.Pages
     public required PlayerColorMap ColorMap { get; set; }
 
     private GameState? _gameState;
-    private bool _availableMoves = false;
+    private bool _availableMoves = true;
+    private bool _showFailedMoveMsg = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -38,8 +39,15 @@ namespace Ludo.Blazor.Pages
 
     private async Task HasAvaliableMovesAsync()
     {
-      await Task.CompletedTask;
-      _availableMoves = true;
+      if (_gameState is null)
+        throw new InvalidOperationException("A game must be active to check available moves");
+
+      bool canMovePiece = await GameService.PlayerHasValidMoveAsync(_gameState);
+
+      bool isRollingForPieceOnBoard = !_gameState.CurrentPlayer.PieceOnBoardAtTurnStart &&
+        _gameState.CurrentPlayer.RollsThisTurn < 3;
+
+      _availableMoves = canMovePiece || isRollingForPieceOnBoard;
       StateHasChanged();
     }
 
@@ -48,21 +56,27 @@ namespace Ludo.Blazor.Pages
       if (_gameState is null)
         throw new InvalidOperationException("A game must be active to roll a die");
 
+      if (!_availableMoves)
+        return;
+
       DieBase die = await DieService.RollDieAsync(_gameState);
       _gameState.Die = die;
 
       _gameState.CurrentPlayer.RollsThisTurn++;
+      Console.WriteLine(_gameState.CurrentPlayer.RollsThisTurn);
+      await HasAvaliableMovesAsync();
 
       StateHasChanged();
     }
 
-    private async Task RequestNextPlayerAsync()
+    private async Task RequestNextPlayerAsync(bool madeMove = false)
     {
       if (_gameState is null)
         throw new InvalidOperationException("A game must be active to get next player");
 
-      byte nextPlayerNr = await PlayerService.GetNextPlayerAsync(_gameState);
-      _gameState.SetNextPlayerByNr(nextPlayerNr);
+      GameState newState = await PlayerService.GetNextPlayerAsync(_gameState, madeMove);
+      _gameState = newState;
+      _availableMoves = true;
 
       StateHasChanged();
     }
@@ -72,13 +86,31 @@ namespace Ludo.Blazor.Pages
       if (_gameState is null)
         throw new InvalidOperationException("A game must be active to make a move");
 
+      if (!_availableMoves)
+        return;
+
       GameState newState = await MoveService.MakeMoveAsync(
         _gameState,
         piece.CurrentTile.IndexInBoard,
         _gameState.Die.PeekRoll()
       );
 
+      //NOTE: if the piece moved between dtos, the player piece must have moved
+      IEnumerable<int> oldPieceLocation = _gameState.CurrentPlayer.Pieces.Select(piece => piece.CurrentTile.IndexInBoard);
+      IEnumerable<int> newPieceLocation = newState.CurrentPlayer.Pieces.Select(piece => piece.CurrentTile.IndexInBoard);
+
+      IEnumerable<(int old, int @new)> locations = oldPieceLocation.Zip(newPieceLocation);
+      bool playersHasMadeMove = locations.Any(set => set.old != set.@new);
+
       _gameState = newState;
+
+      if (playersHasMadeMove)
+      {
+        await RequestNextPlayerAsync(true);
+        _showFailedMoveMsg = false;
+      }
+      else
+        _showFailedMoveMsg = true;
 
       StateHasChanged();
     }

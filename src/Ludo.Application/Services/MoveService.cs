@@ -26,6 +26,9 @@ public class MoveService
     Piece? toMove = movementTile.Pieces.FirstOrDefault();
 
     if (toMove is null)
+      throw new InvalidOperationException("Could not find piece");
+
+    if (toMove.Owner.PlayerNr != go.CurrentPlayer)
       return dto.Game;
 
     movementTile.MovePiece(toMove, dto.Roll);

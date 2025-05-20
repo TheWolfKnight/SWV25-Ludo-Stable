@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Ludo.Application.Services;
 using Ludo.Common.Dtos;
@@ -22,10 +23,15 @@ public class MoveController: ControllerBase
   [HttpPost("v1/move")]
   public async Task<ActionResult<GameDto>> MovePieceAsync([FromBody] MakeMoveRequestDto request)
   {
-    GameDto result = await Task.Run(() => _service.MovePiece(request));
-
-    if (result == request.Game)
+    GameDto result;
+    try
+    {
+      result = await Task.Run(() => _service.MovePiece(request));
+    }
+    catch (Exception e)
+    {
       return BadRequest("Could not find a piece on the designated tile");
+    }
 
     return Ok(result);
   }

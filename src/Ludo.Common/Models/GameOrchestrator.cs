@@ -7,7 +7,7 @@ namespace Ludo.Common.Models;
 public class GameOrchestrator
 {
   public required byte CurrentPlayer { get; set; }
-  public required DieBase Die { get; init; }
+  public required DieBase Die { get; set; }
   public required Board Board { get; init; }
   public required Player.Player[] Players { get; set; }
 
@@ -23,10 +23,10 @@ public class GameOrchestrator
     return anyValidMoves;
   }
 
-  public virtual void NextPlayer()
+  public virtual void NextPlayer(bool madeMove)
   {
     Player.Player player = Players[CurrentPlayer];
-    if (!player.PieceOnBoardAtTurnStart && player.RollsThisTurn != 3)
+    if (!madeMove && (!player.PieceOnBoardAtTurnStart && player.RollsThisTurn < 3))
       return;
 
     byte nextPlayer = CurrentPlayer;

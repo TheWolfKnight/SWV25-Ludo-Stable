@@ -1,6 +1,5 @@
 ﻿
 <div id="user-info" class="container-fluid" style="@Style">
-  <div style="height: 35%"></div>
   <div class="row">
     <div class="d-flex col@(AvailableMoves ? "-12 justify-content-center" : "-6 justify-content-end")">
       <b class="@GetInfoTextColor()">@GetCurrentPlayerColorName()</b>
@@ -12,10 +11,17 @@
       </div>
     }
   </div>
+  @if (MadeInvalidMove)
+  {
+    <div class="row">
+      <div class="col d-flex justify-content-center">
+        Dette træk er ikke tilladt
+      </div>
+    </div>
+  }
   <div class="row">
     <div class="col d-flex justify-content-center">
-      @GameState.Die.PeekRoll()
+      sidste rul: @GameState.Die.PeekRoll()
     </div>
   </div>
-  <div style="height: 35%"></div>
 </div>

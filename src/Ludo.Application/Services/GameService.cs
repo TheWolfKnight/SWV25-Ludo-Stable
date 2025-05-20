@@ -1,6 +1,7 @@
 using System;
 using System.Reflection;
 using System.Text.Json;
+using Ludo.Application.Factories;
 using Ludo.Application.Helpers;
 using Ludo.Common.Dtos;
 using Ludo.Common.Dtos.Requests;
@@ -13,10 +14,12 @@ namespace Ludo.Application.Services;
 public class GameService
 {
   private readonly BoardGenerationService _service;
+  private readonly DieFactory _dieFactory;
 
-  public GameService(BoardGenerationService service)
+  public GameService(BoardGenerationService service, DieFactory dieFactory)
   {
     _service = service;
+    _dieFactory = dieFactory;
   }
 
   public async Task<GameOrchestrator> GenerateGameAsync(int amountOfPlayers)
@@ -33,11 +36,15 @@ public class GameService
     return _service.GenerateBoard(dto);
   }
 
-  public byte NextPlayer(GetNextPlayerRequestDto request)
+  public GameDto NextPlayer(GetNextPlayerRequestDto request)
   {
+    byte oldPlayerNr = request.Game.CurrentPlayer;
     GameOrchestrator go = _service.GenerateBoard(request.Game);
-    go.NextPlayer();
+    go.NextPlayer(request.MadeMove);
 
-    return go.CurrentPlayer;
+    if (oldPlayerNr != go.CurrentPlayer)
+      go.Die = _dieFactory.GetDie(go.Die.GetType()?.FullName ?? "Unknown");
+
+    return _service.CompressBoardToDto(go);
   }
 }

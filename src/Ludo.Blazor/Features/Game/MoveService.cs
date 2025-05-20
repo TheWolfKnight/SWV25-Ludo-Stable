@@ -20,6 +20,9 @@ public class MoveService
 
   public async Task<GameState> MakeMoveAsync(GameState state, int pieceTilePosition, int roll)
   {
+    if (roll is not > 0 and < 7)
+      return state;
+
     const string url = "v1/move";
 
     MakeMoveRequestDto request = new()
@@ -39,6 +42,7 @@ public class MoveService
       throw new InvalidOperationException("Could not deserialize response to GameDto object");
 
     GameState result = GameState.FromDto(game, _dieFactory);
+
     return result;
   }
 

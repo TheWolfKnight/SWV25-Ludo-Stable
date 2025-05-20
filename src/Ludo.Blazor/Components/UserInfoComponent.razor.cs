@@ -14,6 +14,8 @@ namespace Ludo.Blazor.Components
 
     [Parameter, EditorRequired]
     public required bool AvailableMoves { get; set; }
+    [Parameter, EditorRequired]
+    public required bool MadeInvalidMove { get; set; }
 
     [Parameter]
     public string? Style { get; set; }

@@ -11,19 +11,24 @@ namespace Ludo.Blazor.Features.Game;
 public class PlayerService
 {
   private readonly HttpClient _httpClient;
+  private readonly DieFactory _dieFactory;
 
-  public PlayerService(HttpClient httpClient)
+  public PlayerService(HttpClient httpClient, DieFactory dieFactory)
   {
     _httpClient = httpClient;
+    _dieFactory = dieFactory;
   }
 
-  public async Task<byte> GetNextPlayerAsync(GameState state)
+  public async Task<GameState> GetNextPlayerAsync(GameState state, bool madeMove)
   {
     const string url = "v1/next";
 
+    Console.WriteLine(state.CurrentPlayer.RollsThisTurn);
+
     GetNextPlayerRequestDto request = new()
     {
-      Game = state.ToDto()
+      Game = state.ToDto(),
+      MadeMove = madeMove
     };
 
     HttpResponseMessage response = await _httpClient.PutAsJsonAsync(url, request);
@@ -31,10 +36,12 @@ public class PlayerService
     if (response.StatusCode is not HttpStatusCode.OK)
       throw new InvalidOperationException($"Could not get valid response from game server, response: {response.StatusCode}");
 
-    string? nextPlayer = await response.Content.ReadAsStringAsync();
-    if (nextPlayer is not string str || !byte.TryParse(str, out byte playerNr))
-      throw new InvalidOperationException($"Invalid response from game server, response was: \"{nextPlayer}\"");
+    GameDto? game = await response.Content.ReadFromJsonAsync<GameDto>();
+    if (game is null)
+      throw new InvalidOperationException($"Invalid response from game server, got invalid GameDto back");
 
-    return playerNr;
+    GameState result = GameState.FromDto(game, _dieFactory);
+
+    return result;
   }
 }
