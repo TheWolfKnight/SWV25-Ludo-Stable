@@ -5,7 +5,7 @@
     {
       @if (tile.Pieces.Count > 0)
       {
-        <img src="tbd" width="15" height="15" /> <p> * @tile.Pieces.Count</p>
+        <img src="@GetPieceImage()" width="25" height="25" style="background-color: black;" /> <p> * @tile.Pieces.Count</p>
       }
     }
   </div>

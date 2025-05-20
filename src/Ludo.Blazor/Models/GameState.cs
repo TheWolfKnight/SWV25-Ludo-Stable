@@ -94,15 +94,30 @@ public class GameState
 
     for (int i = 0; i < players.Length; i++)
     {
-      Player player = null!;
+      Home playerHome = new Home()
+      {
+        HomeTiles = players[i].HomeTiles.Select(i => (board.Tiles[i] as HomeTile)!).ToArray(),
+        Owner = null!,
+      };
 
-      Piece[] pieces = players[i].PieceLocation.Select(i =>
+      Player player = new()
+      {
+        PlayerNr = players[i].PlayerNr,
+        InPlay = players[i].InPlay,
+        Home = playerHome,
+        Pieces = new Piece[4],
+        PieceOnBoardAtTurnStart = players[i].PieceOnBoardAtTurnStart,
+        RollsThisTurn = players[i].RollsThisTurn
+      };
+      playerHome.Owner = player;
+
+      Piece[] pieces = players[i].PieceLocation.Select((loc, index) =>
       {
         Piece piece = new Piece()
         {
-          CurrentTile = (board.Tiles[i] as MovementTile)!,
+          CurrentTile = (board.Tiles[loc] as MovementTile)!,
           Owner = player,
-          PieceState = board.Tiles[i] switch
+          PieceState = board.Tiles[loc] switch
           {
             GoalTile => PieceState.InGoal,
             HomeTile => PieceState.Home,
@@ -111,23 +126,10 @@ public class GameState
         };
 
         piece.CurrentTile.Pieces.Add(piece);
+        player.Pieces[index] = piece;
 
         return piece;
       }).ToArray();
-
-      Home playerHome = new Home()
-      {
-        HomeTiles = players[i].HomeTiles.Select(i => (board.Tiles[i] as HomeTile)!).ToArray(),
-        Owner = player,
-      };
-
-      player = new()
-      {
-        PlayerNr = players[i].PlayerNr,
-        InPlay = players[i].InPlay,
-        Home = playerHome,
-        Pieces = pieces
-      };
 
       playerList[i] = player;
     }

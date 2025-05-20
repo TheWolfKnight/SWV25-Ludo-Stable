@@ -1,4 +1,5 @@
 using Ludo.Blazor.Models;
+using Ludo.Common.Models.Player;
 using Ludo.Common.Models.Tiles;
 using Microsoft.AspNetCore.Components;
 using System.Text;
@@ -39,4 +40,14 @@ public partial class TileComponent : ComponentBase
       return sb.ToString();
   }
 
+  private string GetPieceImage()
+  {
+    if (Tile is not MovementTile movementTile || movementTile.Pieces.Count() == 0)
+      return "";
+
+    Piece piece = movementTile.Pieces.First();
+
+    string path = "Images/Pieces/" + ColorMap.GetPlayerColor(piece.Owner.PlayerNr) + ".png";
+    return path;
+  }
 }
