@@ -22,7 +22,7 @@ public class GameService
     _dieFactory = dieFactory;
   }
 
-  public async Task<GameOrchestrator> GenerateGameAsync(int amountOfPlayers)
+  public async Task<GameOrchestrator> GenerateGameAsync()
   {
     string asmPath = Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location) ?? ".";
     string path = asmPath + "/GamePresets/4v4Game.json";

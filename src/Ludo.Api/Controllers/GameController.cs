@@ -29,12 +29,11 @@ public class GameController : ControllerBase
   [ProducesResponseType(StatusCodes.Status200OK)]
   [ProducesResponseType(StatusCodes.Status400BadRequest)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-  public async Task<ActionResult<GameDto>> GetNewGameAsync([FromQuery] int playerCount)
+  public async Task<ActionResult<GameDto>> GetNewGameAsync()
   {
-    if (playerCount < 2 || playerCount > 4) return BadRequest("Invalid player count.");
     try
     {
-      var response = await _gameService.GenerateGameAsync(playerCount);
+      var response = await _gameService.GenerateGameAsync();
 
       var boardDto = _boardGenerationService.CompressBoardToDto(response);
 

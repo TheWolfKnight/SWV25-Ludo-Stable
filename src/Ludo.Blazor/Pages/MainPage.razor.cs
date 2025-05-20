@@ -35,17 +35,17 @@ namespace Ludo.Blazor.Pages
       if (GameStateService.GetGameState() is not null)
       {
         _gameState = GameStateService.GetGameState();
-        return;
-      } 
-      
-      await NewGameAsync(4);
+      }
+      else
+      {
+        await NewGameAsync();
+      }
+      StateHasChanged();
     }
 
-    private async Task NewGameAsync(int playerAmount)
+    private async Task NewGameAsync()
     {
-      _gameState = await GameService.GetNewGameAsync(playerAmount);
-
-      StateHasChanged();
+      _gameState = await GameService.GetNewGameAsync();
     }
 
     private async Task HasAvaliableMovesAsync()

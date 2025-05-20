@@ -19,9 +19,9 @@ public class GameService
     _dieFactory = dieFactory;
   }
 
-  public async Task<GameState> GetNewGameAsync(int playerAmount)
+  public async Task<GameState> GetNewGameAsync()
   { 
-    string url = $"v1/new?playerCount={playerAmount}";
+    string url = $"v1/new";
 
     var response = await _httpClient.GetAsync(url);
     if (response.StatusCode is not HttpStatusCode.OK)

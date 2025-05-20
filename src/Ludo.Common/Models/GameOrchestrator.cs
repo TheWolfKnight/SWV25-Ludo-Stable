@@ -1,6 +1,7 @@
 using Ludo.Common.Models.Dice;
 using Ludo.Common.Enums;
 using Ludo.Common.Models.Tiles;
+using Ludo.Common.Models.Player;
 
 namespace Ludo.Common.Models;
 
@@ -32,21 +33,28 @@ public class GameOrchestrator
     )
       return;
 
+    Player.Player[] availablePlayers = Players
+      .Where(player => player.InPlay)
+      .ToArray();
+
     byte nextPlayer = CurrentPlayer;
     int checkPlayers = 0;
-    while (checkPlayers++ < Players.Length)
+    while (checkPlayers++ < availablePlayers.Length)
     {
-      nextPlayer = (byte)((CurrentPlayer + 1) % Players.Length);
-      if (Players[nextPlayer].InPlay)
+      int playerIndex = ((CurrentPlayer + 1) % availablePlayers.Length);
+      if (availablePlayers[nextPlayer].InPlay)
+      {
+        nextPlayer = availablePlayers[playerIndex].PlayerNr;
         break;
+      }
     }
 
-    if (checkPlayers == Players.Length)
+    if (checkPlayers == availablePlayers.Length)
       throw new InvalidOperationException("Ingen gyldigt spiller fundet");
 
     CurrentPlayer = nextPlayer;
 
-    player = Players[nextPlayer];
+    player = Players.First(player => player.PlayerNr == nextPlayer);
     player.RollsThisTurn = 0;
     player.PieceOnBoardAtTurnStart = player.Pieces
       .Any(piece => piece.CurrentTile is not (HomeTile or GoalTile));
