@@ -8,6 +8,8 @@ namespace Ludo.Blazor.Components
     public string? Style { get; set; }
 
     [Parameter, EditorRequired]
+    public required bool CanRoll { get; set; }
+    [Parameter, EditorRequired]
     public required bool EnableSkipTurnButton { get; set; }
 
     [Parameter, EditorRequired]

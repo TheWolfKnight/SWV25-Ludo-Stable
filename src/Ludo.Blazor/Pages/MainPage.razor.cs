@@ -2,7 +2,6 @@
 using Ludo.Blazor.Models;
 using Ludo.Common.Models.Dice;
 using Ludo.Common.Models.Player;
-using Ludo.Common.Models.Tiles;
 using Microsoft.AspNetCore.Components;
 
 namespace Ludo.Blazor.Pages
@@ -21,7 +20,10 @@ namespace Ludo.Blazor.Pages
     public required PlayerColorMap ColorMap { get; set; }
 
     private GameState? _gameState;
-    private bool _availableMoves = true;
+
+    private bool _canRoll = true;
+    private bool _canMove = false;
+
     private bool _showFailedMoveMsg = false;
 
     protected override async Task OnInitializedAsync()
@@ -44,10 +46,13 @@ namespace Ludo.Blazor.Pages
 
       bool canMovePiece = await GameService.PlayerHasValidMoveAsync(_gameState);
 
-      bool isRollingForPieceOnBoard = !_gameState.CurrentPlayer.PieceOnBoardAtTurnStart &&
+      bool rollingForGettingPieceOut = !_gameState.CurrentPlayer.PieceOnBoardAtTurnStart &&
         _gameState.CurrentPlayer.RollsThisTurn < 3;
+      bool rollingForMove = _gameState.CurrentPlayer.PieceOnBoardAtTurnStart &&
+        _gameState.CurrentPlayer.RollsThisTurn < 1;
 
-      _availableMoves = canMovePiece || isRollingForPieceOnBoard;
+      _canMove = canMovePiece;
+      _canRoll = (rollingForGettingPieceOut || rollingForMove) && !canMovePiece;
       StateHasChanged();
     }
 
@@ -56,7 +61,7 @@ namespace Ludo.Blazor.Pages
       if (_gameState is null)
         throw new InvalidOperationException("A game must be active to roll a die");
 
-      if (!_availableMoves)
+      if (!_canRoll || _canMove)
         return;
 
       DieBase die = await DieService.RollDieAsync(_gameState);
@@ -76,7 +81,8 @@ namespace Ludo.Blazor.Pages
 
       GameState newState = await PlayerService.GetNextPlayerAsync(_gameState, madeMove);
       _gameState = newState;
-      _availableMoves = true;
+      _canMove = false;
+      _canRoll = true;
 
       StateHasChanged();
     }
@@ -86,7 +92,7 @@ namespace Ludo.Blazor.Pages
       if (_gameState is null)
         throw new InvalidOperationException("A game must be active to make a move");
 
-      if (!_availableMoves)
+      if (!_canMove)
         return;
 
       GameState newState = await MoveService.MakeMoveAsync(

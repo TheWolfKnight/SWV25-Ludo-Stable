@@ -12,12 +12,12 @@
       </div>
       <div class="col">
         <UserInfoComponent GameState="@_gameState"
-                           AvailableMoves="@_availableMoves"
+                           CanMove="@_canMove" CanRoll="@_canRoll"
                            MadeInvalidMove="@_showFailedMoveMsg"
                            Style="height: 25%; width: 100%" />
         <UserActionComponent OnRollDieClicked="@(() => RollDieAsync())"
                              OnSkipTurnClicked="@(() => RequestNextPlayerAsync())"
-                             EnableSkipTurnButton="!_availableMoves"
+                             EnableSkipTurnButton="@(!_canMove && !_canRoll)" CanRoll="@_canRoll"
                              Style="height: 75%; width: 100%" />
       </div>
     </div>

@@ -13,7 +13,9 @@ namespace Ludo.Blazor.Components
     public required GameState GameState { get; set; }
 
     [Parameter, EditorRequired]
-    public required bool AvailableMoves { get; set; }
+    public required bool CanMove { get; set; }
+    [Parameter, EditorRequired]
+    public required bool CanRoll { get; set; }
     [Parameter, EditorRequired]
     public required bool MadeInvalidMove { get; set; }
 
