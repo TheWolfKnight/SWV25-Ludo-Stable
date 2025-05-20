@@ -1,4 +1,6 @@
 using Ludo.Common.Models.Dice;
+using Ludo.Common.Enums;
+using Ludo.Common.Models.Tiles;
 using Ludo.Common.Models.Player;
 
 namespace Ludo.Common.Models;
@@ -6,41 +8,59 @@ namespace Ludo.Common.Models;
 public class GameOrchestrator
 {
   public required byte CurrentPlayer { get; set; }
-  public required DieBase Die { get; init; }
+  public required DieBase Die { get; set; }
   public required Board Board { get; init; }
   public required Player.Player[] Players { get; set; }
 
-  public void StartGame()
+  public virtual bool HasValidMove(int roll)
   {
-    throw new NotImplementedException();
+    Player.Player player = Players[CurrentPlayer];
+
+    bool anyValidMoves = player.Pieces.Any(piece =>
+      piece.PieceState is not PieceState.InGoal &&
+      piece.CurrentTile.PeekMove(piece, roll)
+    );
+
+    return anyValidMoves;
   }
 
-  public void EndGame()
+  public virtual void NextPlayer(bool madeMove)
   {
-    throw new NotImplementedException();
-  }
+    Player.Player player = Players[CurrentPlayer];
+    if (
+      (!madeMove && (!player.PieceOnBoardAtTurnStart && player.RollsThisTurn < 3)) ||
+      Die.PeekRoll() == 6
+    )
+      return;
 
-  public void RestartGame()
-  {
-    throw new NotImplementedException();
-  }
+    Player.Player[] availablePlayers = Players
+      .Where(player => player.InPlay)
+      .ToArray();
 
-  public virtual void NextPlayer()
-  {
     byte nextPlayer = CurrentPlayer;
     int checkPlayers = 0;
-    while (checkPlayers++ < Players.Length)
-      nextPlayer = (byte)((CurrentPlayer + 1) % Players.Length);
+    while (checkPlayers++ < availablePlayers.Length)
+    {
+      int playerIndex = ((CurrentPlayer + 1) % availablePlayers.Length);
+      if (availablePlayers[nextPlayer].InPlay)
+      {
+        nextPlayer = availablePlayers[playerIndex].PlayerNr;
+        break;
+      }
+    }
+
+    if (checkPlayers == availablePlayers.Length)
+      throw new InvalidOperationException("Ingen gyldigt spiller fundet");
 
     CurrentPlayer = nextPlayer;
+
+    player = Players.First(player => player.PlayerNr == nextPlayer);
+    player.RollsThisTurn = 0;
+    player.PieceOnBoardAtTurnStart = player.Pieces
+      .Any(piece => piece.CurrentTile is not (HomeTile or GoalTile));
   }
 
-  public bool IsValidMove(Piece piece)
-  {
-    throw new NotImplementedException();
-  }
-
-  public byte[] DetermineStartingPlayer(int[] rolls)
+  public static byte[] DetermineStartingPlayer(int[] rolls)
   {
     int highestRoll = rolls.Max();
 

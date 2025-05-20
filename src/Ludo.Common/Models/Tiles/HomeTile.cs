@@ -1,13 +1,14 @@
 using Ludo.Common.Dtos;
 using Ludo.Common.Models.Player;
 using Ludo.Common.Enums;
+using System.Text.Json;
 
 namespace Ludo.Common.Models.Tiles;
 
-public class HomeTile: TileBase
+public class HomeTile: MovementTile
 {
   public override required byte? PlayerNr { get; init; }
-  public required TileBase NextTile { get; set; }
+  public required MovementTile NextTile { get; set; }
 
   public void SendPieceHome(Piece piece)
   {
@@ -16,7 +17,7 @@ public class HomeTile: TileBase
 
   public override void MovePiece(Piece piece, int amount)
   {
-    (bool moveAccepted, TileBase targetTile) = InternalMakeMove(piece, amount);
+    (bool moveAccepted, MovementTile targetTile) = InternalMakeMove(piece, amount);
 
     if (!moveAccepted)
       return;
@@ -39,9 +40,17 @@ public class HomeTile: TileBase
     return InternalMakeMove(piece, amount).MoveAccepted;
   }
 
-  internal override (bool MoveAccepted, TileBase TargetTile) InternalMakeMove(Piece piece, int amount)
+  public override void BindTiles(TileDto tileDto, Board board)
   {
-    (bool, TileBase) result = (true, NextTile);
+    int index = ((JsonElement?)tileDto.Data[nameof(NextTile)])?.Deserialize<int>() ?? throw new InvalidOperationException("Cannot find NextTile for HomeTile");
+
+    MovementTile next = board.Tiles[index] as MovementTile ?? throw new InvalidCastException($"Cannot cast tile at index {index} as a MovementTile");
+    NextTile = next;
+  }
+
+  internal override (bool MoveAccepted, MovementTile TargetTile) InternalMakeMove(Piece piece, int amount)
+  {
+    (bool, MovementTile) result = (true, NextTile);
     if (amount is not 6)
       result = (false, this);
 
@@ -55,16 +64,21 @@ public class HomeTile: TileBase
     base.Pieces.Add(piece);
   }
   
-  internal new static HomeTile FromDto(TileDto tileDto, Board board)
+  internal new static HomeTile FromDto(TileDto tileDto, Board board, TileDto[] tiles)
   {
-    int nextTileIndex = (int) (tileDto.Data[nameof(NextTile)] ?? throw new InvalidCastException("Could not get NextTile index"));
-    TileBase nextTile = board.Tiles[nextTileIndex];
-    
+    int nextTileIndex = ((JsonElement?)tileDto.Data[nameof(NextTile)])?.Deserialize<int>() ?? throw new InvalidCastException("Could not get NextTile index");
+    TileDto nextTile = tiles[nextTileIndex];
+
+    if (nextTile.Type is TileTypes.Filler)
+      throw new InvalidOperationException("Cannot bind to non-MovementTile");
+
+    int? playerNr = ((JsonElement?)tileDto.Data[nameof(PlayerNr)])?.Deserialize<int>();
+
     HomeTile tile = new()
     {
-      NextTile = nextTile,
-      PlayerNr = (byte?) tileDto.Data[nameof(PlayerNr)],
-      IndexInBoard = (int) (tileDto.Data[nameof(IndexInBoard)] ?? throw new InvalidCastException("Could not convert to Index on board")),
+      NextTile = (board.Tiles[nextTileIndex] as MovementTile)!,
+      PlayerNr = (byte?)playerNr,
+      IndexInBoard = ((JsonElement?)tileDto.Data[nameof(IndexInBoard)])?.Deserialize<int>() ?? throw new InvalidCastException("Could not convert to Index on board"),
       Pieces = [],
     };
 

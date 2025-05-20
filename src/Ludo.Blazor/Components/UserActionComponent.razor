@@ -1,0 +1,12 @@
+﻿
+<div id="user-actions" class="container-fluid" style="@Style">
+  <div class="row">
+    <div class="col-6 d-flex justify-content-end">
+      <button disabled="@(!CanRoll)" @onclick="(() => RollDieButtonClicked())">Slå terning</button>
+    </div>
+    <div class="col-6 d-flex justify-content-start">
+      <button disabled="@(!EnableSkipTurnButton)" @onclick="(args => SkipTurnButtonClicked())">Spring tur over</button>
+    </div>
+  </div>
+</div>
+

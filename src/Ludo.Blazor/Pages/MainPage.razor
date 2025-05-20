@@ -1,0 +1,29 @@
+﻿@page "/game"
+
+<h3>Ludo</h3>
+
+<div class="container-fluid">
+  @if (_gameState is not null)
+  {
+    <div class="row">
+      <div class="col-auto">
+        <BoardView Board="@_gameState.Board"
+                   OnMakeMove="@MakeMoveAsync" />
+      </div>
+      <div class="col">
+        <UserInfoComponent GameState="@_gameState"
+                           CanMove="@_canMove" CanRoll="@_canRoll"
+                           MadeInvalidMove="@_showFailedMoveMsg"
+                           Style="height: 25%; width: 100%" />
+        <UserActionComponent OnRollDieClicked="@(() => RollDieAsync())"
+                             OnSkipTurnClicked="@(() => RequestNextPlayerAsync())"
+                             EnableSkipTurnButton="@(!_canMove && !_canRoll)" CanRoll="@_canRoll"
+                             Style="height: 75%; width: 100%" />
+      </div>
+    </div>
+  }
+  else
+  {
+    <p>Du mangler et spill</p>
+  }
+</div>

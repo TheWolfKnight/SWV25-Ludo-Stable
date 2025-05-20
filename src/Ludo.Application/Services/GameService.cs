@@ -1,28 +1,48 @@
-using Ludo.Application.Helpers;
+using System;
+using System.Reflection;
+using System.Text.Json;
+using Ludo.Application.Factories;
+using Ludo.Common.Dtos;
 using Ludo.Common.Dtos.Requests;
 using Ludo.Common.Models;
+using Ludo.Application.Interfaces;
 
 namespace Ludo.Application.Services;
 
-public class GameService
+public class GameService : IGameService
 {
-  public GameOrchestrator GenerateGame(int amountOfPlayers)
+  private readonly IBoardGenerationService _service;
+  private readonly DieFactory _dieFactory;
+
+  public GameService(IBoardGenerationService service, DieFactory dieFactory)
   {
-    throw new NotImplementedException();
+    _service = service;
+    _dieFactory = dieFactory;
   }
 
-  public byte NextPlayer(GetNextPlayerRequestDto request)
+  public async Task<GameOrchestrator> GenerateGameAsync()
   {
-    GameOrchestrator go = new GameOrchestrator
-    {
-      Board = null!,
-      Die = null!,
-      CurrentPlayer = request.CurrentPlayer,
-      Players = request.Players.ToPlayerNrModels(),
-    };
+    string asmPath = Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location) ?? ".";
+    string path = asmPath + "/GamePresets/4v4Game.json";
 
-    go.NextPlayer();
+    FileStream fs = File.OpenRead(path);
+    GameDto? dto = await JsonSerializer.DeserializeAsync<GameDto>(fs);
 
-    return go.CurrentPlayer;
+    if (dto is null)
+      throw new InvalidOperationException($"Could not deserialize from path \"{path}\"");
+
+    return _service.GenerateBoard(dto);
+  }
+
+  public GameDto NextPlayer(GetNextPlayerRequestDto request)
+  {
+    byte oldPlayerNr = request.Game.CurrentPlayer;
+    GameOrchestrator go = _service.GenerateBoard(request.Game);
+    go.NextPlayer(request.MadeMove);
+
+    if (oldPlayerNr != go.CurrentPlayer)
+      go.Die = _dieFactory.GetDie(go.Die.GetType()?.FullName ?? "Unknown");
+
+    return _service.CompressBoardToDto(go);
   }
 }

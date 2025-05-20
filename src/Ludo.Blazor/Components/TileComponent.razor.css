@@ -1,0 +1,36 @@
+﻿
+.grid-cell {
+  width: 3.5rem;
+  height: 3.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: 1px solid black;
+  position: relative;
+}
+
+  .grid-cell:hover {
+    filter: brightness(50%);
+  }
+
+.tile-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 0.7rem;
+  line-height: 1;
+}
+
+.index {
+  font-weight: normal;
+}
+
+.type {
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.standard-tile-no-aligance {
+  background-color: gray;
+}

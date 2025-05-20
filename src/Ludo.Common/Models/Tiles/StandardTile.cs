@@ -1,22 +1,23 @@
 using Ludo.Common.Dtos;
 using Ludo.Common.Enums;
 using Ludo.Common.Models.Player;
+using System.Text.Json;
 
 namespace Ludo.Common.Models.Tiles;
 
-public class StandardTile : TileBase
+public class StandardTile : MovementTile
 {
-  public required TileBase NextTile { get; set; }
+  public required MovementTile NextTile { get; set; }
 
   public override void MovePiece(Piece piece, int amount)
   {
-    (bool moveAccepted, TileBase targetTile) = InternalMakeMove(piece, amount);
+    (bool moveAccepted, MovementTile targetTile) = InternalMakeMove(piece, amount);
     if (!moveAccepted)
       return;
 
     base.Pieces.Remove(piece);
 
-    int cntOpponentPieces = base.Pieces.Count(inner => inner.Owner.PlayerNr != piece.Owner.PlayerNr && inner != piece);
+    int cntOpponentPieces = targetTile.Pieces.Count(inner => inner.Owner.PlayerNr != piece.Owner.PlayerNr && inner != piece);
     if (cntOpponentPieces > 1)
     {
       piece.MoveToHome();
@@ -36,13 +37,21 @@ public class StandardTile : TileBase
     return InternalMakeMove(piece, amount).MoveAccepted;
   }
 
-  internal override (bool MoveAccepted, TileBase TargetTile) InternalMakeMove(Piece piece, int amount)
+  public override void BindTiles(TileDto tileDto, Board board)
+  {
+    int index = ((JsonElement?)tileDto.Data[nameof(NextTile)])?.Deserialize<int>() ?? throw new InvalidOperationException("Cannot find NextTile for StandardTile");
+
+    MovementTile next = board.Tiles[index] as MovementTile ?? throw new InvalidCastException($"Cannot cast tile at index {index} as a MovementTile");
+    NextTile = next;
+  }
+
+  internal override (bool MoveAccepted, MovementTile TargetTile) InternalMakeMove(Piece piece, int amount)
   {
     if (amount is 0)
       return (true, this);
 
-    bool containsOwnPieces = base.Pieces.Any(inner => inner.Owner.PlayerNr == piece.Owner.PlayerNr);
-    if (amount is not 0 && containsOwnPieces)
+    bool containsOwnPieces = NextTile.Pieces.Any(inner => inner.Owner.PlayerNr == piece.Owner.PlayerNr);
+    if (amount is not <= 1 && containsOwnPieces)
       return (false, this);
 
     return NextTile.InternalMakeMove(piece, amount - 1);
@@ -55,16 +64,15 @@ public class StandardTile : TileBase
     base.Pieces.Add(piece);
   }
 
-  internal new static StandardTile FromDto(TileDto tileDto, Board board)
+  internal new static StandardTile FromDto(TileDto tileDto, Board board, TileDto[] tiles)
   {
-    int nextTileIndex = (int) (tileDto.Data[nameof(NextTile)] ?? throw new InvalidCastException("Could not get NextTile index"));
-    TileBase nextTile = board.Tiles[nextTileIndex];
-    
+    int? playerNr = ((JsonElement?)tileDto.Data[nameof(PlayerNr)])?.Deserialize<int>();
+
     StandardTile tile = new()
     {
-      NextTile = nextTile,
-      PlayerNr = (byte?) tileDto.Data[nameof(PlayerNr)],
-      IndexInBoard = (int) (tileDto.Data[nameof(IndexInBoard)] ?? throw new InvalidCastException("Could not convert to Index on board")),
+      NextTile = null!,
+      PlayerNr = (byte?)playerNr,
+      IndexInBoard = ((JsonElement?)tileDto.Data[nameof(IndexInBoard)])?.Deserialize<int>() ?? throw new InvalidCastException("Could not convert to Index on board"),
       Pieces = [],
     };
 

@@ -5,9 +5,9 @@ namespace Ludo.Common.Models.Player;
 public class Home
 {
   public required HomeTile[] HomeTiles { get; init; }
-  public required Player Owner { get; init; }
+  public required Player Owner { get; set; }
 
-  public HomeTile GetFirstAvailableHomeTile()
+  public virtual HomeTile GetFirstAvailableHomeTile()
   {
     HomeTile? availableTile = this.HomeTiles.FirstOrDefault(tile => !tile.Pieces.Any());
 

@@ -1,0 +1,12 @@
+﻿
+<div class="grid-cell @GetTileStyle() @(Tile is MovementTile ? "movement-tile" : "")" @onclick="GetTileAsync">
+  <div class="tile-info">
+    @if (Tile is MovementTile tile)
+    {
+      @if (tile.Pieces.Count > 0)
+      {
+        <img src="@GetPieceImage()" width="25" height="25" style="background-color: black;" /> <p> * @tile.Pieces.Count</p>
+      }
+    }
+  </div>
+</div>

@@ -1,26 +1,30 @@
 using System.Threading.Tasks;
 using Ludo.Application.Services;
+using Ludo.Common.Dtos;
 using Ludo.Common.Dtos.Requests;
+using Ludo.Application.Interfaces;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ludo.Api.Controllers;
 
-[Route("api/[controller]")]
+[EnableCors]
 [ApiController]
+[Route("api/[controller]")]
 public class PlayerController : ControllerBase
 {
-  private readonly GameService _service;
+  private readonly IGameService _service;
 
-  public PlayerController(GameService service)
+  public PlayerController(IGameService service)
   {
     _service = service;
   }
 
-  [HttpPut("/v1/next")]
-  public async  Task<ActionResult<byte>> GetNextPlayerAsync([FromBody] GetNextPlayerRequestDto request)
+  [HttpPut("v1/next")]
+  public async  Task<ActionResult<GameDto>> GetNextPlayerAsync([FromBody] GetNextPlayerRequestDto request)
   {
-    byte nextPlayer = await Task.Run(() => _service.NextPlayer(request));
+    GameDto dto = await Task.Run(() => _service.NextPlayer(request));
 
-    return Ok(nextPlayer);
+    return Ok(dto);
   }
 }

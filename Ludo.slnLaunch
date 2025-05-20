@@ -1,0 +1,17 @@
+[
+  {
+    "Name": "Full Start",
+    "Projects": [
+      {
+        "Path": "src\\Ludo.Api\\Ludo.Api.csproj",
+        "Action": "Start",
+        "DebugTarget": "https"
+      },
+      {
+        "Path": "src\\Ludo.Blazor\\Ludo.Blazor.csproj",
+        "Action": "Start",
+        "DebugTarget": "https"
+      }
+    ]
+  }
+]

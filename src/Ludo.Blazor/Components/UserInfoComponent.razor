@@ -1,0 +1,27 @@
+﻿
+<div id="user-info" class="container-fluid" style="@Style">
+  <div class="row">
+    <div class="d-flex col@(CanMove ? "-12 justify-content-center" : "-6 justify-content-end")">
+      <b class="@GetInfoTextColor()">@GetCurrentPlayerColorName()</b>
+    </div>
+    @if (!CanMove && !CanRoll)
+    {
+      <div class="d-flex col-6 justify-content-start">
+        Ingen træk tilgængelig
+      </div>
+    }
+  </div>
+  @if (MadeInvalidMove)
+  {
+    <div class="row">
+      <div class="col d-flex justify-content-center">
+        Dette træk er ikke tilladt
+      </div>
+    </div>
+  }
+  <div class="row">
+    <div class="col d-flex justify-content-center">
+      sidste rul: @GameState.Die.PeekRoll()
+    </div>
+  </div>
+</div>

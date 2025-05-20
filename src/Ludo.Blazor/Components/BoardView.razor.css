@@ -1,0 +1,149 @@
+﻿
+.tile-grid {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+  overflow: hidden;
+}
+
+.tile-grid {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+  overflow: hidden;
+}
+
+.grid-row {
+  display: flex;
+  margin: 0;
+}
+
+.tile-selection {
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  padding: 1rem;
+  margin-top: 1rem;
+  background-color: #f8f9fa;
+}
+
+.tile-option {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  margin: 0.5rem 0;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+  .tile-option:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+
+  .tile-option.selected {
+    border: 2px solid #007bff;
+    box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+  }
+
+  .tile-option.standard {
+    background-color: lightgray;
+  }
+
+  .tile-option.home {
+    background-color: lightgreen;
+  }
+
+  .tile-option.driveway {
+    background-color: lightblue;
+  }
+
+  .tile-option.filter {
+    background-color: lightcoral;
+  }
+
+  .tile-option.goal {
+    background-color: lightpink;
+  }
+
+  .tile-option.filler {
+    background-color: #f0f0f0;
+    border: 1px dashed #999;
+  }
+
+.tile-type-label {
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-left: 0.5rem;
+}
+
+.tile-data-editor {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  border: 1px solid #e9ecef;
+}
+
+.tile-data-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #eee;
+}
+
+.tile-type-icon {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 4px;
+  margin-right: 0.75rem;
+}
+
+.data-row {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.data-key {
+  font-weight: 600;
+  width: 30%;
+  color: #555;
+}
+
+.data-value {
+  width: 60%;
+}
+
+  .data-value input {
+    width: 70%;
+    padding: 0.375rem 0.75rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  }
+
+    .data-value input:focus {
+      border-color: #86b7fe;
+      box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+      outline: 0;
+    }
+
+.update-btn {
+  margin-left: 0.5rem;
+}
+
+.brush-controls {
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  border: 1px solid #e9ecef;
+}
+
+.cycle-brush-btn {
+  width: 100%;
+  font-weight: bold;
+  font-size: 1.1rem;
+}

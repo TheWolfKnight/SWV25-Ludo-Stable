@@ -1,0 +1,86 @@
+.player-card-body {
+    background-color: white;
+    margin: 0.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    min-height: 12.5rem;
+    width: 11.25rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.player-card-body:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.player-card-body h3 {
+    color: #333;
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+}
+
+.player-card-body .roll-value {
+    font-size: 2rem;
+    font-weight: bold;
+    height: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 1rem 0;
+}
+
+.player-card-body .btn {
+    width: 100%;
+    padding: 0.5rem;
+    margin-top: auto;
+}
+
+.color-cards {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.5rem;
+}
+
+.color-card {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.red-card {
+    background-color: #ff4d4d;
+}
+
+.green-card {
+    background-color: #4dff4d;
+}
+
+.yellow-card {
+    background-color: #ffff4d;
+}
+
+.blue-card {
+    background-color: #4d4dff;
+}
+
+.red-background {
+    background-color: #ffb3b3;
+}
+
+.green-background {
+    background-color: #b3ffb3;
+}
+
+.yellow-background {
+    background-color: #ffffb3;
+}
+
+.blue-background {
+    background-color: #b3b3ff;
+}
