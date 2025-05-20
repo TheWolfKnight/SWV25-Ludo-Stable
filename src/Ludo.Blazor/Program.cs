@@ -22,6 +22,7 @@ builder.Services.AddSingleton<PlayerColorMap>();
 
 builder.Services.AddTransient<DieBase, DieD6>();
 builder.Services.AddScoped<DieFactory>();
+builder.Services.AddScoped<GameStateService>();
 
 var app = builder.Build();
 

@@ -18,6 +18,8 @@ namespace Ludo.Blazor.Pages
     public required PlayerService PlayerService { get; set; }
     [Inject]
     public required PlayerColorMap ColorMap { get; set; }
+    [Inject]
+    public required GameStateService GameStateService { get; set; }
 
     private GameState? _gameState;
 
@@ -29,6 +31,13 @@ namespace Ludo.Blazor.Pages
     protected override async Task OnInitializedAsync()
     {
       ColorMap.MakeDefaultColorMap();
+
+      if (GameStateService.GetGameState() is not null)
+      {
+        _gameState = GameStateService.GetGameState();
+        return;
+      } 
+      
       await NewGameAsync(4);
     }
 
